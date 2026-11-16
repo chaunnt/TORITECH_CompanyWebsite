@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Thông tin cấu hình dùng chung cho toàn site. Sửa ở đây rồi chạy: python3 tools/build.py"""
 
-SITE_URL = "https://chaunnt.github.io/TORITECH_CompanyWebsite/"
+SITE_URL = "https://toritech.vn/"  # tên miền production (bản GitHub Pages: https://chaunnt.github.io/TORITECH_CompanyWebsite/)
 
 COMPANY = {
     "legal_name": "CÔNG TY TNHH TORITECH",

@@ -1,0 +1,74 @@
+{
+  "_note": "Danh mục artifact hiển thị trên website. cat: vision | booking | mcp. 'works' = trang HTML chép vào showcase/ (mở trực tiếp). 'docs' = công văn/đề xuất (chỉ thẻ tóm tắt). 'skipped' = artifact đã xét và cố ý không đưa lên, kèm lý do.",
+  "works": [
+    {
+      "artifact_slug": "e3e84078-affc-40fc-8cec-6d729e0e3203",
+      "href": "showcase/kien-truc-du-lieu-dang-kiem.html",
+      "cat": "vision",
+      "title": "Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh",
+      "desc": "Bộ mô hình 2.5D: Sở Xây dựng tiếp nhận, giám sát và điều hành dữ liệu đăng kiểm theo thời gian thực; IOC phát hiện xe hết hạn, điều phối hạ tầng.",
+      "kind": "Mô hình tương tác"
+    },
+    {
+      "artifact_slug": "13b1771e-3ae0-4dc2-8348-407a0d1b4338",
+      "href": "showcase/van-thu-so-vi-pham-giao-thong.html",
+      "cat": "mcp",
+      "title": "Văn thư số xử lý vi phạm giao thông",
+      "desc": "Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic.",
+      "kind": "Mô phỏng 2.5D"
+    },
+    {
+      "artifact_slug": "f85e473d-4fe9-4ae0-84ee-0dd97e3bcc2c",
+      "href": "showcase/dvc-connector-ai.html",
+      "cat": "mcp",
+      "title": "DVC Connector – Tự động hoá dịch vụ công bằng AI",
+      "desc": "Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot.",
+      "kind": "Trang sản phẩm"
+    },
+    {
+      "artifact_slug": "350aeed0-bcdd-42bb-8147-e8d46a298293",
+      "href": "showcase/kiem-dinh-khi-thai-xe-may.html",
+      "cat": "booking",
+      "title": "Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
+      "desc": "Đề xuất xã hội hoá: đặt lịch & thanh toán cho hơn 11,5 triệu xe máy khi kiểm định khí thải bắt đầu từ 01/7/2027, có trợ lý AI hỗ trợ vận hành.",
+      "kind": "Đề xuất dự án"
+    },
+    {
+      "artifact_slug": "8f9f95bf-27a5-457b-9cde-205429abad61",
+      "href": "showcase/dat-lich-da-kenh-phan-tan.html",
+      "cat": "booking",
+      "title": "Đặt lịch & đơn hàng đa kênh, dữ liệu phân tán",
+      "desc": "Kiến trúc Edge node tại ngân hàng/ví điện tử, Core giữ bộ đếm slot chung, sổ sự kiện ký số và đối soát cuối ngày – chịu tải cao, không chia quota.",
+      "kind": "Đề xuất kiến trúc"
+    },
+    {
+      "artifact_slug": "118514e3-a56a-4982-a413-e37c40be1cf4",
+      "href": "showcase/danh-ba-dang-kiem-ttdk.html",
+      "cat": "booking",
+      "title": "Danh bạ đăng kiểm TTDK",
+      "desc": "Danh bạ trung tâm đăng kiểm, garage, cứu hộ, bảo hiểm trên toàn quốc từ TTDK API: bản đồ, giờ làm việc, đánh giá, đặt lịch trực tuyến.",
+      "kind": "Ứng dụng web"
+    }
+  ],
+  "docs": [
+    {
+      "artifact_slug": "d4d316b7-e6c6-4a8a-bac0-7b8df89e9b3e",
+      "cat": "vision",
+      "title": "Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera",
+      "desc": "Đề xuất thí điểm 03 tháng, chủ động bố trí nguồn lực, không thu phí, tại Sở Xây dựng và 06 cơ sở đăng kiểm thuộc 3 khu vực TP.HCM."
+    },
+    {
+      "artifact_slug": "9474c57a-c232-46ad-977d-cf7269974d6c",
+      "cat": "booking",
+      "title": "Công văn đề xuất bản đồ số mạng lưới kiểm định khí thải xe máy TP.HCM",
+      "desc": "Hệ thống thông tin bản đồ số mạng lưới cơ sở đăng kiểm, kiểm định khí thải, bảo hành, bảo dưỡng; lộ trình 4 giai đoạn 12/2026 – 2030."
+    },
+    {
+      "artifact_slug": "e0508616-0fbe-42e9-93e9-93d8a9301e9e",
+      "cat": "mcp",
+      "title": "Đề xuất tự động hoá văn thư & thông báo vi phạm giao thông",
+      "desc": "Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."
+    }
+  ],
+  "skipped": []
+}

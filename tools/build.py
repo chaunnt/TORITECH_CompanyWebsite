@@ -228,29 +228,10 @@ def cta_band(h="Sẵn sàng đánh giá giải pháp cho đơn vị của bạn?
 
 
 # ---------------------------------------------------------------- showcase data (các artifact hiện có)
-WORKS = [
-    # file/key, category, title, description, type
-    dict(href="showcase/kien-truc-du-lieu-dang-kiem.html", cat="vision", title="Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh",
-         desc="Bộ mô hình 2.5D: Sở Xây dựng tiếp nhận, giám sát và điều hành dữ liệu đăng kiểm theo thời gian thực; IOC phát hiện xe hết hạn, điều phối hạ tầng.", kind="Mô hình tương tác"),
-    dict(href="showcase/van-thu-so-vi-pham-giao-thong.html", cat="mcp", title="Văn thư số xử lý vi phạm giao thông",
-         desc="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic.", kind="Mô phỏng 2.5D"),
-    dict(href="showcase/dvc-connector-ai.html", cat="mcp", title="DVC Connector – Tự động hoá dịch vụ công bằng AI",
-         desc="Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot.", kind="Trang sản phẩm"),
-    dict(href="showcase/kiem-dinh-khi-thai-xe-may.html", cat="booking", title="Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
-         desc="Đề xuất xã hội hoá: đặt lịch & thanh toán cho hơn 11,5 triệu xe máy khi kiểm định khí thải bắt đầu từ 01/7/2027, có trợ lý AI hỗ trợ vận hành.", kind="Đề xuất dự án"),
-    dict(href="showcase/dat-lich-da-kenh-phan-tan.html", cat="booking", title="Đặt lịch & đơn hàng đa kênh, dữ liệu phân tán",
-         desc="Kiến trúc Edge node tại ngân hàng/ví điện tử, Core giữ bộ đếm slot chung, sổ sự kiện ký số và đối soát cuối ngày – chịu tải cao, không chia quota.", kind="Đề xuất kiến trúc"),
-    dict(href="showcase/danh-ba-dang-kiem-ttdk.html", cat="booking", title="Danh bạ đăng kiểm TTDK",
-         desc="Danh bạ trung tâm đăng kiểm, garage, cứu hộ, bảo hiểm trên toàn quốc từ TTDK API: bản đồ, giờ làm việc, đánh giá, đặt lịch trực tuyến.", kind="Ứng dụng web"),
-]
-DOCS = [
-    dict(cat="vision", title="Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera",
-         desc="Đề xuất thí điểm 03 tháng, chủ động bố trí nguồn lực, không thu phí, tại Sở Xây dựng và 06 cơ sở đăng kiểm thuộc 3 khu vực TP.HCM."),
-    dict(cat="booking", title="Công văn đề xuất bản đồ số mạng lưới kiểm định khí thải xe máy TP.HCM",
-         desc="Hệ thống thông tin bản đồ số mạng lưới cơ sở đăng kiểm, kiểm định khí thải, bảo hành, bảo dưỡng; lộ trình 4 giai đoạn 12/2026 – 2030."),
-    dict(cat="mcp", title="Đề xuất tự động hoá văn thư & thông báo vi phạm giao thông",
-         desc="Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."),
-]
+with open(os.path.join(os.path.dirname(__file__), "showcase.json"), encoding="utf-8") as _f:
+    _SHOW = json.load(_f)
+WORKS = _SHOW["works"]   # bản trình diễn HTML trong showcase/
+DOCS = _SHOW["docs"]     # công văn / đề xuất: chỉ thẻ tóm tắt
 CATS = {"vision": ("AI Vision & VMS", "v"), "booking": ("Đặt lịch & Điều phối", "b"), "mcp": ("MCP & AI Agent", "m")}
 
 

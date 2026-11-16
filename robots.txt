@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chaunnt.github.io/TORITECH_CompanyWebsite/sitemap.xml
+Sitemap: https://toritech.vn/sitemap.xml
