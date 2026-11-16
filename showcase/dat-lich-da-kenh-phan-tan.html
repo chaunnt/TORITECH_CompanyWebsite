@@ -1,0 +1,490 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Đặt lịch đa kênh phân tán</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: một cột tài liệu kỹ thuật, sơ đồ full-width cuộn ngang riêng, bảng so sánh lõi/biên */
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --fg:#17202b; --muted:#5a6675; --line:#d9dee5;
+  --accent:#0b6e6e; --accent-soft:#e2f1f0; --edge:#8a4b0f; --edge-soft:#f7ece0; --warn:#a33a2a;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161c; --surface:#18202a; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2b3542;
+  --accent:#4fc3bd; --accent-soft:#163331; --edge:#e0a463; --edge-soft:#33261a; --warn:#ef8a78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161c; --surface:#18202a; --fg:#e4e9ef; --muted:#9aa6b4; --line:#2b3542;
+  --accent:#4fc3bd; --accent-soft:#163331; --edge:#e0a463; --edge-soft:#33261a; --warn:#ef8a78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1080px;margin:0 auto;padding-block:40px 80px;display:grid;gap:44px}
+h1,h2,h3{text-wrap:balance;line-height:1.25;margin:0}
+h1{font-size:2rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.35rem;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0;max-width:72ch}
+section{display:grid;gap:16px;min-width:0}
+.lede{color:var(--muted);font-size:1.05rem}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+code{background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.zone{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:10px;min-width:0}
+.zone.core{border-top:4px solid var(--accent)}
+.zone.edge{border-top:4px solid var(--edge)}
+.zone ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px}
+.tag.core{background:var(--accent-soft);color:var(--accent)}
+.tag.edge{background:var(--edge-soft);color:var(--edge)}
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.diagram pre.mermaid{margin:0;min-width:640px;background:transparent}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+.steps{margin:0;padding-left:22px;display:grid;gap:8px;max-width:80ch}
+.note{border-left:3px solid var(--warn);padding:10px 14px;background:var(--surface);border-radius:0 8px 8px 0;max-width:80ch}
+.note strong{color:var(--warn)}
+</style>
+
+<main>
+<header style="display:grid;gap:12px">
+  <div class="eyebrow">Đề xuất kiến trúc · Station Server · 15/11/2026</div>
+  <h1>Đặt lịch &amp; đơn hàng đa kênh, dữ liệu phân tán</h1>
+  <p class="lede">Frontend + backend chạy trên hạ tầng của từng ngân hàng / ví điện tử (gọi là <b>Edge node</b>). Server hiện tại (<b>Core</b>) chỉ giữ bộ đếm slot dùng chung, bảng tham chiếu mỏng và sổ sự kiện có ký số. Đối tác gánh phần lớn tải; Core vẫn là nơi quyết định dữ liệu cuối cùng và cấp số liệu cho dashboard.</p>
+</header>
+
+<section>
+  <h2>1. Ý tưởng cốt lõi</h2>
+  <p>Không đồng bộ từng bản ghi giữa các nơi. Thay vào đó dùng ba cơ chế rẻ hơn nhiều:</p>
+  <ol class="steps">
+    <li><b>Một bộ đếm slot chung ở Core, không chia quota.</b> Mọi kênh, kể cả app và trạm nội bộ, cùng giữ chỗ trên một bộ đếm cho mỗi trạm/ngày/khung giờ. Ai đặt trước được trước, nên không có nơi thừa nơi thiếu. Mỗi lượt đặt chỉ tốn 1 lệnh gọi rất nhẹ: <code>UPDATE ... SET reserved = reserved + 1 WHERE reserved &lt; capacity</code>. Phần nặng (xem giờ trống, thanh toán, thông báo) vẫn ở Edge. Danh sách giờ trống lấy từ ảnh chụp (snapshot) do Core xuất sẵn mỗi 30–60 giây, Edge tự cache.</li>
+    <li><b>Đẩy sự kiện một chiều (outbox → ingest).</b> Mỗi thay đổi ở Edge ghi vào bảng outbox, gom lô rồi đẩy về Core. Mỗi sự kiện có số thứ tự liên tục và chuỗi hash, ký bằng khoá của đối tác. Core phát hiện được thiếu, trùng hoặc bị sửa mà không cần đọc DB của đối tác.</li>
+    <li><b>Đối soát cuối ngày.</b> Edge gửi tổng (số lượng, tổng tiền, hash cuối chuỗi). Core so với dữ liệu đã nhận. Lệch thì yêu cầu gửi lại đoạn thiếu. Tương thích với hướng đặc tả đối soát OpenAPI V2 hiện có trong repo.</li>
+  </ol>
+  <div class="split">
+    <div class="zone core">
+      <span class="tag core">Core · server hiện tại</span>
+      <h3>Giữ ít, nhưng là bản quyết định</h3>
+      <ul>
+        <li><code>CustomerSchedule</code>, <code>Order</code> hiện tại giữ nguyên cho kênh nội bộ (app, web, trạm).</li>
+        <li>Bảng mới <code>ChannelScheduleRef</code>, <code>ChannelOrderRef</code>: chỉ cột cần cho trạm check-in, báo cáo và đối soát.</li>
+        <li><code>SlotCapacity</code>: bộ đếm sức chứa dùng chung cho mọi kênh. <code>SlotHold</code>: từng lượt giữ chỗ của các kênh.</li>
+        <li><code>ChannelEventLog</code>: sổ sự kiện chỉ ghi thêm, có ký số.</li>
+        <li>Dashboard đọc từ bảng tham chiếu và bảng tổng hợp, không gọi sang đối tác.</li>
+      </ul>
+    </div>
+    <div class="zone edge">
+      <span class="tag edge">Edge · tại ngân hàng / ví</span>
+      <h3>Gánh tải người dùng</h3>
+      <ul>
+        <li>Toàn bộ UI, tìm trạm, chọn giờ, thanh toán, OTP, thông báo.</li>
+        <li>DB riêng: hồ sơ khách hàng đầy đủ, dữ liệu riêng của đối tác (Core không cần biết).</li>
+        <li>Cache snapshot giờ trống, chỉ gọi Core 1 lần khi khách bấm "Đặt".</li>
+        <li>Outbox + worker đẩy lô sự kiện, thử lại khi lỗi.</li>
+        <li>API tra cứu chi tiết (tuỳ chọn) để trạm xem thêm khi cần.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>2. Tổng quan triển khai</h2>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph BankA["Ngân hàng A (hạ tầng đối tác)"]
+    UA[Người dùng app NH A] --> FEA[Frontend]
+    FEA --> BEA[Backend Edge]
+    BEA --> DBA[(DB riêng NH A<br/>booking + PII + outbox)]
+  end
+  subgraph WalletB["Ví điện tử B (hạ tầng đối tác)"]
+    UB[Người dùng ví B] --> FEB[Frontend]
+    FEB --> BEB[Backend Edge]
+    BEB --> DBB[(DB riêng ví B)]
+  end
+  subgraph Core["Core · Station Server"]
+    QS[Slot Service<br/>bộ đếm chung + snapshot]
+    IG[Event Ingest<br/>verify chữ ký + hash chain]
+    RC[Reconciliation]
+    REF[(ChannelScheduleRef<br/>ChannelOrderRef<br/>ChannelEventLog)]
+    CS[(CustomerSchedule<br/>Order hiện tại)]
+    DASH[Dashboard giám sát]
+    ST[App trạm đăng kiểm]
+  end
+  BEA -- "1. giữ chỗ (1 lệnh / lượt đặt)" --> QS
+  BEB -- "1. giữ chỗ" --> QS
+  BEA -- "2. đẩy lô sự kiện (async)" --> IG
+  BEB -- "2. đẩy lô sự kiện" --> IG
+  BEA -- "3. tổng cuối ngày" --> RC
+  BEB -- "3. tổng cuối ngày" --> RC
+  IG --> REF
+  RC --> REF
+  QS --> CS
+  QS -. "snapshot giờ trống 30-60s" .-> BEA
+  QS -. "snapshot" .-> BEB
+  REF --> DASH
+  CS --> DASH
+  ST -- "check-in theo biển số / mã" --> REF
+  ST -. "xem chi tiết (tuỳ chọn)" .-> BEA
+  </pre></div>
+</section>
+
+<section>
+  <h2>3. Sequence: đặt lịch qua kênh đối tác</h2>
+  <p>Xem giờ trống, thanh toán, thông báo đều ở Edge. Core chỉ nhận đúng 1 lệnh đồng bộ là giữ chỗ, mọi thứ khác về Core theo lô bất đồng bộ.</p>
+  <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Người dùng (app NH/ví)
+  participant E as Edge Backend
+  participant EDB as Edge DB (+outbox)
+  participant Q as Core · Slot Service
+  participant I as Core · Event Ingest
+  participant R as Core · Ref tables
+
+  rect rgba(11,110,110,0.08)
+  Note over E,Q: Nền: Core xuất snapshot giờ trống mỗi 30-60s
+  E->>Q: GET snapshot (ETag, chỉ tải khi có thay đổi)
+  Q-->>E: số chỗ còn theo trạm / ngày / khung giờ
+  end
+
+  U->>E: Xem trạm, ngày, giờ trống
+  E-->>U: Trả từ cache Edge (không gọi Core)
+  U->>E: Bấm Đặt (biển số, giờ)
+  E->>EDB: INSERT EdgeBooking (PENDING)
+  E->>Q: reserve(slotKey, channelBookingId, HOLD hoặc CONFIRM) - lệnh đồng bộ duy nhất
+  Q->>Q: UPDATE SlotCapacity SET reserved+1 WHERE reserved < capacity
+  alt Còn chỗ
+    Q->>Q: INSERT SlotHold(holdId, hết hạn sau 15 phút)
+    Q-->>E: OK, holdId
+    E->>EDB: thanh toán nếu có, CONFIRMED + OutboxEvent(BOOKING_CONFIRMED, holdId)
+    E-->>U: Xác nhận, mã lịch hẹn CH-NHA-xxxx
+  else Hết chỗ
+    Q-->>E: FULL + 3 khung giờ gần nhất còn chỗ
+    E-->>U: Gợi ý khung giờ khác
+  end
+
+  loop Outbox worker (mỗi vài giây, gom tối đa 500 sự kiện)
+    E->>EDB: lấy sự kiện chưa gửi theo seq
+    E->>I: POST /channel/events (lô, chữ ký Ed25519)
+    I->>I: verify chữ ký, seq liên tục, hash chain, idempotent theo eventId
+    I->>R: upsert ChannelScheduleRef, append ChannelEventLog
+    I->>Q: SlotHold chuyển CONFIRMED
+    I-->>E: ack lastSeq
+    E->>EDB: đánh dấu đã gửi đến lastSeq
+  end
+  </pre></div>
+</section>
+
+<section>
+  <h2>4. Sequence: check-in tại trạm, huỷ lịch và đối soát</h2>
+  <div class="diagram"><pre class="mermaid">
+sequenceDiagram
+  autonumber
+  participant ST as App trạm
+  participant R as Core · Ref tables
+  participant I as Core · Event Ingest
+  participant E as Edge Backend
+  participant RC as Core · Reconciliation
+  participant D as Dashboard
+
+  Note over ST,R: Trạm chỉ cần bảng tham chiếu, không gọi đối tác
+  ST->>R: Tìm lịch theo biển số + ngày (gộp nội bộ và mọi kênh)
+  R-->>ST: scheduleCode, giờ, kênh, trạng thái
+  ST->>R: Cập nhật CHECKED_IN / COMPLETED
+  R->>I: tạo sự kiện chiều ngược (Core → kênh)
+  I-->>E: webhook trạng thái (lô, có retry)
+
+  Note over E: Người dùng huỷ trên app ngân hàng
+  E->>E: Huỷ local, ghi outbox BOOKING_CANCELED
+  E->>I: đẩy trong lô kế tiếp
+  I->>R: status = CANCELED, reserved - 1 (slot trả lại cho mọi kênh)
+
+  Note over E,RC: 00:30 hằng ngày
+  E->>RC: daySummary(channel, date, count, tổng tiền, lastSeq, lastHash)
+  RC->>R: tính lại từ ChannelEventLog
+  alt Khớp
+    RC-->>E: MATCHED
+  else Lệch (thiếu seq / khác hash)
+    RC-->>E: yêu cầu gửi lại seq từ a đến b
+    E->>I: gửi lại đoạn thiếu
+  end
+  RC->>R: dọn SlotHold treo, khớp reserved với số lịch thực
+  R->>D: số liệu tổng hợp theo kênh / trạm / ngày
+  </pre></div>
+</section>
+
+<section>
+  <h2>5. Class diagram</h2>
+  <p>Phần Core thêm 6 bảng nhỏ, không sửa cấu trúc <code>CustomerSchedule</code> hiện có (đã có sẵn <code>partnerName</code>, <code>partnerTranID</code>, <code>scheduleHash</code> có thể dùng cho kênh nội bộ). Phần Edge là gợi ý tối thiểu cho đối tác, họ được thêm bảng riêng tuỳ ý.</p>
+  <div class="diagram"><pre class="mermaid">
+classDiagram
+  direction LR
+
+  class Channel {
+    +int channelId
+    +string channelCode  "NH_A, VI_B"
+    +string channelType  "BANK | EWALLET"
+    +string publicKey    "Ed25519, verify sự kiện"
+    +string webhookUrl
+    +int lastAckSeq
+    +string lastHash
+    +datetime lastHeartbeatAt
+    +int status
+  }
+
+  class SlotCapacity {
+    +bigint slotId
+    +int stationsId
+    +string dateSchedule
+    +string timeSlot
+    +int capacity
+    +int reserved
+    +int version
+    +reserve() bool
+    +release()
+  }
+
+  class SlotHold {
+    +string holdId
+    +bigint slotId
+    +int channelId
+    +string channelBookingId  "khoá idempotent"
+    +int status  "HELD | CONFIRMED | RELEASED | EXPIRED"
+    +datetime expiresAt
+  }
+
+  class ChannelScheduleRef {
+    +bigint refId
+    +int channelId
+    +string channelBookingId  "id phía đối tác"
+    +string scheduleCode
+    +int stationsId
+    +string licensePlates
+    +string dateSchedule
+    +string time
+    +int vehicleType
+    +string phoneHash  "không lưu số gốc"
+    +int status
+    +string holdId
+    +bigint lastEventSeq
+    +datetime updatedAt
+    +findByPlate(plate, date)
+  }
+
+  class ChannelOrderRef {
+    +bigint refId
+    +int channelId
+    +string channelOrderId
+    +string scheduleCode
+    +decimal totalAmount
+    +decimal channelFee
+    +string paymentRef
+    +int paymentStatus
+    +bigint lastEventSeq
+  }
+
+  class ChannelEventLog {
+    +bigint id
+    +int channelId
+    +bigint seq
+    +string eventId  "unique, chống trùng"
+    +string eventType
+    +json payload  "chỉ trường tham chiếu"
+    +string prevHash
+    +string hash
+    +string signature
+    +datetime receivedAt
+    +verify()
+  }
+
+  class ReconciliationBatch {
+    +int batchId
+    +int channelId
+    +string date
+    +int partnerCount
+    +int coreCount
+    +decimal partnerAmount
+    +decimal coreAmount
+    +string partnerLastHash
+    +int result  "MATCHED | MISMATCH | RESOLVED"
+  }
+
+  class CustomerSchedule {
+    <<hiện có>>
+    +int customerScheduleId
+    +string scheduleCode
+    +int stationsId
+    +string partnerName
+    +string partnerTranID
+  }
+
+  class Order {
+    <<hiện có>>
+    +int orderId
+  }
+
+  class EdgeBooking {
+    <<phía đối tác>>
+    +id
+    +customer PII đầy đủ
+    +dữ liệu riêng đối tác
+    +status
+  }
+
+  class OutboxEvent {
+    <<phía đối tác>>
+    +seq
+    +eventId
+    +eventType
+    +payload
+    +prevHash
+    +hash
+    +sentAt
+  }
+
+  class AvailabilityCache {
+    <<phía đối tác>>
+    +snapshot
+    +etag
+    +fetchedAt
+  }
+
+  Channel "1" --> "*" SlotHold
+  Channel "1" --> "*" ChannelScheduleRef
+  Channel "1" --> "*" ChannelOrderRef
+  Channel "1" --> "*" ChannelEventLog
+  Channel "1" --> "*" ReconciliationBatch
+  SlotCapacity "1" --> "*" SlotHold : giữ chỗ
+  SlotHold "1" --> "0..1" ChannelScheduleRef
+  ChannelScheduleRef "1" --> "0..1" ChannelOrderRef
+  ChannelEventLog ..> ChannelScheduleRef : dựng lại trạng thái
+  CustomerSchedule ..> SlotCapacity : kênh nội bộ trừ chung bộ đếm
+  ChannelOrderRef ..> Order : gộp báo cáo doanh thu
+  EdgeBooking "1" --> "*" OutboxEvent
+  AvailabilityCache ..> SlotCapacity : snapshot chỉ đọc
+  OutboxEvent ..> ChannelEventLog : đẩy lô, ký số
+  </pre></div>
+</section>
+
+<section>
+  <h2>6. Ai chịu tải gì</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Công việc</th><th>Chạy ở</th><th>Tần suất gọi Core</th></tr></thead>
+    <tbody>
+      <tr><td>Hiển thị UI, tìm trạm, xem giờ trống</td><td><span class="tag edge">Edge</span></td><td>0 (đọc snapshot giờ trống đã cache)</td></tr>
+      <tr><td>Giữ chỗ khi bấm "Đặt"</td><td><span class="tag core">Core</span></td><td>1 lệnh nhẹ / lượt đặt (vài ms)</td></tr>
+      <tr><td>Thanh toán, OTP, SMS/Zalo, hoá đơn</td><td><span class="tag edge">Edge</span></td><td>0</td></tr>
+      <tr><td>Xuất snapshot giờ trống</td><td><span class="tag core">Core</span></td><td>1 job / 30–60 giây, Edge tải theo ETag</td></tr>
+      <tr><td>Nhận sự kiện</td><td><span class="tag core">Core</span></td><td>1 request / lô (hàng trăm sự kiện)</td></tr>
+      <tr><td>Check-in tại trạm</td><td><span class="tag core">Core</span></td><td>Như hiện tại, đọc bảng tham chiếu</td></tr>
+      <tr><td>Dashboard</td><td><span class="tag core">Core</span></td><td>Đọc bảng tổng hợp, không gọi đối tác</td></tr>
+      <tr><td>Đối soát</td><td><span class="tag core">Core</span></td><td>1 lần / kênh / ngày</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>7. Dashboard giám sát lấy gì</h2>
+  <ul class="steps" style="list-style:disc">
+    <li>Số lịch theo kênh / trạm / ngày, tỷ lệ huỷ, tỷ lệ check-in: từ <code>ChannelScheduleRef</code>.</li>
+    <li>Doanh thu, phí kênh, trạng thái thanh toán: từ <code>ChannelOrderRef</code> + <code>Order</code>.</li>
+    <li>Sức khoẻ kênh: độ trễ đồng bộ = now − <code>lastHeartbeatAt</code>, khoảng hở seq, số lô bị từ chối chữ ký.</li>
+    <li>Tỷ lệ lấp đầy slot theo trạm và kênh, số lượt giữ chỗ hết hạn, số lần trả về FULL (nhu cầu bị từ chối).</li>
+    <li>Kết quả đối soát: số ngày MATCHED / MISMATCH theo kênh.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>8. Những điểm cần quyết định</h2>
+  <div class="note"><strong>Điểm đồng bộ duy nhất là lệnh giữ chỗ.</strong> Nếu Core không phản hồi, Edge không xác nhận được lịch. Phương án dự phòng: Edge nhận yêu cầu ở trạng thái "chờ xác nhận", tự thử lại và báo khách khi có kết quả. Để Core không thành điểm nghẽn, tách lệnh giữ chỗ thành một service nhỏ riêng (Redis hoặc bảng riêng), không chạy chung tiến trình với các API nặng hiện tại.</div>
+  <ol class="steps">
+    <li><b>Thời gian giữ chỗ.</b> Bao lâu là đủ cho bước thanh toán (gợi ý 15 phút)? Lịch miễn phí thì xác nhận luôn trong 1 lệnh, không cần giữ.</li>
+    <li><b>Trường dữ liệu tối thiểu ở Core.</b> Trạm cần biển số, giờ, loại xe để check-in. Số điện thoại và họ tên có cần không, hay chỉ lưu hash và gọi sang Edge khi cần (tác động tới Nghị định 13/2023 về bảo vệ dữ liệu cá nhân và hợp đồng với ngân hàng)?</li>
+    <li><b>Ràng buộc với đối tác.</b> Phiên bản Edge do mình phát hành (bắt buộc cập nhật), đối tác có được sửa code không? Nếu có, hash chain + chữ ký vẫn đảm bảo Core phát hiện gian lận dữ liệu đã gửi, nhưng không bắt được sự kiện bị giấu từ đầu; đối soát doanh thu với cổng thanh toán là lớp kiểm tra thứ hai.</li>
+    <li><b>Độ trễ chấp nhận được.</b> Dashboard trễ vài giây đến vài phút có ổn không? Nếu cần gần thời gian thực, giảm kích thước lô.</li>
+    <li><b>Đơn hàng không gắn lịch</b> (bảo hiểm, sản phẩm khác): dùng chung <code>ChannelOrderRef</code> với <code>scheduleCode</code> rỗng.</li>
+  </ol>
+</section>
+</main>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="vendor/mermaid.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+
+</body></html>
