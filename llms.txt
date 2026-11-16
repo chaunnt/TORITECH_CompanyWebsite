@@ -1,0 +1,32 @@
+# TORITECH
+
+> CÔNG TY TNHH TORITECH (MST 0317545179) cung cấp hạ tầng thị giác máy tính (AI Camera Vision & VMS), nền tảng đặt lịch hẹn & điều phối dịch vụ quy mô lớn, và hệ sinh thái AI Agent qua Model Context Protocol (MCP) cho cơ quan quản lý (B2G), doanh nghiệp (B2B) và người dân (B2C) tại Việt Nam.
+
+Liên hệ: hotline/Zalo 0343 902 960 · Trụ sở: 139/21/2A Thạnh Lộc 27, Khu phố 3C, Phường An Phú Đông, Thành phố Hồ Chí Minh, Việt Nam
+
+## Giải pháp
+- [AI Camera Vision & VMS](https://chaunnt.github.io/TORITECH_CompanyWebsite/ai-vision-vms.html): phân tích video thời gian thực, quản lý tập trung camera/đầu ghi (ONVIF/RTSP), cảnh báo, báo cáo.
+- [Nền tảng Đặt lịch & Điều phối](https://chaunnt.github.io/TORITECH_CompanyWebsite/dat-lich.html): bộ đếm slot chung chịu tải cao, đa kênh qua ngân hàng/ví điện tử, thông báo, thanh toán, đối soát ký số.
+- [Hệ sinh thái MCP & AI Agent](https://chaunnt.github.io/TORITECH_CompanyWebsite/mcp.html): MCP Dịch vụ công, MCP Doanh nghiệp (ERP/CRM/kế toán/thuế), MCP Trợ lý nhân viên; RBAC, OAuth, Audit Log, Human-in-the-loop, Zero Data Training.
+
+## Tin cậy & pháp lý
+- [Trust Center](https://chaunnt.github.io/TORITECH_CompanyWebsite/trust-center.html)
+- [Điều khoản sử dụng](https://chaunnt.github.io/TORITECH_CompanyWebsite/dieu-khoan-su-dung.html)
+- [Chính sách bảo vệ dữ liệu cá nhân](https://chaunnt.github.io/TORITECH_CompanyWebsite/chinh-sach-bao-ve-du-lieu-ca-nhan.html)
+- [Chính sách bảo mật AI & MCP](https://chaunnt.github.io/TORITECH_CompanyWebsite/chinh-sach-bao-mat-ai-mcp.html)
+- [Miễn trừ trách nhiệm dữ liệu dịch vụ công](https://chaunnt.github.io/TORITECH_CompanyWebsite/mien-tru-trach-nhiem-dich-vu-cong.html)
+- [Thỏa thuận xử lý dữ liệu (DPA)](https://chaunnt.github.io/TORITECH_CompanyWebsite/thoa-thuan-xu-ly-du-lieu-dpa.html)
+- [Cam kết chất lượng dịch vụ (SLA)](https://chaunnt.github.io/TORITECH_CompanyWebsite/cam-ket-chat-luong-sla.html)
+- [Chính sách thanh toán & hoàn huỷ](https://chaunnt.github.io/TORITECH_CompanyWebsite/chinh-sach-thanh-toan-hoan-huy.html)
+- [Chính sách Cookie](https://chaunnt.github.io/TORITECH_CompanyWebsite/chinh-sach-cookie.html)
+
+## Tài nguyên
+- [Tài liệu kỹ thuật](https://chaunnt.github.io/TORITECH_CompanyWebsite/tai-lieu.html)
+- [Hồ sơ năng lực & tiêu chuẩn kỹ thuật](https://chaunnt.github.io/TORITECH_CompanyWebsite/ho-so-nang-luc.html)
+- [Dự án & hồ sơ](https://chaunnt.github.io/TORITECH_CompanyWebsite/du-an.html)
+  - [Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/kien-truc-du-lieu-dang-kiem.html): Bộ mô hình 2.5D: Sở Xây dựng tiếp nhận, giám sát và điều hành dữ liệu đăng kiểm theo thời gian thực; IOC phát hiện xe hết hạn, điều phối hạ tầng.
+  - [Văn thư số xử lý vi phạm giao thông](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/van-thu-so-vi-pham-giao-thong.html): Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic.
+  - [DVC Connector – Tự động hoá dịch vụ công bằng AI](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/dvc-connector-ai.html): Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot.
+  - [Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/kiem-dinh-khi-thai-xe-may.html): Đề xuất xã hội hoá: đặt lịch & thanh toán cho hơn 11,5 triệu xe máy khi kiểm định khí thải bắt đầu từ 01/7/2027, có trợ lý AI hỗ trợ vận hành.
+  - [Đặt lịch & đơn hàng đa kênh, dữ liệu phân tán](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/dat-lich-da-kenh-phan-tan.html): Kiến trúc Edge node tại ngân hàng/ví điện tử, Core giữ bộ đếm slot chung, sổ sự kiện ký số và đối soát cuối ngày – chịu tải cao, không chia quota.
+  - [Danh bạ đăng kiểm TTDK](https://chaunnt.github.io/TORITECH_CompanyWebsite/showcase/danh-ba-dang-kiem-ttdk.html): Danh bạ trung tâm đăng kiểm, garage, cứu hộ, bảo hiểm trên toàn quốc từ TTDK API: bản đồ, giờ làm việc, đánh giá, đặt lịch trực tuyến.
