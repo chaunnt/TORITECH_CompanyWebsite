@@ -10,9 +10,13 @@ Landing page HTML5 đa trang của **CÔNG TY TNHH TORITECH** – AI Camera Visi
 - SEO/GEO: Open Graph, JSON-LD (Organization, FAQPage), `sitemap.xml`, `robots.txt`, `llms.txt`
 
 ## Chỉnh sửa
-Site là HTML tĩnh thuần, sửa trực tiếp các file `.html`, `assets/css/site.css`, `assets/js/*.js`.
+Site là HTML tĩnh: có thể sửa trực tiếp các file `.html`, `assets/css/site.css`, `assets/js/*.js`.
 
-- Header, footer, menu được lặp lại ở mỗi trang: khi đổi thì sửa ở tất cả các file (dùng tìm & thay thế).
-- Xem thử: `python3 -m http.server 8000` rồi mở http://localhost:8000
+`tools/` là công cụ sinh trang (tuỳ chọn, chạy trên máy): `tools/build.py` (trang), `tools/legal.py` (chính sách), `tools/site_config.py` (pháp nhân, email, URL).
 
-Deploy tự động bằng GitHub Actions (`.github/workflows/pages.yml`) khi push lên `main`, không có bước build.
+```bash
+python3 tools/build.py          # sinh lại toàn bộ HTML – GHI ĐÈ các file .html đã sửa tay
+python3 -m http.server 8000     # xem thử tại http://localhost:8000
+```
+
+Deploy: GitHub Actions (`.github/workflows/pages.yml`) chép file lên Pages khi push `main`, không chạy build, và **không** đưa `.github/`, `tools/`, `README.md` lên site.
