@@ -48,6 +48,30 @@
       "title": "Danh bạ đăng kiểm TTDK",
       "desc": "Danh bạ trung tâm đăng kiểm, garage, cứu hộ, bảo hiểm trên toàn quốc từ TTDK API: bản đồ, giờ làm việc, đánh giá, đặt lịch trực tuyến.",
       "kind": "Ứng dụng web"
+    },
+    {
+      "artifact_slug": "3e53d7de-b397-4de4-a2a6-361e4f8e4db1",
+      "href": "showcase/ket-noi-du-lieu-tin-tuc-giao-thong.html",
+      "cat": "vision",
+      "title": "Kết nối dữ liệu sản xuất tin tức giao thông",
+      "desc": "Mô phỏng 2.5D trung tâm tổng hợp thu thập 7 luồng dữ liệu hiện trường (ETC vùng phát thải thấp, kiểm định, ùn tắc, camera AI) và liên thông cơ quan quản lý, xử lý thành bản tin phân phối đa kênh.",
+      "kind": "Mô phỏng 2.5D"
+    },
+    {
+      "artifact_slug": "ef8c2752-7487-4815-b67e-299c30df20a7",
+      "href": "showcase/giam-sat-bai-xe-hoc-duong.html",
+      "cat": "vision",
+      "title": "Giám sát bãi giữ xe học đường",
+      "desc": "Cổng trường kết hợp trụ ETC và camera AI nhận dạng biển số: tự động tra cứu đăng ký xe, ghi nhận lịch sử ra vào và cảnh báo phương tiện vi phạm. Dữ liệu minh hoạ.",
+      "kind": "Mô phỏng 2.5D"
+    },
+    {
+      "artifact_slug": "80e89c26-304a-4bc1-ae49-d0aa06bb63d8",
+      "href": "showcase/claude-van-hanh-nhan-tin-cskh-mcp.html",
+      "cat": "mcp",
+      "title": "AI Agent vận hành hệ thống nhắn tin CSKH qua MCP",
+      "desc": "So sánh vận hành thủ công với AI Agent qua MCP (Model Context Protocol): Claude lọc tệp, soạn nội dung và tạo chiến dịch Zalo OA, SMS, Email trong khi dữ liệu khách hàng vẫn nằm trên CRM.",
+      "kind": "Mô phỏng 2.5D"
     }
   ],
   "docs": [
@@ -70,5 +94,11 @@
       "desc": "Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."
     }
   ],
-  "skipped": []
+  "skipped": [
+    {
+      "artifact_slug": "d6eca5f0-8cd0-49f8-84fb-d31c0c6531b5",
+      "title": "Mô hình 2.5D – Giám sát giao thông & phát thải (Sở Xây dựng)",
+      "reason": "cần chủ sở hữu duyệt: hiển thị biển số đầy đủ, không có ghi chú dữ liệu giả định/minh hoạ; trình bày Sở Xây dựng là chủ thể vận hành (cat dự kiến: vision)."
+    }
+  ]
 }
