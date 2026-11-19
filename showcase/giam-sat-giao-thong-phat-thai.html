@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mô hình 2.5D – Giám sát giao thông & phát thải (Sở Xây dựng)</title>
+<style>
+:root{--bg:#0b1220;--panel:#111a2c;--line:#22304a;--txt:#e6edf7;--mut:#8b9bb4;
+--so:#22d3ee;--csgt:#fbbf24;--dk:#34d399;--etc:#a78bfa;--cam:#f472b6;--owner:#60a5fa;--gara:#fb923c;--danger:#ef4444}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:"Segoe UI",Roboto,system-ui,sans-serif}
+header{padding:10px 14px 6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px}
+header .sub{font-size:12px;color:var(--mut)}
+#flows{display:flex;gap:6px;padding:4px 14px 8px;overflow-x:auto;scrollbar-width:none}
+#flows::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:#131e33;color:var(--txt);border-radius:999px;padding:6px 11px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.chip b{color:var(--so);margin-right:4px}
+.chip.on{background:#0e3a4a;border-color:var(--so)}
+.chip.all{border-color:#3b82f6;background:#132a52}
+main{display:flex;gap:10px;padding:0 10px 10px;height:calc(100% - 92px)}
+#stage{position:relative;flex:1;min-width:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#13213a 0%,#0a1120 70%)}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.mapctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
+.mapctl button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#111a2ccc;color:var(--txt);font-size:16px;cursor:pointer}
+#clock{position:absolute;left:10px;top:8px;background:#111a2ccc;border:1px solid var(--line);border-radius:9px;padding:5px 9px;font-size:12px}
+#clock b{font-size:15px;color:#fff}
+#legend{position:absolute;left:8px;bottom:8px;background:#111a2cdd;border:1px solid var(--line);border-radius:10px;padding:6px 9px;font-size:11px;display:flex;flex-wrap:wrap;gap:4px 10px;max-width:calc(100% - 16px)}
+#legend span{display:inline-flex;align-items:center;gap:5px;color:var(--mut)}
+#legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+aside{width:360px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.card h3{margin:0 0 4px;font-size:14px}
+.card h4{margin:0 0 6px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+#flowDesc{font-size:12.5px;color:var(--mut);margin:0 0 6px;line-height:1.45}
+#steps{margin:0;padding-left:0;list-style:none;font-size:12.5px}
+#steps li{padding:4px 0 4px 22px;position:relative;color:#7f8ea8;line-height:1.35}
+#steps li:before{content:"";position:absolute;left:4px;top:8px;width:9px;height:9px;border-radius:50%;border:2px solid #34445f}
+#steps li.cur{color:#fff}
+#steps li.cur:before{border-color:var(--so);background:var(--so);box-shadow:0 0 8px var(--so)}
+#steps li.done{color:#a9b8cf}
+#steps li.done:before{border-color:#22c55e;background:#22c55e}
+#phone{flex:0 0 auto}
+#notis{display:flex;flex-direction:column;gap:6px;max-height:170px;overflow:auto}
+.noti{background:#0c1424;border:1px solid var(--line);border-left:3px solid var(--owner);border-radius:10px;padding:6px 8px;font-size:12px;animation:pop .35s ease}
+.noti .t{font-weight:700;font-size:12.5px;margin-bottom:2px}
+.noti .m{color:var(--mut)}
+.noti.warn{border-left-color:#f59e0b}.noti.danger{border-left-color:var(--danger)}.noti.ok{border-left-color:#22c55e}
+@keyframes pop{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}
+#logbox{flex:1;min-height:120px;display:flex;flex-direction:column}
+#log{overflow:auto;font-size:12px;line-height:1.4;flex:1}
+.lg{padding:3px 0;border-bottom:1px dashed #1c2940}
+.lg .tm{color:#5f7090;margin-right:5px;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:1px 5px;margin-right:5px;color:#0b1220}
+.empty{color:#5f7090;font-size:12px}
+@media (max-width:900px){
+ main{flex-direction:column;height:auto}
+ #stage{height:min(62vh,calc(100vw*.8 + 40px));flex:none}
+ #legend{font-size:10px;padding:4px 7px}
+ aside{width:100%}
+ #notis{max-height:none}
+ #log{max-height:240px}
+ header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mô hình giám sát giao thông – Sở Xây dựng làm trung tâm dữ liệu</h1>
+  <span class="sub">Kết nối dữ liệu Cục CSGT (đăng ký xe, vi phạm) &amp; Cục Đăng kiểm VN (thông tin xe, khí thải)</span>
+</header>
+<div id="flows"></div>
+<main>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div id="clock">🕒 <b id="clk">08:00</b> <span id="clkNote" style="color:#8b9bb4"></span></div>
+    <div class="mapctl">
+      <button id="zin" title="Phóng to">＋</button>
+      <button id="zout" title="Thu nhỏ">－</button>
+      <button id="zfit" title="Vừa khung">⤢</button>
+      <button id="spd" title="Tốc độ" style="font-size:12px">1×</button>
+    </div>
+    <div id="legend">
+      <span><i style="background:var(--so)"></i>Sở XD</span>
+      <span><i style="background:var(--csgt)"></i>Cục CSGT</span>
+      <span><i style="background:var(--dk)"></i>Cục Đăng kiểm</span>
+      <span><i style="background:var(--etc)"></i>Trạm ETC</span>
+      <span><i style="background:var(--cam)"></i>Camera AI</span>
+      <span><i style="background:var(--owner)"></i>Chủ xe</span>
+    </div>
+  </div>
+  <aside>
+    <div class="card">
+      <h3 id="flowTitle">Đang chạy tự động 7 luồng</h3>
+      <p id="flowDesc">Chạm vào một luồng phía trên để xem riêng. Kéo để di chuyển bản đồ, chụm/cuộn để phóng to.</p>
+      <ol id="steps"></ol>
+    </div>
+    <div class="card" id="phone">
+      <h4>📱 Thông báo gửi đến chủ xe / đơn vị</h4>
+      <div id="notis"><div class="empty">Chưa có thông báo.</div></div>
+    </div>
+    <div class="card" id="logbox">
+      <h4>🖥️ Nhật ký trung tâm dữ liệu Sở XD</h4>
+      <div id="log"></div>
+    </div>
+  </aside>
+</main>
+
+<script>
+(()=>{
+const cv=document.getElementById('cv'), g=cv.getContext('2d');
+const TW=64, TH=32, ZU=30, N=24;
+const COL={so:'#22d3ee',csgt:'#fbbf24',dk:'#34d399',etc:'#a78bfa',cam:'#f472b6',owner:'#60a5fa',gara:'#fb923c',warn:'#f59e0b',danger:'#ef4444',ok:'#22c55e'};
+let DPR=1, W=0, H=0, view={s:1,ox:0,oy:0}, userMoved=false;
+
+/* ---------- helpers ---------- */
+const iso=(x,y,z=0)=>[(x-y)*TW/2,(x+y)*TH/2-z*ZU];
+const scr=(x,y,z=0)=>{const p=iso(x,y,z);return[p[0]*view.s+view.ox,p[1]*view.s+view.oy];};
+function hex2rgb(h){h=h.replace('#','');return[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];}
+function shade(h,f){const c=hex2rgb(h).map(v=>Math.round(f<0?v*(1+f):v+(255-v)*f));return`rgb(${c[0]},${c[1]},${c[2]})`;}
+function rgba(h,a){const c=hex2rgb(h);return`rgba(${c[0]},${c[1]},${c[2]},${a})`;}
+function P(pts,fill,stroke,lw){g.beginPath();pts.forEach((p,i)=>{const q=iso(p[0],p[1],p[2]||0);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);});g.closePath();if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=lw||1;g.stroke();}}
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646;};
+function rrect(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+
+/* ---------- world ---------- */
+const ROADS=[[0,10,24,11,'h'],[10,0,11,24,'v'],[0,18,24,19,'h'],[18,0,19,24,'v'],[11,5,24,6,'h'],[5,0,6,10,'v'],[3,16,4,18,'d'],[13.75,19,14.75,20.2,'d']];
+const LEZ=[11.2,0,24,9.8], NOIDO=[0,0,9.8,9.8];
+const B=[];
+function bld(x0,y0,x1,y1,h,col,opt={}){const b={x0,y0,x1,y1,h,col,...opt,win:[]};
+  const step=.42;for(let z=.3;z<h-.2;z+=step){for(let x=x0+.2;x<x1-.25;x+=.48)b.win.push(['L',x,z,rnd()<.45]);for(let y=y0+.2;y<y1-.25;y+=.48)b.win.push(['R',y,z,rnd()<.45]);}
+  B.push(b);return b;}
+const filler='#2a3a58';
+[[12,0.8,14.6,3.6,1.8],[15.2,0.8,17.4,4.2,2.6],[19.6,0.8,22.6,4.2,1.6],[12.4,6.6,14.8,9.0,1.4],[15.4,6.6,17.4,9.0,2.8],[19.8,6.6,23.2,9.0,2.0],
+ [0.8,0.8,4.4,4.0,2.2],[6.6,0.8,9.4,3.6,3.0],[0.8,5.4,4.4,8.8,1.6],[6.6,4.6,9.4,8.4,2.4],
+ [6.4,12.4,9.4,16.6,2.0],[20,20,23.4,23.2,1.8],[6.4,20,9.4,23.4,1.6],[0.8,11.8,2.6,12.6,0.6]].forEach(a=>bld(...a,filler));
+const SO=bld(13,13,16.5,16.5,4.4,'#0e7490',{main:'so',winc:'#67e8f9'});
+const CSGT=bld(1.5,20,5,23.2,2.6,'#92400e',{main:'csgt',winc:'#fde68a'});
+const DK=bld(19.8,12.4,23.4,16.6,2.6,'#065f46',{main:'dk',winc:'#a7f3d0'});
+const TRAM=bld(1.4,13,5.6,16,1.3,'#14532d',{main:'tram',winc:'#bbf7d0'});
+const GARA=bld(12.4,20.2,16.2,23.2,1.1,'#7c2d12',{main:'gara',winc:'#fed7aa'});
+const TREES=[[12.2,4.6],[13.4,4.5],[14.6,4.6],[15.8,4.5],[17.2,4.6],[20,4.6],[21.2,4.5],[22.4,4.6],[12.3,9.4],[14.6,9.4],[16.6,9.4],[20.6,9.4],[22.6,9.4],[4.6,4.7],[2.2,4.7],[7.6,4.2],[0.6,9.2],[3,9.3],[23.5,11.8],[23.5,17.4],[11.6,17.3],[12.6,17.3],[17.3,12],[17.3,17.3]];
+const NODES={so:[14.75,14.75,5.4],csgt:[3.25,21.6,3.0],dk:[21.6,14.5,3.0],etc1:[18.5,9.4,1.45],etc2:[11.6,5.5,1.45],
+ cam1:[7.5,17.65,1.7],cam2:[11.3,15.2,1.7],cam3:[6.25,9.35,1.7],cam4:[14,11.35,1.7],tram:[3.5,14.5,1.6],gara:[14.3,21.7,1.3]};
+const CAMS=['cam1','cam2','cam3','cam4'];
+const LABELS=[['so','SỞ XÂY DỰNG','Trung tâm dữ liệu giao thông',COL.so,1],['csgt','CỤC CSGT','Đăng ký xe · Vi phạm',COL.csgt,1],['dk','CỤC ĐĂNG KIỂM VN','Thông tin xe · Khí thải',COL.dk,1],
+ ['tram','Trạm đăng kiểm','',COL.dk,0],['gara','Gara bảo dưỡng','',COL.gara,0]];
+const LINKS=[['so','csgt',COL.csgt,1],['so','dk',COL.dk,1],['so','etc1',COL.etc,0],['so','etc2',COL.etc,0],['so','cam1',COL.cam,0],['so','cam2',COL.cam,0],['so','cam3',COL.cam,0],['so','cam4',COL.cam,0],['tram','dk',COL.dk,0],['gara','so',COL.gara,0]];
+
+/* ---------- drawing primitives ---------- */
+function box(x0,y0,x1,y1,z0,h,col){
+  P([[x0,y1,z0],[x1,y1,z0],[x1,y1,z0+h],[x0,y1,z0+h]],shade(col,-.35));
+  P([[x1,y0,z0],[x1,y1,z0],[x1,y1,z0+h],[x1,y0,z0+h]],shade(col,-.55));
+  P([[x0,y0,z0+h],[x1,y0,z0+h],[x1,y1,z0+h],[x0,y1,z0+h]],shade(col,.12));
+}
+function drawBuilding(b,t){
+  const glow=b.main==='so'?(alertT>t?COL.danger:null):null;
+  box(b.x0,b.y0,b.x1,b.y1,0,b.h,b.col);
+  const wc=b.winc||'#fcd97a';
+  for(const w of b.win){
+    const lit=w[3]||(b.main==='so');
+    const c=lit?rgba(wc.length===7?wc:'#fcd97a',b.main?.85:.55):'rgba(20,30,50,.6)';
+    if(w[0]==='L')P([[w[1],b.y1,w[2]],[w[1]+.22,b.y1,w[2]],[w[1]+.22,b.y1,w[2]+.2],[w[1],b.y1,w[2]+.2]],c);
+    else P([[b.x1,w[1],w[2]],[b.x1,w[1]+.22,w[2]],[b.x1,w[1]+.22,w[2]+.2],[b.x1,w[1],w[2]+.2]],c);
+  }
+  if(b.main==='so'){
+    // rooftop data-center + antenna
+    box(14,14,15.5,15.5,b.h,.35,'#155e75');
+    P([[14.75,14.75,b.h+.35],[14.75,14.75,b.h+1.2]],null,'#67e8f9',2);
+    const q=iso(14.75,14.75,b.h+1.25);g.beginPath();g.arc(q[0],q[1],3+Math.sin(t/200)*1,0,7);g.fillStyle=glow||'#a5f3fc';g.fill();
+    if(glow){P([[b.x0,b.y0,b.h],[b.x1,b.y0,b.h],[b.x1,b.y1,b.h],[b.x0,b.y1,b.h]],null,rgba(COL.danger,.5+.5*Math.sin(t/120)),3);}
+  }
+  if(b.main==='tram'){ // open bays
+    for(let i=0;i<3;i++){const x=1.9+i*1.25;P([[x,16,0],[x+.8,16,0],[x+.8,16,.9],[x,16,.9]],'#0a1a10');}
+  }
+  if(b.main==='gara'){P([[13.6,23.2,0],[14.9,23.2,0],[14.9,23.2,.8],[13.6,23.2,.8]],'#1c0a04');P([[13.7,20.2,0],[14.8,20.2,0],[14.8,20.2,.8],[13.7,20.2,.8]],null,'#fdba74',1.5);}
+}
+function drawTree(x,y){const b=iso(x,y,0),t=iso(x,y,.55);g.strokeStyle='#5b3a1a';g.lineWidth=3;g.beginPath();g.moveTo(b[0],b[1]);g.lineTo(t[0],t[1]);g.stroke();
+  g.beginPath();g.arc(t[0],t[1]-4,9,0,7);g.fillStyle='#166534';g.fill();g.beginPath();g.arc(t[0]-3,t[1]-7,5,0,7);g.fillStyle='#22c55e';g.fill();}
+function drawPole(x,y,h,col){box(x-.04,y-.04,x+.04,y+.04,0,h,'#64748b');}
+function drawCam(id,t){const n=NODES[id];drawPole(n[0],n[1],n[2]-.1);box(n[0]-.14,n[1]-.1,n[0]+.14,n[1]+.1,n[2]-.12,.2,'#334155');
+  const q=iso(n[0],n[1],n[2]+.12);g.beginPath();g.arc(q[0],q[1],2.6,0,7);g.fillStyle=(Math.floor(t/500)%2)?COL.cam:'#7f1d4f';g.fill();}
+function drawGantry(id){
+  if(id==='etc1'){const y=9.4;drawPole(17.9,y,1.3);drawPole(19.1,y,1.3);box(17.85,y-.08,19.15,y+.08,1.22,.2,'#6d28d9');}
+  else{const x=11.6;drawPole(x,4.9,1.3);drawPole(x,6.1,1.3);box(x-.08,4.85,x+.08,6.15,1.22,.2,'#6d28d9');}
+}
+const SIGNS=[[19.4,9.75,'LEZ',COL.ok],[11.45,6.45,'LEZ',COL.ok],[4.6,9.6,'⛔ Tải/khách 6h–22h',COL.danger]];
+function drawSignPost(s){drawPole(s[0],s[1],1.05);}
+
+/* ---------- vehicles ---------- */
+const VEH=[];
+function offsetPath(path,lane){
+  const out=[];for(let i=0;i<path.length;i++){
+    const a=path[Math.max(0,i-1)],b=path[i],c=path[Math.min(path.length-1,i+1)];
+    const d1=norm([b[0]-a[0],b[1]-a[1]]),d2=norm([c[0]-b[0],c[1]-b[1]]);
+    const n1=d1?[-d1[1],d1[0]]:null,n2=d2?[-d2[1],d2[0]]:null;
+    let o;if(!n1)o=n2;else if(!n2)o=n1;else if(Math.abs(n1[0]-n2[0])<.01&&Math.abs(n1[1]-n2[1])<.01)o=n1;else o=[n1[0]+n2[0],n1[1]+n2[1]];
+    out.push([b[0]+o[0]*lane,b[1]+o[1]*lane]);}
+  return out;}
+function norm(v){const l=Math.hypot(v[0],v[1]);return l<1e-6?null:[v[0]/l,v[1]/l];}
+function spawn(type,path,o={}){
+  const v={type,pts:offsetPath(path,o.lane??.24),i:0,target:0,speed:o.speed||2.4,color:o.color||'#e5e7eb',plate:o.plate||'',amb:!!o.amb,alpha:1,fade:0,dir:[1,0],res:null,bubble:null,loop:!!o.loop};
+  v.pos=[...v.pts[0]];const d=norm([v.pts[1][0]-v.pts[0][0],v.pts[1][1]-v.pts[0][1]]);if(d)v.dir=d;
+  if(o.progress){v.target=v.pts.length-1;}
+  VEH.push(v);return v;}
+function updateVeh(v,dt){
+  let rem=v.speed*dt;
+  while(rem>0&&v.i<v.target){const nx=v.pts[v.i+1];const dx=nx[0]-v.pos[0],dy=nx[1]-v.pos[1];const d=Math.hypot(dx,dy);
+    if(d>1e-6)v.dir=[dx/d,dy/d];
+    if(d<=rem){v.pos=[nx[0],nx[1]];v.i++;rem-=d;}else{v.pos[0]+=dx/d*rem;v.pos[1]+=dy/d*rem;rem=0;}}
+  if(v.i>=v.target&&v.res){const r=v.res;v.res=null;r();}
+  if(v.loop&&v.i>=v.pts.length-1){v.i=0;v.pos=[...v.pts[0]];}
+  if(v.fade){v.alpha-=dt*1.5;}
+}
+function vbox(c,u,L,Wd,z0,h,col){
+  const n=[-u[1],u[0]];
+  const p=[[c[0]+u[0]*L/2+n[0]*Wd/2,c[1]+u[1]*L/2+n[1]*Wd/2],[c[0]+u[0]*L/2-n[0]*Wd/2,c[1]+u[1]*L/2-n[1]*Wd/2],[c[0]-u[0]*L/2-n[0]*Wd/2,c[1]-u[1]*L/2-n[1]*Wd/2],[c[0]-u[0]*L/2+n[0]*Wd/2,c[1]-u[1]*L/2+n[1]*Wd/2]];
+  const nm=[u,[-n[0],-n[1]],[-u[0],-u[1]],n];
+  for(let i=0;i<4;i++){const nn=nm[i];if(nn[0]+nn[1]>0){const a=p[i],b=p[(i+1)%4];P([[a[0],a[1],z0],[b[0],b[1],z0],[b[0],b[1],z0+h],[a[0],a[1],z0+h]],shade(col,nn[0]>nn[1]?-.5:-.3));}}
+  P(p.map(q=>[q[0],q[1],z0+h]),shade(col,.08));
+}
+function drawVeh(v){
+  g.globalAlpha=Math.max(0,v.alpha);const c=v.pos,u=v.dir,k=(s)=>[c[0]+u[0]*s,c[1]+u[1]*s];
+  // shadow
+  P([[c[0]-.4,c[1]-.25],[c[0]+.4,c[1]-.25],[c[0]+.4,c[1]+.25],[c[0]-.4,c[1]+.25]].map(q=>[q[0],q[1],0]),'rgba(0,0,0,.25)');
+  if(v.type==='car'){vbox(c,u,.82,.42,.06,.2,v.color);vbox(k(-.06),u,.44,.36,.26,.17,'#1e293b');
+    const hl=iso(...k(.42),.16);g.fillStyle='#fef9c3';g.beginPath();g.arc(hl[0],hl[1],1.6,0,7);g.fill();}
+  else if(v.type==='moto'){vbox(c,u,.5,.14,.08,.16,v.color);vbox(k(-.04),u,.16,.16,.24,.28,'#f1f5f9');}
+  else if(v.type==='truck'){vbox(k(.55),u,.36,.46,.06,.42,v.color);vbox(k(-.12),u,1.0,.5,.06,.55,'#cbd5e1');}
+  else if(v.type==='bus'){vbox(c,u,1.4,.5,.06,.5,v.color);}
+  g.globalAlpha=1;
+}
+
+/* ---------- effects / packets ---------- */
+let simT=0,speedMul=1,alertT=0;
+const FX=[],PK=[],WAIT=[];
+let RUN=0;const ABORT={abort:1};
+function chk(r){if(r!==RUN)throw ABORT;}
+function wait(ms,r){return new Promise(res=>WAIT.push({t:simT+ms,res,r})).then(()=>chk(r));}
+function npos(n){return typeof n==='string'?NODES[n]:[n.pos[0],n.pos[1],.9];}
+function arcPts(a,b){const A=iso(...a),Bp=iso(...b);const dx=Bp[0]-A[0],dy=Bp[1]-A[1],L=Math.hypot(dx,dy)||1;
+  const sgn=dx>=0?1:-1;const px=-dy/L*sgn,py=dx/L*sgn;const bend=L*.22;
+  const C=[(A[0]+Bp[0])/2+px*bend*(Math.abs(dx)<L*.35?1:.25),(A[1]+Bp[1])/2-40-L*.18+py*bend*(Math.abs(dx)<L*.35?0:.25)];
+  return[A,C,Bp];}
+function qb(p,t){const u=1-t;return[u*u*p[0][0]+2*u*t*p[1][0]+t*t*p[2][0],u*u*p[0][1]+2*u*t*p[1][1]+t*t*p[2][1]];}
+function packet(from,to,label,color,r,dur=1300){
+  return new Promise(res=>PK.push({from,to,label,color,t0:simT,dur,res,r})).then(()=>chk(r));}
+function pulse(node,color,ms=900){FX.push({k:'pulse',node,color,t0:simT,until:simT+ms});}
+function bubble(target,text,color,ms=2800){FX.push({k:'bubble',target,text,color,t0:simT,until:simT+ms});}
+function scan(gate,v,ms=1100){FX.push({k:'scan',gate,v,t0:simT,until:simT+ms});}
+function camDetect(cam,v,ms=2000){FX.push({k:'cam',cam,v,t0:simT,until:simT+ms});}
+function floatText(node,text,color,ms=2200){FX.push({k:'float',node,text,color,t0:simT,until:simT+ms});}
+function driveTo(v,idx,r){v.target=idx;return new Promise(res=>{if(v.i>=idx)res();else v.res=res;}).then(()=>chk(r));}
+function remove(v){v.fade=1;}
+
+/* ---------- UI ---------- */
+const $=id=>document.getElementById(id);
+const TAGC={ETC:COL.etc,CAMERA:COL.cam,'SỞ XD':COL.so,CSGT:COL.csgt,'ĐĂNG KIỂM':COL.dk,'TRẠM ĐK':COL.dk,GARA:COL.gara,'CHỦ XE':COL.owner};
+let clock='08:00';
+function log(tag,msg){const d=document.createElement('div');d.className='lg';d.innerHTML=`<span class="tm">${clock}</span><span class="tag" style="background:${TAGC[tag]||'#94a3b8'}">${tag}</span>${msg}`;const L=$('log');L.prepend(d);while(L.children.length>60)L.lastChild.remove();}
+function notify(title,msg,cls='',who='Chủ xe'){const N=$('notis');if(N.querySelector('.empty'))N.innerHTML='';const d=document.createElement('div');d.className='noti '+cls;d.innerHTML=`<div class="t">${title}</div><div class="m"><b style="color:#cbd5e1">${who}</b> · ${clock} — ${msg}</div>`;N.prepend(d);while(N.children.length>8)N.lastChild.remove();}
+function setClock(t,note=''){clock=t;$('clk').textContent=t;$('clkNote').textContent=note;}
+let curSteps=[];
+function step(i){[...$('steps').children].forEach((li,j)=>{li.className=j<i?'done':j===i?'cur':'';});}
+function stepsDone(){[...$('steps').children].forEach(li=>li.className='done');}
+
+/* ---------- FLOWS ---------- */
+const FLOWS=[
+{name:'Vào vùng LEZ',title:'Luồng 1 · Xe đi vào vùng phát thải thấp (LEZ)',clock:'08:15',
+ desc:'Trụ ETC tại cửa ngõ LEZ tự động quét thẻ ETC, dữ liệu về Sở XD để đối chiếu và thông báo cho chủ xe.',
+ steps:['Ô tô đi qua trụ ETC tại biển báo LEZ','ETC quét thẻ, gửi mã thẻ + biển số về Sở XD','Sở XD tra cứu Cục Đăng kiểm: khí thải ĐẠT','Sở XD gửi thông báo "Xe đi vào vùng phát thải thấp"'],
+ async fn(r){
+  const v=spawn('car',[[24.5,18.5],[18.5,18.5],[18.5,9.6],[18.5,7.2],[18.5,-1.5]],{color:'#38bdf8',plate:'51H-286.15'});
+  step(0);await driveTo(v,2,r);
+  step(1);scan('etc1',v);log('ETC','Trụ ETC-LEZ01 quét thẻ ePass xe <b>51H-286.15</b>');driveTo(v,3,r).catch(()=>{});
+  await packet('etc1','so','Thẻ ETC + biển số',COL.etc,r);pulse('so',COL.so);log('SỞ XD','Ghi nhận xe vào vùng LEZ – lưu hành trình');
+  step(2);await packet('so','dk','Tra cứu khí thải',COL.so,r);await packet('dk','so','Khí thải: ĐẠT',COL.dk,r);log('ĐĂNG KIỂM','Xe 51H-286.15: tiêu chuẩn khí thải <b>ĐẠT</b>');
+  step(3);await packet('so',v,'Thông báo',COL.owner,r);bubble(v,'🔔 Xe đi vào vùng phát thải thấp',COL.ok);
+  notify('Xe đi vào vùng phát thải thấp','Xe 51H-286.15 vừa vào vùng LEZ trung tâm. Xe đạt chuẩn khí thải, không phát sinh phí.','ok');log('CHỦ XE','Đã gửi thông báo vào LEZ');
+  stepsDone();await wait(2200,r);await driveTo(v,4,r);remove(v);}},
+{name:'Thu phí phát thải',title:'Luồng 2 · Xe không đạt chuẩn khí thải vào LEZ → thu phí phát thải',clock:'09:05',
+ desc:'Xe có kiểm định nhưng không đạt tiêu chuẩn khí thải vùng LEZ: Sở XD ra lệnh cho ETC tự động thu phí phát thải.',
+ steps:['Xe máy đi qua trụ ETC cửa ngõ LEZ','ETC gửi dữ liệu về Sở XD','Cục Đăng kiểm trả kết quả: khí thải KHÔNG ĐẠT chuẩn LEZ','Sở XD lệnh ETC tự động thu phí phát thải','Thông báo trừ phí cho chủ xe'],
+ async fn(r){
+  const v=spawn('moto',[[10.5,24.5],[10.5,5.5],[11.9,5.5],[15.5,5.5],[24.8,5.5]],{color:'#f97316',plate:'59X2-418.27',speed:2.6});
+  step(0);await driveTo(v,2,r);
+  step(1);scan('etc2',v);log('ETC','Trụ ETC-LEZ02 quét thẻ xe máy <b>59X2-418.27</b>');driveTo(v,3,r).catch(()=>{});
+  await packet('etc2','so','Thẻ ETC + biển số',COL.etc,r);pulse('so',COL.so);
+  step(2);await packet('so','dk','Tra cứu khí thải',COL.so,r);await packet('dk','so','Khí thải: KHÔNG ĐẠT',COL.danger,r);log('ĐĂNG KIỂM','Xe 59X2-418.27 có kiểm định nhưng khí thải <b style="color:#fca5a5">không đạt</b> chuẩn LEZ');
+  step(3);log('SỞ XD','Áp dụng biểu phí phát thải vùng LEZ');await packet('so','etc2','Lệnh thu phí',COL.so,r);
+  floatText('etc2','−50.000đ phí phát thải',COL.warn);pulse('etc2',COL.warn);log('ETC','Đã trừ 50.000đ từ tài khoản ETC (minh hoạ)');
+  await packet('etc2','so','Xác nhận đã thu',COL.etc,r);
+  step(4);await packet('so',v,'Thông báo',COL.owner,r);bubble(v,'💳 Đã thu phí phát thải 50.000đ',COL.warn);
+  notify('Thu phí phát thải vùng LEZ','Xe 59X2-418.27 không đạt chuẩn khí thải LEZ. Hệ thống ETC đã tự động thu 50.000đ (minh hoạ).','warn');
+  stepsDone();await wait(2200,r);await driveTo(v,4,r);remove(v);}},
+{name:'Nhắc kiểm định',title:'Luồng 3 · Xe không đạt kiểm định → nhắc nhở kiểm định',clock:'10:20',
+ desc:'Camera AI nhận diện biển số, Sở XD đối chiếu kết quả kiểm định từ Cục Đăng kiểm và gửi nhắc nhở.',
+ steps:['Camera AI nhận diện biển số ô tô','Gửi hình ảnh + biển số về Sở XD','Cục Đăng kiểm trả kết quả: KHÔNG ĐẠT kiểm định','Sở XD gửi nhắc nhở kiểm định lại'],
+ async fn(r){
+  const v=spawn('car',[[10.5,24.5],[10.5,15.4],[10.5,12.6],[10.5,-1.5]],{color:'#eab308',plate:'51G-772.09'});
+  step(0);await driveTo(v,1,r);camDetect('cam2',v);log('CAMERA','CAM-02 nhận diện <b>51G-772.09</b>');driveTo(v,2,r).catch(()=>{});
+  step(1);await packet('cam2','so','Ảnh + biển số',COL.cam,r);pulse('so',COL.so);
+  step(2);await packet('so','dk','Tra cứu kiểm định',COL.so,r);await packet('dk','so','KHÔNG ĐẠT kiểm định',COL.danger,r);log('ĐĂNG KIỂM','Lần kiểm định gần nhất: <b style="color:#fca5a5">không đạt</b>, chưa kiểm định lại');
+  step(3);await packet('so',v,'Nhắc nhở',COL.owner,r);bubble(v,'🔔 Nhắc kiểm định lại',COL.warn);
+  notify('Nhắc nhở kiểm định','Xe 51G-772.09 chưa đạt kiểm định. Vui lòng khắc phục và đặt lịch kiểm định lại.','warn');
+  stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
+{name:'Chưa đăng ký thông tin',title:'Luồng 4 · Xe chưa đăng ký thông tin → tra cứu đăng ký & nhắc chủ xe',clock:'11:40',
+ desc:'Camera nhận diện xe chưa có trong cơ sở dữ liệu địa phương; Sở XD tra cứu đăng ký xe từ Cục CSGT để tìm chủ xe và gửi nhắc nhở.',
+ steps:['Camera AI nhận diện biển số','Sở XD: biển số chưa có thông tin trong CSDL địa phương','Sở XD tra cứu đăng ký xe tại Cục CSGT','Cục CSGT trả thông tin chủ xe','Gửi thông báo nhắc chủ xe tra cứu, cập nhật thông tin'],
+ async fn(r){
+  const v=spawn('car',[[-0.5,10.5],[13.4,10.5],[16.5,10.5],[24.8,10.5]],{color:'#a3e635',plate:'60A-315.88'});
+  step(0);await driveTo(v,1,r);camDetect('cam4',v);log('CAMERA','CAM-04 nhận diện <b>60A-315.88</b>');driveTo(v,2,r).catch(()=>{});
+  await packet('cam4','so','Ảnh + biển số',COL.cam,r);pulse('so',COL.so);
+  step(1);log('SỞ XD','Biển số 60A-315.88 <b>chưa có</b> thông tin trong CSDL địa phương');bubble('so','❓ Xe chưa có thông tin',COL.warn,1800);await wait(900,r);
+  step(2);await packet('so','csgt','Tra cứu đăng ký xe',COL.so,r);
+  step(3);await packet('csgt','so','Thông tin chủ xe',COL.csgt,r);log('CSGT','Trả về: chủ xe N***n V*n A · SĐT 09xx***xxx');
+  step(4);await packet('so',v,'Nhắc tra cứu',COL.owner,r);bubble(v,'🔔 Nhắc tra cứu thông tin xe',COL.owner);
+  notify('Nhắc tra cứu thông tin xe','Xe 60A-315.88 chưa có thông tin trên hệ thống giám sát địa phương. Vui lòng tra cứu và cập nhật thông tin xe.','');
+  stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
+{name:'Hết hạn đăng kiểm',title:'Luồng 5 · Xe chưa đăng kiểm / hết hạn đăng kiểm lưu thông',clock:'14:10',
+ desc:'Camera phát hiện xe đang lưu thông; Sở XD đối chiếu hạn đăng kiểm (Cục ĐK) và thông tin chủ xe (Cục CSGT), rồi gửi cảnh báo.',
+ steps:['Camera AI phát hiện xe lưu thông trên đường','Sở XD tra cứu hạn đăng kiểm tại Cục Đăng kiểm','Kết quả: hết hạn đăng kiểm','Tra cứu liên hệ chủ xe tại Cục CSGT','Gửi cảnh báo cho người dân'],
+ async fn(r){
+  const v=spawn('car',[[24.5,18.5],[8.2,18.5],[5.5,18.5],[-0.8,18.5]],{color:'#f43f5e',plate:'51F-063.41'});
+  step(0);await driveTo(v,1,r);camDetect('cam1',v);log('CAMERA','CAM-01 phát hiện <b>51F-063.41</b>');driveTo(v,2,r).catch(()=>{});
+  await packet('cam1','so','Ảnh + biển số',COL.cam,r);pulse('so',COL.so);
+  step(1);await packet('so','dk','Tra cứu hạn đăng kiểm',COL.so,r);
+  step(2);await packet('dk','so','HẾT HẠN 03/09/2026',COL.danger,r);log('ĐĂNG KIỂM','Xe 51F-063.41 <b style="color:#fca5a5">hết hạn đăng kiểm</b> từ 03/09/2026');
+  step(3);await packet('so','csgt','Thông tin chủ xe',COL.so,r);await packet('csgt','so','Liên hệ chủ xe',COL.csgt,r);
+  step(4);await packet('so',v,'Cảnh báo',COL.danger,r);bubble(v,'⚠️ Xe hết hạn đăng kiểm',COL.danger);
+  notify('Cảnh báo: xe hết hạn đăng kiểm','Xe 51F-063.41 đang lưu thông khi đã hết hạn đăng kiểm. Vui lòng đặt lịch đăng kiểm sớm.','danger');
+  stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
+{name:'Bảo dưỡng & tái kiểm',title:'Luồng 6 · Đăng kiểm không đạt → bảo dưỡng → kiểm định lại',clock:'15:30',
+ desc:'Trạm đăng kiểm gửi kết quả không đạt về Cục ĐK, Sở XD nhận và hướng dẫn chủ xe mang xe đi bảo dưỡng, sau đó kiểm định lại.',
+ steps:['Xe vào trạm đăng kiểm','Kết quả KHÔNG ĐẠT gửi Cục Đăng kiểm → Sở XD','Sở XD thông báo chủ xe mang xe đi bảo dưỡng','Xe bảo dưỡng tại gara, gara cập nhật về Sở','Xe kiểm định lại: ĐẠT, Sở cập nhật trạng thái'],
+ async fn(r){
+  let v=spawn('car',[[24.5,18.5],[3.5,18.5],[3.5,16.4]],{color:'#c084fc',plate:'51K-905.12',speed:3.2});
+  step(0);await driveTo(v,2,r);pulse('tram',COL.dk,1200);bubble('tram','🔍 Đang kiểm định…',COL.dk,1600);log('TRẠM ĐK','Xe 51K-905.12 vào kiểm định');await wait(1700,r);
+  step(1);await packet('tram','dk','Kết quả: KHÔNG ĐẠT',COL.danger,r);log('ĐĂNG KIỂM','Không đạt: khí thải CO vượt ngưỡng, phanh lệch');await packet('dk','so','Kết quả không đạt',COL.dk,r);pulse('so',COL.so);
+  step(2);await packet('so',v,'Hướng dẫn bảo dưỡng',COL.owner,r);bubble(v,'🔧 Mang xe đi bảo dưỡng',COL.warn);
+  notify('Xe không đạt đăng kiểm','Xe 51K-905.12 không đạt (khí thải, phanh). Vui lòng mang xe đi bảo dưỡng – gợi ý gara gần nhất.','warn');await wait(1400,r);
+  const p=v.pos;remove(v);
+  v=spawn('car',[[3.5,16.4],[3.5,18.5],[14.25,18.5],[14.25,20.0]],{color:'#c084fc',plate:'51K-905.12',speed:3.2});v.alpha=1;
+  step(3);await driveTo(v,3,r);bubble('gara','🔧 Đang bảo dưỡng…',COL.gara,2200);pulse('gara',COL.gara,1500);await wait(2300,r);
+  await packet('gara','so','Đã bảo dưỡng',COL.gara,r);log('GARA','Hoàn tất bảo dưỡng hệ thống xả & phanh');remove(v);
+  v=spawn('car',[[14.25,20.0],[14.25,18.5],[3.5,18.5],[3.5,16.4]],{color:'#c084fc',plate:'51K-905.12',speed:3.2});
+  step(4);await driveTo(v,3,r);pulse('tram',COL.dk,1200);bubble('tram','🔍 Kiểm định lại…',COL.dk,1500);await wait(1600,r);
+  await packet('tram','dk','Kết quả: ĐẠT',COL.ok,r);await packet('dk','so','Cập nhật: ĐẠT',COL.dk,r);log('SỞ XD','Cập nhật trạng thái xe 51K-905.12: <b style="color:#86efac">đạt kiểm định</b>');
+  await packet('so',v,'Thông báo',COL.owner,r);bubble(v,'✅ Đạt kiểm định',COL.ok);
+  notify('Đạt kiểm định','Xe 51K-905.12 đã đạt kiểm định sau bảo dưỡng. Giấy chứng nhận đã được cập nhật.','ok');
+  stepsDone();await wait(2000,r);remove(v);}},
+{name:'Xe tải vào nội đô sai giờ',title:'Luồng 7 · Xe tải / xe khách vào nội đô sai giờ quy định',clock:'07:45',
+ desc:'Camera tại cửa ngõ nội đô phát hiện xe tải trong khung giờ cấm; Sở XD đối chiếu dữ liệu và gửi cảnh báo cho chủ xe và bộ phận điều hành của Sở.',
+ steps:['Camera cửa ngõ nội đô phát hiện xe tải lúc 07:45','Sở XD tra cứu đăng ký (CSGT) & loại xe, tải trọng (Đăng kiểm)','Đối chiếu khung giờ cấm 06:00–22:00 → vi phạm','Cảnh báo chủ xe và bộ phận điều hành Sở XD','Đồng bộ dữ liệu vi phạm với Cục CSGT'],
+ async fn(r){
+  const v=spawn('truck',[[10.5,24.5],[10.5,10.5],[5.5,10.5],[5.5,9.7],[5.5,6.4]],{color:'#2563eb',plate:'51C-777.88',speed:2.2});
+  step(0);await driveTo(v,3,r);camDetect('cam3',v);log('CAMERA','CAM-03 (cửa ngõ nội đô) phát hiện xe tải <b>51C-777.88</b> lúc 07:45');driveTo(v,4,r).catch(()=>{});
+  await packet('cam3','so','Ảnh + biển số + giờ',COL.cam,r);pulse('so',COL.so);
+  step(1);await Promise.all([packet('so','csgt','Tra cứu đăng ký',COL.so,r),packet('so','dk','Tra cứu loại xe',COL.so,r)]);
+  await Promise.all([packet('csgt','so','Chủ xe: Cty VT ***',COL.csgt,r),packet('dk','so','Xe tải 8 tấn',COL.dk,r)]);
+  step(2);log('SỞ XD','Xe tải 8 tấn vào nội đô trong khung giờ cấm → <b style="color:#fca5a5">vi phạm</b>');
+  step(3);alertT=simT+3500;bubble('so','🚨 Cảnh báo: xe tải vào nội đô sai giờ',COL.danger,3500);
+  notify('Cảnh báo điều hành','Xe tải 51C-777.88 vào nội đô lúc 07:45 (giờ cấm 06:00–22:00).','danger','Sở XD – Bộ phận điều hành');
+  await packet('so',v,'Cảnh báo',COL.danger,r);bubble(v,'⚠️ Sai giờ quy định',COL.danger);
+  notify('Cảnh báo: sai giờ lưu thông nội đô','Xe 51C-777.88 đi vào khu vực nội đô trong giờ cấm. Vui lòng rời khu vực / điều chỉnh lộ trình.','danger');
+  step(4);await packet('so','csgt','Dữ liệu vi phạm',COL.so,r);log('CSGT','Đã nhận dữ liệu vi phạm để xử lý theo quy định');
+  stepsDone();await wait(2200,r);remove(v);}}
+];
+
+/* ---------- run control ---------- */
+function clearScenario(){for(let i=VEH.length-1;i>=0;i--)if(!VEH[i].amb)VEH.splice(i,1);FX.length=0;PK.length=0;alertT=0;}
+function setFlowUI(i){const f=FLOWS[i];$('flowTitle').textContent=f.title;$('flowDesc').textContent=f.desc;
+  $('steps').innerHTML=f.steps.map(s=>`<li>${s}</li>`).join('');setClock(f.clock,i===6?'(giờ cấm xe tải)':'');}
+function chips(on){[...$('flows').children].forEach(c=>c.classList.toggle('on',c.dataset.i==on));}
+async function runOne(i){RUN++;const r=RUN;clearScenario();chips(i);setFlowUI(i);try{await FLOWS[i].fn(r);}catch(e){if(e!==ABORT)console.error(e);}}
+async function runAll(){RUN++;const r=RUN;try{while(true){for(let i=0;i<FLOWS.length;i++){chk(r);clearScenario();chips('all');setFlowUI(i);await FLOWS[i].fn(r);await wait(900,r);}}}catch(e){if(e!==ABORT)console.error(e);}}
+const fl=$('flows');
+const ca=document.createElement('button');ca.className='chip all';ca.dataset.i='all';ca.innerHTML='▶ Chạy tất cả';ca.onclick=runAll;fl.appendChild(ca);
+FLOWS.forEach((f,i)=>{const b=document.createElement('button');b.className='chip';b.dataset.i=i;b.innerHTML=`<b>${i+1}</b>${f.name}`;b.onclick=()=>runOne(i);fl.appendChild(b);});
+
+/* ambient traffic */
+[[[[-1,10.5],[25,10.5]],'car','#94a3b8',.1],[[[25,10.5],[-1,10.5]],'car','#e2e8f0',.5],[[[-1,18.5],[25,18.5]],'car','#cbd5e1',.3],
+ [[[25,18.5],[-1,18.5]],'moto','#94a3b8',.7],[[[10.5,25],[10.5,10.5],[25,10.5]],'moto','#e5e7eb',.2],[[[-1,10.5],[18.5,10.5],[18.5,25]],'car','#64748b',.6],
+ [[[25,10.5],[-1,10.5]],'bus','#0f766e',.0],[[[18.5,25],[18.5,10.5],[-1,10.5]],'moto','#cbd5e1',.4]].forEach(([p,t,c,pr])=>{
+  const v=spawn(t,p,{color:c,amb:1,loop:1,speed:1.4+Math.random()*.8});v.target=v.pts.length-1;
+  // advance to random progress
+  for(let k=0;k<pr*200;k++)updateVeh(v,.05);});
+
+/* ---------- view ---------- */
+function resize(){const r=cv.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;if(!userMoved)fit();}
+function fit(){const mw=W<600?1720:1600,mh=1020;view.s=Math.min(W/mw,H/mh);view.ox=W/2;view.oy=H/2-300*view.s;}
+function zoomAt(px,py,f){const ns=Math.max(.15,Math.min(3,view.s*f));f=ns/view.s;view.ox=px-(px-view.ox)*f;view.oy=py-(py-view.oy)*f;view.s=ns;userMoved=true;}
+window.addEventListener('resize',resize);
+const ptr=new Map();let lastD=0;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,[e.offsetX,e.offsetY]);if(ptr.size===2){const a=[...ptr.values()];lastD=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);}});
+cv.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;const prev=ptr.get(e.pointerId);ptr.set(e.pointerId,[e.offsetX,e.offsetY]);
+  if(ptr.size===1){view.ox+=e.offsetX-prev[0];view.oy+=e.offsetY-prev[1];userMoved=true;}
+  else if(ptr.size===2){const a=[...ptr.values()];const d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(lastD)zoomAt((a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2,d/lastD);lastD=d;}});
+const up=e=>{ptr.delete(e.pointerId);lastD=0;};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.offsetX,e.offsetY,e.deltaY<0?1.12:1/1.12);},{passive:false});
+$('zin').onclick=()=>zoomAt(W/2,H/2,1.25);$('zout').onclick=()=>zoomAt(W/2,H/2,.8);$('zfit').onclick=()=>{userMoved=false;fit();};
+$('spd').onclick=()=>{speedMul=speedMul===1?2:speedMul===2?.5:1;$('spd').textContent=speedMul+'×';};
+
+/* ---------- render ---------- */
+function drawGround(t){
+  P([[0,0],[N,0],[N,N],[0,N]],'#121c2e');
+  g.strokeStyle='rgba(120,150,200,.06)';g.lineWidth=1;
+  for(let i=0;i<=N;i++){P([[i,0],[i,N]],null,'rgba(120,150,200,.06)');P([[0,i],[N,i]],null,'rgba(120,150,200,.06)');}
+  // sidewalks/blocks tint
+  // zones
+  const z=(R,col,a)=>{P([[R[0],R[1]],[R[2],R[1]],[R[2],R[3]],[R[0],R[3]]],rgba(col,a));};
+  z(LEZ,'#22c55e',.13);z(NOIDO,'#f59e0b',.09);
+  // roads
+  for(const r of ROADS){P([[r[0],r[1]],[r[2],r[1]],[r[2],r[3]],[r[0],r[3]]],'#27324a');}
+  g.setLineDash([10,10]);
+  for(const r of ROADS){if(r[4]==='d')continue;if(r[4]==='h'){const y=(r[1]+r[3])/2;P([[r[0],y],[r[2],y]],null,'#6b7a96',1.2);}else{const x=(r[0]+r[2])/2;P([[x,r[1]],[x,r[3]]],null,'#6b7a96',1.2);}}
+  g.setLineDash([]);
+  // zone borders
+  g.setLineDash([14,8]);g.lineDashOffset=-t/40;
+  P([[LEZ[0],LEZ[1]],[LEZ[2],LEZ[1]],[LEZ[2],LEZ[3]],[LEZ[0],LEZ[3]]],null,'#4ade80',2.4);
+  P([[NOIDO[0],NOIDO[1]],[NOIDO[2],NOIDO[1]],[NOIDO[2],NOIDO[3]],[NOIDO[0],NOIDO[3]]],null,'#fbbf24',1.8);
+  g.setLineDash([]);g.lineDashOffset=0;
+}
+function drawLinks(t){
+  for(const[a,b,col,main]of LINKS){const p=arcPts(NODES[a],NODES[b]);
+    g.beginPath();g.moveTo(p[0][0],p[0][1]);g.quadraticCurveTo(p[1][0],p[1][1],p[2][0],p[2][1]);
+    if(main){g.strokeStyle=rgba(col,.22);g.lineWidth=7;g.stroke();g.setLineDash([8,10]);g.lineDashOffset=-t/25;g.strokeStyle=rgba(col,.9);g.lineWidth=2;g.stroke();}
+    else{g.setLineDash([3,7]);g.lineDashOffset=-t/50;g.strokeStyle=rgba(col,.38);g.lineWidth=1.3;g.stroke();}
+    g.setLineDash([]);}
+}
+function drawScene(t){
+  g.setTransform(DPR*view.s,0,0,DPR*view.s,DPR*view.ox,DPR*view.oy);
+  drawGround(t);
+  // LEZ scan beams under objects? draw beams after
+  const items=[];
+  for(const b of B)items.push([b.x1+b.y1-.5,()=>drawBuilding(b,t)]);
+  for(const tr of TREES)items.push([tr[0]+tr[1],()=>drawTree(tr[0],tr[1])]);
+  for(const c of CAMS)items.push([NODES[c][0]+NODES[c][1],()=>drawCam(c,t)]);
+  items.push([18.5+9.4+.6,()=>drawGantry('etc1')]);items.push([11.7+5.5+.6,()=>drawGantry('etc2')]);
+  for(const s of SIGNS)items.push([s[0]+s[1],()=>drawSignPost(s)]);
+  for(const v of VEH)items.push([v.pos[0]+v.pos[1]+.3,()=>drawVeh(v)]);
+  items.sort((a,b)=>a[0]-b[0]);for(const it of items)it[1]();
+  // beams
+  for(const f of FX){
+    if(f.k==='scan'){const a=1-(simT-f.t0)/(f.until-f.t0);const v=f.v.pos;
+      const gp=f.gate==='etc1'?[[17.95,9.4],[19.05,9.4]]:[[11.6,4.95],[11.6,6.05]];
+      P([[gp[0][0],gp[0][1],1.22],[gp[1][0],gp[1][1],1.22],[v[0]+.3,v[1]+.3,.2],[v[0]-.3,v[1]-.3,.2]],rgba(COL.etc,.35*a));}
+    if(f.k==='cam'){const a=Math.min(1,1-(simT-f.t0)/(f.until-f.t0)+.3);const c=NODES[f.cam],v=f.v.pos;const C=iso(...c),V=iso(v[0],v[1],.2);
+      g.beginPath();g.moveTo(C[0],C[1]);g.lineTo(V[0]-22,V[1]-6);g.lineTo(V[0]+22,V[1]-6);g.closePath();g.fillStyle=rgba(COL.cam,.18*a);g.fill();}
+  }
+  drawLinks(t);
+  // packets
+  for(const p of PK){const k=Math.min(1,(simT-p.t0)/p.dur);const ap=arcPts(npos(p.from),npos(p.to));
+    for(let j=0;j<6;j++){const tt=Math.max(0,k-j*.03);const q=qb(ap,tt);g.beginPath();g.arc(q[0],q[1],6-j*.8,0,7);g.fillStyle=rgba(p.color,j?.25:1);g.fill();}
+    const q=qb(ap,k);g.beginPath();g.arc(q[0],q[1],12,0,7);g.fillStyle=rgba(p.color,.18);g.fill();}
+}
+function drawOverlay(t){
+  g.setTransform(DPR,0,0,DPR,0,0);
+  const fs=Math.max(W<600?9:10,Math.min(13,view.s*24));
+  // zone labels
+  const zl=(x,y,txt,col,sub)=>{const q=scr(x,y,0);g.font=`800 ${fs+3}px system-ui`;g.textAlign='center';g.fillStyle=rgba(col,.9);g.fillText(txt,q[0],q[1]);if(sub&&W>=600){g.font=`600 ${fs-1}px system-ui`;g.fillStyle=rgba(col,.7);g.fillText(sub,q[0],q[1]+fs+2);}};
+  zl(21.5,2.2,'VÙNG LEZ','#4ade80','Vùng phát thải thấp');zl(3.6,2.6,'NỘI ĐÔ','#fbbf24','Cấm xe tải/khách giờ cao điểm');
+  // signs
+  for(const s of SIGNS){const q=scr(s[0],s[1],1.05);g.font=`800 ${s[2]==='LEZ'?fs+1:fs-2}px system-ui`;const w=g.measureText(s[2]).width+12,h=fs+8;
+    rrect(q[0]-w/2,q[1]-h,w,h,5);g.fillStyle=s[2]==='LEZ'?'#15803d':'#fff';g.fill();g.lineWidth=2;g.strokeStyle=s[2]==='LEZ'?'#bbf7d0':COL.danger;g.stroke();
+    g.fillStyle=s[2]==='LEZ'?'#fff':'#b91c1c';g.textAlign='center';g.textBaseline='middle';g.fillText(s[2],q[0],q[1]-h/2+.5);g.textBaseline='alphabetic';}
+  // ETC & camera tags
+  const tag=(n,txt,col)=>{const q=scr(...NODES[n]);g.font=`700 ${fs-3}px system-ui`;const w=g.measureText(txt).width+8;const x=q[0]+6,y=q[1]-4;rrect(x,y-fs+2,w,fs+2,4);g.fillStyle=rgba(col,.9);g.fill();g.fillStyle='#0b1220';g.textAlign='left';g.fillText(txt,x+4,y);};
+  tag('etc1','ETC',COL.etc);tag('etc2','ETC',COL.etc);CAMS.forEach((c,i)=>tag(c,'CAM '+(i+1),COL.cam));
+  // main labels
+  for(const[n,t1,t2o,col,big]of LABELS){const below=n==='so'||n==='dk';const q=n==='so'?scr(16.5,16.5,0):n==='dk'?scr(23.4,16.6,0):scr(...NODES[n]);const y=below?q[1]+fs*2+22:q[1]-(big?22:14);const t2=W<600?'':t2o;
+    g.font=`800 ${big?fs+1:fs-1}px system-ui`;const w1=g.measureText(t1).width;g.font=`500 ${fs-2}px system-ui`;const w2=t2?g.measureText(t2).width:0;
+    const w=Math.max(w1,w2)+16,h=t2?fs*2+8:fs+8;rrect(q[0]-w/2,y-h,w,h,7);g.fillStyle='rgba(10,17,32,.88)';g.fill();g.strokeStyle=col;g.lineWidth=1.5;g.stroke();
+    g.textAlign='center';g.fillStyle=col;g.font=`800 ${big?fs+1:fs-1}px system-ui`;g.fillText(t1,q[0],y-h+fs+2);if(t2){g.fillStyle='#cbd5e1';g.font=`500 ${fs-2}px system-ui`;g.fillText(t2,q[0],y-6);}}
+  // Sở data hub ring
+  {const q=scr(14.75,14.75,5.6);g.save();g.translate(q[0],q[1]);g.scale(1,.45);g.beginPath();g.arc(0,0,26*view.s/.5*.5+10,0,7);g.strokeStyle=rgba(COL.so,.4+.2*Math.sin(t/300));g.lineWidth=2;g.stroke();g.restore();}
+  // vehicle plates for scenario
+  for(const v of VEH){if(v.amb||!v.plate||v.alpha<=0)continue;const q=scr(v.pos[0],v.pos[1],.7);g.globalAlpha=Math.max(0,v.alpha);g.font=`700 ${fs-3}px ui-monospace,monospace`;
+    const w=g.measureText(v.plate).width+8;rrect(q[0]-w/2,q[1]-8,w,fs,3);g.fillStyle='#f8fafc';g.fill();g.strokeStyle='#0f172a';g.lineWidth=1;g.stroke();g.fillStyle='#0f172a';g.textAlign='center';g.fillText(v.plate,q[0],q[1]+fs-11);g.globalAlpha=1;}
+  // FX overlays
+  for(const f of FX){const life=(simT-f.t0)/(f.until-f.t0);if(life>1)continue;
+    if(f.k==='pulse'){const q=scr(...NODES[f.node]);for(let j=0;j<2;j++){const k=(life*1.6+j*.4)%1;g.beginPath();g.ellipse(q[0],q[1],8+k*40,(8+k*40)*.5,0,0,7);g.strokeStyle=rgba(f.color,1-k);g.lineWidth=2;g.stroke();}}
+    if(f.k==='cam'){const q=scr(f.v.pos[0],f.v.pos[1],.3);g.strokeStyle=COL.cam;g.lineWidth=2;g.strokeRect(q[0]-26,q[1]-24,52,34);g.font=`700 ${fs-3}px system-ui`;g.fillStyle=COL.cam;g.textAlign='left';g.fillText('AI ✓ '+f.v.plate,q[0]-26,q[1]+22);}
+    if(f.k==='float'){const q=scr(...NODES[f.node]);g.globalAlpha=1-life*.6;g.font=`800 ${fs+1}px system-ui`;g.textAlign='center';g.fillStyle=f.color;g.fillText(f.text,q[0],q[1]-30-life*30);g.globalAlpha=1;}
+    if(f.k==='bubble'){const p=typeof f.target==='string'?scr(...NODES[f.target]):scr(f.target.pos[0],f.target.pos[1],1.2);const y=p[1]-(typeof f.target==='string'?(f.target==='so'?62:40):36);
+      g.globalAlpha=life>.85?(1-life)/.15:Math.min(1,life*8);g.font=`700 ${fs}px system-ui`;const w=g.measureText(f.text).width+18,h=fs+12;
+      rrect(p[0]-w/2,y-h,w,h,9);g.fillStyle='#0b1220';g.fill();g.strokeStyle=f.color;g.lineWidth=2;g.stroke();
+      g.beginPath();g.moveTo(p[0]-6,y);g.lineTo(p[0],y+7);g.lineTo(p[0]+6,y);g.fillStyle=f.color;g.fill();
+      g.fillStyle='#fff';g.textAlign='center';g.fillText(f.text,p[0],y-h/2+fs/2-1);g.globalAlpha=1;}
+  }
+  // packet labels
+  for(const p of PK){const k=Math.min(1,(simT-p.t0)/p.dur);const ap=arcPts(npos(p.from),npos(p.to));const q=qb(ap,k);
+    const sx=q[0]*view.s+view.ox,sy=q[1]*view.s+view.oy;g.font=`700 ${fs-2}px system-ui`;const w=g.measureText(p.label).width+10;
+    rrect(sx-w/2,sy-fs-16,w,fs+4,6);g.fillStyle=rgba(p.color,.95);g.fill();g.fillStyle='#0b1220';g.textAlign='center';g.fillText(p.label,sx,sy-14);}
+}
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,(now-last)/1000)*speedMul;last=now;simT+=dt*1000;
+  for(const v of VEH)updateVeh(v,dt);for(let i=VEH.length-1;i>=0;i--)if(VEH[i].alpha<=0)VEH.splice(i,1);
+  for(let i=PK.length-1;i>=0;i--){const p=PK[i];if(p.r!==RUN){PK.splice(i,1);p.res();continue;}if(simT>=p.t0+p.dur){PK.splice(i,1);if(typeof p.to==='string')pulse(p.to,p.color,700);p.res();}}
+  for(let i=WAIT.length-1;i>=0;i--){const w=WAIT[i];if(simT>=w.t||w.r!==RUN){WAIT.splice(i,1);w.res();}}
+  for(let i=FX.length-1;i>=0;i--)if(simT>FX[i].until)FX.splice(i,1);
+  g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);
+  drawScene(now);drawOverlay(now);requestAnimationFrame(frame);}
+resize();requestAnimationFrame(frame);
+setTimeout(runAll,500);
+})();
+</script>
+</body>
+</html>

@@ -72,6 +72,14 @@
       "title": "AI Agent vận hành hệ thống nhắn tin CSKH qua MCP",
       "desc": "So sánh vận hành thủ công với AI Agent qua MCP (Model Context Protocol): Claude lọc tệp, soạn nội dung và tạo chiến dịch Zalo OA, SMS, Email trong khi dữ liệu khách hàng vẫn nằm trên CRM.",
       "kind": "Mô phỏng 2.5D"
+    },
+    {
+      "artifact_slug": "d6eca5f0-8cd0-49f8-84fb-d31c0c6531b5",
+      "href": "showcase/giam-sat-giao-thong-phat-thai.html",
+      "cat": "vision",
+      "title": "Giám sát giao thông & phát thải đô thị",
+      "desc": "Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ.",
+      "kind": "Mô phỏng 2.5D"
     }
   ],
   "docs": [
@@ -94,11 +102,5 @@
       "desc": "Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."
     }
   ],
-  "skipped": [
-    {
-      "artifact_slug": "d6eca5f0-8cd0-49f8-84fb-d31c0c6531b5",
-      "title": "Mô hình 2.5D – Giám sát giao thông & phát thải (Sở Xây dựng)",
-      "reason": "cần chủ sở hữu duyệt: hiển thị biển số đầy đủ, không có ghi chú dữ liệu giả định/minh hoạ; trình bày Sở Xây dựng là chủ thể vận hành (cat dự kiến: vision)."
-    }
-  ]
+  "skipped": []
 }
