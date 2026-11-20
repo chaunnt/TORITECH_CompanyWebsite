@@ -655,6 +655,35 @@ def write(path, content):
     return path
 
 
+SHOW_META_START, SHOW_META_END = "<!-- toritech:meta -->", "<!-- /toritech:meta -->"
+
+
+def inject_showcase_meta():
+    """Chèn thẻ SEO/OG vào <head> các trang showcase (không đổi nội dung artifact). Ảnh: assets/img/showcase/<ten>.png (tools/og_shots.js)."""
+    import re
+    root = os.path.join(os.path.dirname(__file__), "..")
+    for w in WORKS:
+        fp = os.path.join(root, w["href"])
+        if not os.path.exists(fp):
+            continue
+        html = open(fp, encoding="utf-8").read()
+        html = re.sub(re.escape(SHOW_META_START) + ".*?" + re.escape(SHOW_META_END) + "\n?", "", html, flags=re.S)
+        stem = os.path.splitext(os.path.basename(w["href"]))[0]
+        img_rel = f"assets/img/showcase/{stem}.png"
+        img = SITE_URL + (img_rel if os.path.exists(os.path.join(root, img_rel)) else "assets/img/og.png")
+        url, t, d = SITE_URL + w["href"], escape(w["title"] + " – TORITECH"), escape(w["desc"])
+        meta = (f'{SHOW_META_START}\n<meta name="description" content="{d}"><link rel="canonical" href="{url}">\n'
+                f'<meta property="og:type" content="website"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">\n'
+                f'<meta property="og:title" content="{t}"><meta property="og:description" content="{d}"><meta property="og:url" content="{url}">\n'
+                f'<meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">\n'
+                f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{t}"><meta name="twitter:description" content="{d}"><meta name="twitter:image" content="{img}">\n'
+                f'{SHOW_META_END}\n')
+        m = re.search(r"<meta[^>]*charset[^>]*>\n?", html, flags=re.I) or re.search(r"<head[^>]*>\n?", html, flags=re.I)
+        html = html[:m.end()] + ("" if html[m.end() - 1] == "\n" else "\n") + meta + html[m.end():]
+        with open(fp, "w", encoding="utf-8") as f:
+            f.write(html)
+
+
 def main():
     pages = {
         "index.html": p_index(), "ai-vision-vms.html": p_vision(), "dat-lich.html": p_booking(), "mcp.html": p_mcp(),
@@ -693,6 +722,7 @@ Liên hệ: hotline/Zalo {CO["hotline"]} · Trụ sở: {CO["address"]}
 """ + "".join(f"  - [{w['title']}]({SITE_URL}{w['href']}): {w['desc']}\n" for w in WORKS)
     write("llms.txt", llms)
     write(".nojekyll", "")
+    inject_showcase_meta()
     print("Built", len(pages), "pages")
 
 

@@ -45,7 +45,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
    - Docs (công văn, đề xuất gửi cơ quan, bản nháp có chỗ trống `[…]`) → `docs`: chỉ thẻ tóm tắt 1–2 câu, không đăng toàn văn.
 3. Kiểm tra an toàn trước khi đăng: không chứa SĐT/email cá nhân, CCCD, token/API key thật, dữ liệu khách hàng thật, mật khẩu; không mạo danh cơ quan; nếu có → `skipped` với lý do "cần người duyệt" (không tự sửa nội dung artifact).
 4. Viết `title` (giữ tên artifact, chỉnh cho rõ), `desc` 1–2 câu theo checklist mục 4, `kind` (Mô hình tương tác / Mô phỏng 2.5D / Trang sản phẩm / Đề xuất dự án / Đề xuất kiến trúc / Ứng dụng web).
-5. `python3 tools/build.py`, xem thử bằng trình duyệt headless (không lỗi JS, thẻ hiển thị đúng hạng mục), rồi commit & push `main`.
+5. `node tools/og_shots.js` (tạo ảnh xem trước 1200×630 cho trang showcase mới vào `assets/img/showcase/`), rồi `python3 tools/build.py` (tự chèn thẻ OG/canonical vào `<head>` trang showcase giữa `<!-- toritech:meta -->`, không đổi nội dung), xem thử bằng trình duyệt headless (không lỗi JS, thẻ hiển thị đúng hạng mục), rồi commit & push `main`.
 6. Ghi tóm tắt: đã thêm gì, vào hạng mục nào, đã bỏ qua gì và vì sao.
 
 ## 6. Khi được yêu cầu "bổ sung trang"
