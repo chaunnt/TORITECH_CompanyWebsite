@@ -3,7 +3,7 @@
 Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và cho tác vụ đồng bộ artifact hằng ngày.
 
 ## 0. Quy tắc làm việc tiết kiệm (đọc trước)
-- **Mọi phần chung đều do script làm.** Header/chân trang site, header + chân trang + "Phản biện" + "Cùng hạng mục" + thẻ SEO/OG của trang dự án, ảnh đại diện, thumbnail, trang hạng mục, sitemap, llms.txt, trang chuyển hướng → `python3 tools/build.py`. **Không** sửa tay file `.html` đã sinh, **không** đọc/ghi từng dòng danh sách; sửa ở `tools/` rồi build.
+- **Mọi phần chung đều do script làm.** Header/chân trang site, header + chân trang + "Cùng hạng mục" + thẻ SEO/OG của trang dự án, ảnh đại diện, thumbnail, trang hạng mục, sitemap, llms.txt, trang chuyển hướng → `python3 tools/build.py`. **Không** sửa tay file `.html` đã sinh, **không** đọc/ghi từng dòng danh sách; sửa ở `tools/` rồi build.
 - Thêm dự án: `python3 tools/add_work.py ...` (xem docstring) → `python3 tools/build.py`. Không cần mở `projects.json`.
 - Kiểm tra nhanh sau build: script playwright mở trang `du-an*.html`, `lien-he.html` và từng `du-an/*.html` (không lỗi JS; `#tt-top` ở y=0 không bị che; cuộn hết trang thấy `#tt-foot`).
 - Không dùng chữ "showcase" ở URL/tên/nội dung mới. Thư mục `showcase/` chỉ còn trang chuyển hướng cho link cũ đã chia sẻ (sinh tự động từ `old_href`).
@@ -24,7 +24,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 - Cấu trúc URL dự án:
   - `du-an.html` – tổng hợp, chia section theo hạng mục.
   - Trang hạng mục: `du-an-ai-vision-vms.html`, `du-an-dat-lich.html`, `du-an-mcp-ai-agent.html`, `du-an-game-giai-tri.html` (thẻ dùng **ảnh WebP**, không nhúng iframe/HTML5 – nhẹ trang).
-  - Trang dự án: `du-an/<ten-khong-dau>.html` (HTML gốc artifact + khối build chèn: header chung về trang hạng mục, chân trang có Phản biện + danh sách cùng hạng mục). Ảnh: `assets/img/du-an/<ten>.jpg` (OG 1200×630) và `assets/img/du-an/thumb/<ten>.webp`.
+  - Trang dự án: `du-an/<ten-khong-dau>.html` (HTML gốc artifact + khối build chèn: header chung về trang hạng mục, chân trang có danh sách cùng hạng mục). Ảnh: `assets/img/du-an/<ten>.jpg` (OG 1200×630) và `assets/img/du-an/thumb/<ten>.webp`.
 - Trang Liên hệ: **không có form**; chỉ nút bấm trực tiếp Email (mailto, tiêu đề theo `?topic=`), Gọi, Zalo.
 - Mỗi giải pháp: cảnh 2.5D (Vấn đề ↔ Giải pháp), năng lực, lợi ích theo vai trò (quản lý vs kỹ thuật), bảng thông số, dự án liên quan, CTA.
 - Footer 4 cột (Pháp nhân · Sản phẩm · Tài nguyên · Pháp lý) + dải pháp lý.
@@ -45,7 +45,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 | Văn phong | Chuyên gia, điềm tĩnh; giải thích viết tắt lần đầu (MCP, VMS, RBAC, SLA…) | "Siêu phẩm", "số 1", "duy nhất" |
 | An toàn dữ liệu | Che khuôn mặt, biển số, SĐT cá nhân, CCCD, API key/token; dùng dữ liệu giả lập | Lộ thông tin thật |
 | Chuyển đổi | CTA đúng ngữ cảnh (giữa bài + cuối bài) | Kết thúc cụt |
-| **Phản biện cuối bài** | Mọi dự án/bài viết kết thúc bằng phần **Phản biện**: "Nên làm vì" (≥2 ý: giá trị, lý do làm ngay) và "Nếu không làm" (≥2 ý: hậu quả, rủi ro, chi phí cơ hội). Lập luận cụ thể theo bài toán, không bịa số liệu. Với dự án: field `phan_bien` trong `projects.json` (`add_work.py --yes/--no`), build tự hiển thị | Thiếu phần phản biện; lập luận chung chung, doạ dẫm |
+| **Phản biện cuối bài** | Khi **soạn nội dung** (artifact, trang giải pháp, bài viết, đề xuất), người viết **tự viết** phần **Phản biện** ở cuối, nằm trong thân bài: "Vì sao nên làm" (giá trị, lý do làm ngay) và "Nếu không làm thì sao" (hậu quả, rủi ro, chi phí cơ hội) – lập luận riêng cho bài toán, có căn cứ, không bịa số liệu. **Không** sinh tự động bằng script/footer, không dùng câu mẫu lặp lại giữa các bài | Thiếu phản biện; phản biện chung chung, dán khuôn, doạ dẫm |
 | SEO/GEO | Từ khoá ở H1/100 chữ đầu/1 H2/meta; câu trả lời trực diện dưới tiêu đề dạng câu hỏi; alt ảnh | — |
 | Form | Ô đồng ý **không** tick sẵn | Tick sẵn |
 - Không công bố: chứng nhận (ISO, SOC 2…) chưa có; danh sách đối tác chưa ký (chỉ ghi "khả năng tích hợp").
@@ -57,7 +57,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
    - Trang HTML trình diễn/sản phẩm/kiến trúc → `works`: tải HTML (Artifact read `path: index.html` → file trong scratchpad) rồi `tools/add_work.py --src <file> --name <ten-khong-dau> ...` (artifact nhiều file: tải đủ file phụ vào `du-an/`; thư viện `/_runtime/...` → vendor vào `du-an/vendor/`).
    - Docs (công văn, đề xuất gửi cơ quan, bản nháp có chỗ trống `[…]`) → `docs`: chỉ thẻ tóm tắt 1–2 câu, không đăng toàn văn.
 3. Kiểm tra an toàn trước khi đăng: không chứa SĐT/email cá nhân, CCCD, token/API key thật, dữ liệu khách hàng thật, mật khẩu; không mạo danh cơ quan; nếu có → `skipped` với lý do "cần người duyệt" (không tự sửa nội dung artifact).
-4. Viết `title` (giữ tên artifact, chỉnh cho rõ), `desc` 1–2 câu theo checklist mục 4, `kind` (Mô hình tương tác / Mô phỏng 2.5D / Trang sản phẩm / Đề xuất dự án / Đề xuất kiến trúc / Ứng dụng web), **phản biện** (≥2 `--yes`, ≥2 `--no`).
+4. Viết `title` (giữ tên artifact, chỉnh cho rõ), `desc` 1–2 câu theo checklist mục 4, `kind` (Mô hình tương tác / Mô phỏng 2.5D / Trang sản phẩm / Đề xuất dự án / Đề xuất kiến trúc / Ứng dụng web). Phản biện thuộc nội dung artifact (người làm artifact tự viết); tác vụ đồng bộ không tự thêm vào trang.
 5. `python3 tools/build.py` (tự chụp ảnh còn thiếu qua `tools/og_shots.js`, tạo thumbnail, chèn khối `<!-- toritech:meta|top|foot -->` – chạy lại không nhân bản, nội dung artifact giữ nguyên), kiểm tra nhanh (mục 0), rồi commit & push `main`.
 6. Ghi tóm tắt: đã thêm gì, vào hạng mục nào, đã bỏ qua gì và vì sao.
 

@@ -77,13 +77,6 @@ CSS = """<style>
 #tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
 #tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
 #tt-foot .tt-legal a:hover{color:#22d3ee}
-#tt-foot .tt-crit{margin:0 0 30px;padding:0 0 26px;border-bottom:1px solid #1e2a44}
-#tt-foot .tt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:12px 0}
-#tt-foot .tt-cols>div{padding:14px 16px;border-radius:12px;border:1px solid #1e2a44;background:#111c33}
-#tt-foot .tt-yes{border-left:4px solid #14b8a6}#tt-foot .tt-no{border-left:4px solid #f97316}
-#tt-foot h3{margin:0 0 8px;font-size:15px;font-weight:700;color:#fff}
-#tt-foot .tt-cols ul{display:block;padding-left:18px;list-style:disc}#tt-foot .tt-cols li{margin:0 0 6px;color:#cbd5e1}
-#tt-foot .tt-sub a{color:#22d3ee}
 @media print{#tt-top,#tt-foot{display:none}}
 </style>"""
 
@@ -120,15 +113,7 @@ def _foot(w, cat_name, cat_page, works, docs, co):
             items.append(f'<li><a href="../{cat_page}#ho-so"><span><b>{escape(d["title"])}</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li>')
     lst = f'<ul>{"".join(items)}</ul>' if items else '<p class="tt-sub">Chưa có bài khác trong hạng mục này.</p>'
     email = f' · <a href="mailto:{co["email_support"]}">{co["email_support"]}</a>' if co["email_support"] else ""
-    pb = w.get("phan_bien")
-    crit = ""
-    if pb:
-        li = lambda xs: "".join(f"<li>{escape(x)}</li>" for x in xs)
-        crit = (f'<section class="tt-crit" aria-label="Phản biện"><h2>Phản biện: vì sao nên làm?</h2><div class="tt-cols">'
-                f'<div class="tt-yes"><h3>Nên làm vì</h3><ul>{li(pb["nen_lam"])}</ul></div>'
-                f'<div class="tt-no"><h3>Nếu không làm</h3><ul>{li(pb["khong_lam"])}</ul></div></div>'
-                f'<p class="tt-sub">Cần đánh giá cho đơn vị của bạn? <a href="../lien-he.html">Liên hệ TORITECH</a>.</p></section>')
-    return (f'<!-- toritech:foot -->\n<div id="tt-foot" role="contentinfo"><div class="tt-in">{crit}'
+    return (f'<!-- toritech:foot -->\n<div id="tt-foot" role="contentinfo"><div class="tt-in">'
             f'<h2>Cùng hạng mục: {escape(cat_name)}</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p>{lst}'
             f'<a class="tt-more" href="../{cat_page}">Xem toàn bộ hạng mục {escape(cat_name)} →</a>'
             f'<div class="tt-legal"><span>© {co["legal_name"]} · MST {co["tax_id"]}</span>'
