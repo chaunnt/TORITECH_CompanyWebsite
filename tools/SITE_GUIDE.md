@@ -26,7 +26,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
   - Trang hạng mục: `du-an-ai-vision-vms.html`, `du-an-dat-lich.html`, `du-an-mcp-ai-agent.html`, `du-an-game-giai-tri.html` (thẻ dùng **ảnh WebP**, không nhúng iframe/HTML5 – nhẹ trang).
   - Trang dự án: `du-an/<ten-khong-dau>.html` (HTML gốc artifact + khối build chèn: header chung về trang hạng mục, chân trang có danh sách cùng hạng mục). Ảnh: `assets/img/du-an/<ten>.jpg` (OG 1200×630) và `assets/img/du-an/thumb/<ten>.webp`.
 - Phần **Phản biện** trong trang dự án là nội dung viết tay (khối `<section id="phan-bien">` ngay trước `<!-- toritech:foot -->`), không nằm trong marker của build → build giữ nguyên. Khi thay bản HTML mới của artifact, phải giữ/viết lại phần này.
-- Trang dự án viết trực tiếp cho website (không có artifact): `artifact_slug` dạng `site-<ten>` (ví dụ `site-vmgportal`, `site-affina-zns`), dùng `../assets/css/site.css`.
+- Trang dự án viết trực tiếp cho website (không có artifact): `artifact_slug` dạng `site-<ten>` (ví dụ `site-vmgportal`, `site-bao-hiem-zns`), dùng `../assets/css/site.css`.
 - Trang Liên hệ: **không có form**; chỉ nút bấm trực tiếp Email (mailto, tiêu đề theo `?topic=`), Gọi, Zalo.
 - Mỗi giải pháp: cảnh 2.5D (Vấn đề ↔ Giải pháp), năng lực, lợi ích theo vai trò (quản lý vs kỹ thuật), bảng thông số, dự án liên quan, CTA.
 - Footer 4 cột (Pháp nhân · Sản phẩm · Tài nguyên · Pháp lý) + dải pháp lý.

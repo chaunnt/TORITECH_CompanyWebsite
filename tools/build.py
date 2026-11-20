@@ -467,7 +467,7 @@ def p_mcp():
         return f'<div class="card reveal" id="{anchor}"><span class="eyebrow">{eyebrow}</span><h3>{title}</h3><p style="margin-bottom:12px">{lead}</p><ul class="check">{li}</ul></div>'
     blocks = "".join([
         block("dvc", "MCP Dịch vụ công", "Kết nối AI với cổng dịch vụ công để tra cứu và nhắc việc, thay cho thao tác đăng nhập từng cổng.",
-              ["Tra cứu thủ tục, trạng thái hồ sơ", "Tải C12 BHXH theo lịch cho nhiều mã đơn vị", "Nhắc lịch tuân thủ: kê khai, nộp, gia hạn", "Lưu Google Drive/OneDrive, ghi Excel, gửi email tổng hợp", '<a href="du-an/vmgportal-ai-sms.html">VMGPortal</a>: AI vận hành cổng SMS của đối tác VMG – soạn mẫu, gửi tin hằng ngày, kiểm tra số dư, báo cáo, đối soát'], "Dành cho kế toán, đại lý, doanh nghiệp"),
+              ["Tra cứu thủ tục, trạng thái hồ sơ", "Tải C12 BHXH theo lịch cho nhiều mã đơn vị", "Nhắc lịch tuân thủ: kê khai, nộp, gia hạn", "Lưu Google Drive/OneDrive, ghi Excel, gửi email tổng hợp", '<a href="du-an/vmgportal-ai-sms.html">VMGPortal</a>: AI vận hành Nền tảng nhắn tin SMS của VMG – soạn mẫu, gửi tin hằng ngày, kiểm tra số dư, báo cáo, đối soát'], "Dành cho kế toán, đại lý, doanh nghiệp"),
         block("doanh-nghiep", "MCP Công cụ Doanh nghiệp", "Đưa AI vào thẳng dữ liệu vận hành, với quyền đọc mặc định và quyền ghi có phê duyệt.",
               ["ERP, CRM, kế toán, thuế, kho vận", "Báo cáo tổng hợp bằng câu lệnh tự nhiên", "Phát hiện bất thường (số phải đóng tăng, tồn kho lệch)", "Lệnh ghi/xoá đi qua Human-in-the-loop"], "Dành cho ban điều hành, tài chính, vận hành"),
         block("nhan-su", "MCP Trợ lý Nhân viên", "Trợ lý làm thay việc lặp lại và trả lời theo đúng quy trình nội bộ của đơn vị.",

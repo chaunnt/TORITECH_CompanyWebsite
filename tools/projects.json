@@ -113,16 +113,16 @@
       "artifact_slug": "site-vmgportal",
       "href": "du-an/vmgportal-ai-sms.html",
       "cat": "mcp",
-      "title": "VMGPortal – AI Agent vận hành hệ thống SMS",
-      "desc": "Connector MCP cho phép AI Agent thao tác thay người dùng trên cổng SMS của đối tác VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt.",
+      "title": "VMGPortal – AI Agent vận hành Nền tảng nhắn tin SMS của VMG",
+      "desc": "Connector MCP cho phép AI Agent thao tác thay người dùng trên Nền tảng nhắn tin SMS của VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt.",
       "kind": "Trang sản phẩm"
     },
     {
-      "artifact_slug": "site-affina-zns",
-      "href": "du-an/tu-dong-ban-bao-hiem-affina.html",
+      "artifact_slug": "site-bao-hiem-zns",
+      "href": "du-an/tu-dong-ban-bao-hiem-xe-qua-zalo.html",
       "cat": "mcp",
-      "title": "Tự động bán bảo hiểm Affina qua Zalo",
-      "desc": "AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm Affina qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng để không nhắn trùng người đã mua, rồi báo cáo chuyển đổi.",
+      "title": "Tự động bán bảo hiểm xe qua Zalo",
+      "desc": "AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm xe qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng, rồi báo cáo chuyển đổi. Ai cũng triển khai được (đại lý, đăng kiểm, garage, nền tảng) và bán được sản phẩm của nhiều hãng bảo hiểm.",
       "kind": "Trang sản phẩm"
     }
   ],
