@@ -3,7 +3,7 @@
 
 python3 tools/add_work.py --src <file.html tải từ artifact> --name <ten-khong-dau> --cat vision|booking|mcp|game \
     --slug <artifact uuid> --title "..." --desc "..." --kind "Mô hình tương tác"
-python3 tools/add_work.py --doc --cat ... --slug ... --title ... --desc ...      # công văn/đề xuất: chỉ thẻ tóm tắt
+python3 tools/add_work.py --doc --slug ... --title ...                           # công văn/đề xuất: CƠ MẬT → chỉ ghi vào skipped, không đăng
 python3 tools/add_work.py --skip --slug ... --title ... --reason "..."           # đã xét, không đăng
 
 Sau đó chạy: python3 tools/build.py  (tự chụp ảnh, tạo thumbnail, chèn header/chân trang/meta).
@@ -34,8 +34,7 @@ if a.slug in known:
 if a.skip:
     d["skipped"].append({"artifact_slug": a.slug, "title": a.title, "reason": a.reason or ""})
 elif a.doc:
-    assert a.cat and a.desc, "--doc cần --cat và --desc"
-    d["docs"].append({"artifact_slug": a.slug, "cat": a.cat, "title": a.title, "desc": a.desc})
+    d["skipped"].append({"artifact_slug": a.slug, "title": a.title, "reason": "không đăng: công văn/đề xuất gửi cơ quan là tài liệu cơ mật"})
 else:
     assert a.src and a.name and a.cat and a.desc, "cần --src --name --cat --desc"
     assert re.fullmatch(r"[a-z0-9-]+", a.name), "--name chỉ gồm a-z, 0-9, '-'"

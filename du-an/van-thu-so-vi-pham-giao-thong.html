@@ -1,11 +1,11 @@
 <!doctype html><html><head><meta charset=utf8>
 <!-- toritech:meta -->
-<meta name="description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><link rel="canonical" href="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
+<meta name="description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent gửi qua cổng đa kênh với gửi bưu cục và nhập tay lên ứng dụng giao thông."><link rel="canonical" href="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
 <link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
 <meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
-<meta property="og:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><meta property="og:url" content="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
+<meta property="og:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent gửi qua cổng đa kênh với gửi bưu cục và nhập tay lên ứng dụng giao thông."><meta property="og:url" content="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
 <meta property="og:image" content="https://toritech.vn/assets/img/du-an/van-thu-so-vi-pham-giao-thong.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/van-thu-so-vi-pham-giao-thong.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent gửi qua cổng đa kênh với gửi bưu cục và nhập tay lên ứng dụng giao thông."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/van-thu-so-vi-pham-giao-thong.jpg">
 <!-- /toritech:meta -->
 <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!-- toritech:top -->
@@ -208,7 +208,7 @@ svg text{font-family:var(--f-d)}
   <header class="hero">
     <span class="eyebrow">Ý tưởng giải pháp · Văn thư xử lý vi phạm giao thông</span>
     <h1>Từ một tập hồ sơ giấy đến <em>điện thoại của người dân</em> trong cùng một ngày</h1>
-    <p class="lede">Sau mỗi lần camera ghi nhận vi phạm, quyết định xử phạt và biên bản đều dồn về bàn văn thư. Trang này mô phỏng chặng đường của tập hồ sơ đó, rồi so sánh ba cách gửi thông báo cho người dân: tự động bằng AI Agent qua cổng đa kênh, gửi thư qua bưu cục, và nhập tay lên VNeTraffic.</p>
+    <p class="lede">Sau mỗi lần camera ghi nhận vi phạm, quyết định xử phạt và biên bản đều dồn về bàn văn thư. Trang này mô phỏng chặng đường của tập hồ sơ đó, rồi so sánh ba cách gửi thông báo cho người dân: tự động bằng AI Agent qua cổng đa kênh, gửi thư qua bưu cục, và nhập tay lên ứng dụng giao thông.</p>
     <div class="route" aria-label="Luồng chung">
       <span class="sig">Xe vượt đèn đỏ</span><i>→</i>
       <span>Camera phát hiện</span><i>→</i>
@@ -243,9 +243,9 @@ svg text{font-family:var(--f-d)}
       <h2>Cùng một tập 1.248 bộ hồ sơ, ba cách đưa tới người dân</h2>
     </div>
     <nav class="fork" aria-label="Ba luồng xử lý văn thư">
-      <a href="#luong-1"><span class="pill good">Đề xuất</span><h3>Luồng 1 · AI Agent và cổng đa kênh</h3><p>Cho tất cả vào máy scan. AI đọc, phân loại, tách theo biển số và gửi qua app ngân hàng, ví điện tử, ePass / VETC.</p></a>
+      <a href="#luong-1"><span class="pill good">Đề xuất</span><h3>Luồng 1 · AI Agent và cổng đa kênh</h3><p>Cho tất cả vào máy scan. AI đọc, phân loại, tách theo biển số và gửi qua app ngân hàng, ví điện tử, ví thu phí ETC.</p></a>
       <a href="#luong-2"><span class="pill warn">Hiện trạng</span><h3>Luồng 2 · Gửi thư qua bưu cục</h3><p>Gấp, đóng phong bì, ghi địa chỉ từng bộ, bàn giao bưu cục, chờ bưu tá đi phát.</p></a>
-      <a href="#luong-3"><span class="pill bad">Hiện trạng</span><h3>Luồng 3 · Nhập lên VNeTraffic</h3><p>Gõ lại từng hồ sơ lên hệ thống. Người dân chỉ nhận được nếu đã cài app, để ý thông báo và nhớ mật khẩu.</p></a>
+      <a href="#luong-3"><span class="pill bad">Hiện trạng</span><h3>Luồng 3 · Nhập lên ứng dụng giao thông</h3><p>Gõ lại từng hồ sơ lên hệ thống. Người dân chỉ nhận được nếu đã cài app, để ý thông báo và nhớ mật khẩu.</p></a>
     </nav>
   </section>
 
@@ -269,7 +269,7 @@ svg text{font-family:var(--f-d)}
     <div class="verdict">
       <div class="vc good"><span class="k">Văn thư làm gì</span><span class="v">Một thao tác: đặt cả tập vào máy</span></div>
       <div class="vc good"><span class="k">Đến người dân</span><span class="v">Trong ngày, ngay sau khi scan</span></div>
-      <div class="vc good"><span class="k">Kênh nhận</span><span class="v">App ngân hàng, ví điện tử, ePass / VETC người dân đã dùng hằng ngày</span></div>
+      <div class="vc good"><span class="k">Kênh nhận</span><span class="v">App ngân hàng, ví điện tử, ví thu phí ETC người dân đã dùng hằng ngày</span></div>
       <div class="vc good"><span class="k">Theo dõi</span><span class="v">Biết đã gửi, đã xem theo từng biển số</span></div>
     </div>
   </section>
@@ -301,13 +301,13 @@ svg text{font-family:var(--f-d)}
 
   <section class="sec app-sec" id="luong-3" data-scene="s3">
     <div class="sec-head">
-      <span class="tag app"><b>3</b><span class="eyebrow">Luồng xử lý văn thư 3 · VNeTraffic</span></span>
-      <h2>Nhập tay lên VNeTraffic, nhưng thông báo chỉ tới người đang dùng app</h2>
-      <p>Văn thư phải gõ lại từng hồ sơ. Sau đó thông báo chỉ đến được người đã cài VNeTraffic, có để ý thông báo và còn đăng nhập được.</p>
+      <span class="tag app"><b>3</b><span class="eyebrow">Luồng xử lý văn thư 3 · App giao thông</span></span>
+      <h2>Nhập tay lên ứng dụng giao thông, nhưng thông báo chỉ tới người đang dùng app</h2>
+      <p>Văn thư phải gõ lại từng hồ sơ. Sau đó thông báo chỉ đến được người đã cài ứng dụng giao thông, có để ý thông báo và còn đăng nhập được.</p>
     </div>
     <div class="stage">
       <p class="swipe">Vuốt ngang để xem toàn cảnh →</p>
-      <div class="stage-scroll"><svg class="scene" viewBox="-640 -290 1280 540" role="img" aria-label="Mô phỏng luồng 3: văn thư nhập tay, hệ thống VNeTraffic, bốn người dân với bốn kết quả khác nhau"></svg></div>
+      <div class="stage-scroll"><svg class="scene" viewBox="-640 -290 1280 540" role="img" aria-label="Mô phỏng luồng 3: văn thư nhập tay, hệ thống ứng dụng giao thông, bốn người dân với bốn kết quả khác nhau"></svg></div>
       <div class="controls">
         <div class="btns">
           <button class="cbtn play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z"/></svg><span class="lbl">Phát</span></button>
@@ -320,7 +320,7 @@ svg text{font-family:var(--f-d)}
       <div class="vc bad"><span class="k">Văn thư làm gì</span><span class="v">Gõ lại từng hồ sơ, kiểm tra, bấm gửi</span></div>
       <div class="vc bad"><span class="k">Kênh nhận</span><span class="v">Chỉ một app, phải cài và đăng nhập</span></div>
       <div class="vc bad"><span class="k">Rủi ro</span><span class="v">Chưa cài app, sót thông báo, quên mật khẩu</span></div>
-      <div class="vc warn"><span class="k">Độ phủ</span><span class="v">Chỉ tới nhóm người dân đang dùng VNeTraffic</span></div>
+      <div class="vc warn"><span class="k">Độ phủ</span><span class="v">Chỉ tới nhóm người dân đang dùng ứng dụng giao thông</span></div>
     </div>
   </section>
 
@@ -331,11 +331,11 @@ svg text{font-family:var(--f-d)}
     </div>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>Tiêu chí</th><th class="hl">Luồng 1 · AI + cổng đa kênh</th><th>Luồng 2 · Bưu cục</th><th>Luồng 3 · VNeTraffic</th></tr></thead>
+        <thead><tr><th>Tiêu chí</th><th class="hl">Luồng 1 · AI + cổng đa kênh</th><th>Luồng 2 · Bưu cục</th><th>Luồng 3 · App giao thông</th></tr></thead>
         <tbody>
           <tr><th>Công sức văn thư</th><td class="hl"><span class="pill good">Thấp</span><br>Đặt cả tập vào máy scan một lần</td><td><span class="pill bad">Rất cao</span><br>Tra địa chỉ, gấp, đóng phong bì, ghi địa chỉ, vào sổ, bàn giao từng bộ</td><td><span class="pill bad">Cao</span><br>Gõ lại thông tin từng hồ sơ lên hệ thống</td></tr>
           <tr><th>Thời gian tới người dân</th><td class="hl"><span class="pill good">Trong ngày</span></td><td><span class="pill bad">3–10 ngày</span></td><td><span class="pill warn">Phụ thuộc tốc độ nhập tay</span></td></tr>
-          <tr><th>Người dân nhận qua</th><td class="hl">App ngân hàng số, ví điện tử, ePass / VETC đã có sẵn trên điện thoại</td><td>Thư giấy gửi tới địa chỉ đăng ký xe</td><td>Chỉ app VNeTraffic</td></tr>
+          <tr><th>Người dân nhận qua</th><td class="hl">App ngân hàng số, ví điện tử, ví thu phí ETC đã có sẵn trên điện thoại</td><td>Thư giấy gửi tới địa chỉ đăng ký xe</td><td>Chỉ ứng dụng giao thông</td></tr>
           <tr><th>Nguy cơ không nhận được</th><td class="hl"><span class="pill good">Thấp</span><br>Gửi song song nhiều kênh</td><td><span class="pill bad">Cao</span><br>Vắng nhà, sai địa chỉ, chuyển hoàn</td><td><span class="pill bad">Cao</span><br>Chưa cài app, sót thông báo, quên mật khẩu</td></tr>
           <tr><th>Chi phí mỗi thông báo</th><td class="hl"><span class="pill good">Gần như không phát sinh</span></td><td><span class="pill bad">Giấy, phong bì, cước, công phát</span></td><td><span class="pill warn">Thấp, nhưng tốn giờ công nhập</span></td></tr>
           <tr><th>Theo dõi trạng thái</th><td class="hl">Đã gửi / đã xem theo từng biển số, từng kênh</td><td>Chỉ biết khi có báo phát hoặc thư bị trả về</td><td>Chỉ trong phạm vi người dùng app</td></tr>
@@ -520,7 +520,7 @@ const S0={dur:11.4,
 const Z1={A:[-410,78],B:[0,78],C:[405,78]};
 const CLK={shirt:'#eef2f7',pants:'#20385f',hair:'#1a1410'};
 const PLATES=['30A-123.45','51G-678.90','29H-246.80','43A-555.12'];
-const APPS=[['Ngân hàng số','#1e40af'],['Ví điện tử','#7e22ce'],['ePass / VETC','#c2410c']];
+const APPS=[['Ngân hàng số','#1e40af'],['Ví điện tử','#7e22ce'],['ví thu phí ETC','#c2410c']];
 const S1={dur:16.6,
  steps:[[0,'Cho TẤT CẢ hồ sơ vào máy scan'],[2.6,'Máy scan tự scan và lưu vào máy tính'],[6.3,'AI Agent đọc, phân loại, tách theo biển số'],[10.9,'AI Agent tự nhập lên Cổng chuyển tiếp'],[12.5,'Thông báo tới điện thoại người dân']],
  build(){
@@ -715,14 +715,14 @@ const S2={dur:16.4,
 const Z3={A:[-410,78],B:[-20,78],C:[360,78]};
 const RECS=[['30A-123.45','Vượt đèn đỏ','1248/QĐ-XPHC','Nguyễn Văn A'],['51G-678.90','Vượt đèn đỏ','1249/QĐ-XPHC','Trần Thị B'],['29H-246.80','Sai làn đường','1250/QĐ-XPHC','Lê Văn C'],['43A-555.12','Vượt đèn đỏ','1251/QĐ-XPHC','Phạm Thị D']];
 const FL=['Biển số','Hành vi','Số quyết định','Chủ phương tiện'];
-const CIT=[['ok','Đã cài VNeTraffic','Nhận và đã xem thông báo'],['sig','Chưa cài VNeTraffic','Không nhận được gì'],['amb','Có app nhưng bỏ sót','Thông báo bị trôi, không để ý'],['sig','Quên mật khẩu','Không đăng nhập được để xem']];
+const CIT=[['ok','Đã cài ứng dụng giao thông','Nhận và đã xem thông báo'],['sig','Chưa cài ứng dụng giao thông','Không nhận được gì'],['amb','Có app nhưng bỏ sót','Thông báo bị trôi, không để ý'],['sig','Quên mật khẩu','Không đăng nhập được để xem']];
 const S3={dur:13.8,
- steps:[[0,'Văn thư gõ tay từng hồ sơ'],[4.2,'VNeTraffic gửi thông báo trong app'],[6.0,'Chưa cài app, sót tin, quên mật khẩu'],[10.6,'Chỉ một phần người dân nhận được']],
+ steps:[[0,'Văn thư gõ tay từng hồ sơ'],[4.2,'App giao thông gửi thông báo trong app'],[6.0,'Chưa cài app, sót tin, quên mật khẩu'],[10.6,'Chỉ một phần người dân nhận được']],
  build(){
   let a=plat(-110,-85,-10,220,170,10);
   a+=box(-45,-42,0,82,52,26,'#9c6b43');
   a+=box(-12,-34,26,6,6,6,'#3b4252')+box(-34,-38,32,50,4,32,'#1b2233');
-  let sc=`<rect x="1.5" y="1.5" width="47" height="29" fill="#f8fafc"/><rect x="1.5" y="1.5" width="47" height="5" fill="#1d4ed8"/><text x="3.5" y="5.2" style="font:800 3.2px var(--f-d);fill:#fff">VNeTraffic · Nhập thông báo</text>`;
+  let sc=`<rect x="1.5" y="1.5" width="47" height="29" fill="#f8fafc"/><rect x="1.5" y="1.5" width="47" height="5" fill="#1d4ed8"/><text x="3.5" y="5.2" style="font:800 3.2px var(--f-d);fill:#fff">App giao thông · Nhập thông báo</text>`;
   for(let i=0;i<4;i++)sc+=`<rect x="4" y="${9+i*5.2}" width="12" height="2.6" fill="#cbd5e1"/><rect x="18" y="${9+i*5.2}" width="28" height="3.2" fill="#ffffff" stroke="#cbd5e1" stroke-width=".3"/><rect data-k="sf${i}" x="18.6" y="${9.7+i*5.2}" width="0" height="1.8" fill="#334155"/>`;
   a+=face('L',-34,-34,64,sc);
   let kb=`<rect width="30" height="10" fill="#2a3140"/>`;for(let i=0;i<20;i++)kb+=`<rect data-k="ky${i}" x="${1.2+(i%10)*2.9}" y="${1.2+Math.floor(i/10)*4.2}" width="2.3" height="3.4" fill="#475569"/>`;
@@ -739,12 +739,12 @@ const S3={dur:13.8,
   b+=box(-50,-40,0,40,40,96,'#1d4ed8');
   let rk='';for(let i=0;i<7;i++)rk+=`<rect x="4" y="${8+i*12}" width="32" height="7" fill="#1e3a8a"/><circle data-k="vl${i}" cx="32" cy="${11.5+i*12}" r="1.5" fill="#93c5fd"/>`;
   b+=face('L',-50,0,96,rk);
-  const bo=card('cSrv',-130,-330,250,78,`<text x="16" y="26" class="t-cap">HỆ THỐNG</text><text x="16" y="48" class="t-h">VNeTraffic</text><text x="16" y="66" class="t-s">Chỉ gửi được trong ứng dụng VNeTraffic</text>`);
+  const bo=card('cSrv',-130,-330,250,78,`<text x="16" y="26" class="t-cap">HỆ THỐNG</text><text x="16" y="48" class="t-h">App giao thông</text><text x="16" y="66" class="t-s">Chỉ gửi được trong ứng dụng giao thông</text>`);
 
   let c=plat(-92,-112,-10,180,200,10);
   const PH=[[-75,-98],[-37,-40],[1,18],[39,76]];
   const INN=[
-   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#eff6ff"/><rect x="1.6" y="2.4" width="18.8" height="5.4" fill="#1d4ed8"/><text x="3" y="6.4" style="font:800 2.8px var(--f-d);fill:#fff">VNeTraffic</text><g data-k="n0" style="opacity:0"><rect x="3" y="10" width="16" height="9" rx="1.2" fill="#fff" stroke="#bfdbfe" stroke-width=".4"/><circle cx="5.4" cy="13" r="1.3" fill="#dc2626"/><rect x="7.6" y="12" width="9.6" height="1" fill="#334155"/><rect x="7.6" y="14.6" width="6.8" height="1" fill="#94a3b8"/><circle cx="11" cy="28" r="4.2" fill="#16a34a"/><path d="M9,28 l1.5,1.6 l3,-3.2" fill="none" stroke="#fff" stroke-width=".9"/></g>`,
+   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#eff6ff"/><rect x="1.6" y="2.4" width="18.8" height="5.4" fill="#1d4ed8"/><text x="3" y="6.4" style="font:800 2.8px var(--f-d);fill:#fff">App giao thông</text><g data-k="n0" style="opacity:0"><rect x="3" y="10" width="16" height="9" rx="1.2" fill="#fff" stroke="#bfdbfe" stroke-width=".4"/><circle cx="5.4" cy="13" r="1.3" fill="#dc2626"/><rect x="7.6" y="12" width="9.6" height="1" fill="#334155"/><rect x="7.6" y="14.6" width="6.8" height="1" fill="#94a3b8"/><circle cx="11" cy="28" r="4.2" fill="#16a34a"/><path d="M9,28 l1.5,1.6 l3,-3.2" fill="none" stroke="#fff" stroke-width=".9"/></g>`,
    `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#1e293b"/>${[0,1,2,3,4,5,6,7,8].map(i=>`<rect x="${3.5+(i%3)*5.6}" y="${6+Math.floor(i/3)*6.2}" width="4" height="4" rx="1" fill="${['#f97316','#22c55e','#eab308','#a855f7','#ec4899','#14b8a6','#64748b','#ef4444','#0ea5e9'][i]}"/>`).join('')}<g data-k="n1" style="opacity:0"><circle cx="11" cy="30" r="4.4" fill="#dc2626"/><path d="M9,28 l4,4 M13,28 l-4,4" stroke="#fff" stroke-width=".9"/></g>`,
    `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#f1f5f9"/>${[0,1,2,3,4,5].map(i=>`<rect data-k="m${i}" x="3" y="${4+i*5}" width="16" height="4.2" rx="1" fill="${i===4?'#bfdbfe':'#cbd5e1'}" style="opacity:0"/>`).join('')}<g data-k="n2" style="opacity:0"><circle cx="18" cy="5" r="3" fill="#dc2626"/><text x="18" y="6.1" text-anchor="middle" style="font:800 2.8px var(--f-m);fill:#fff">37</text></g>`,
    `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#ffffff"/><rect x="1.6" y="2.4" width="18.8" height="5.4" fill="#1d4ed8"/><text x="3" y="6.4" style="font:800 2.8px var(--f-d);fill:#fff">Đăng nhập</text><rect x="7.5" y="10" width="7" height="6" rx="1" fill="#94a3b8"/><path d="M8.8,10 v-1.6 a2.2,2.2 0 0 1 4.4,0 v1.6" fill="none" stroke="#94a3b8" stroke-width=".8"/><g data-k="pw"><rect x="3.5" y="19" width="15" height="4" rx="1" fill="#f1f5f9" stroke="#cbd5e1" stroke-width=".3"/><text x="11" y="22.2" text-anchor="middle" style="font:800 3.4px var(--f-m);fill:#334155">••••••</text></g><g data-k="n3" style="opacity:0"><text x="11" y="28" text-anchor="middle" style="font:800 2.6px var(--f-d);fill:#dc2626">Sai mật khẩu</text><text x="11" y="32" text-anchor="middle" style="font:600 2.4px var(--f-d);fill:#1d4ed8">Quên mật khẩu?</text></g>`];
@@ -834,6 +834,6 @@ document.querySelectorAll('[data-scene]').forEach(sec=>{
 </style>
 <section id="phan-bien" aria-labelledby="pb-h"><h2 id="pb-h">Phản biện: vì sao nên làm?</h2><p>Đánh giá thẳng giá trị của mô hình và cái giá nếu tiếp tục cách làm hiện tại.</p><div class="pb-g"><div class="pb-c"><h3>Vì sao nên làm</h3><ul><li>Khâu chậm nhất của xử phạt nguội là gửi thông báo và theo dõi văn thư; tự động hoá khâu này rút ngắn thời gian từ vi phạm đến khi người dân nhận được thông báo.</li><li>Hồ sơ số có nhật ký đầy đủ, dễ tra soát khi người dân khiếu nại.</li></ul></div><div class="pb-c no"><h3>Nếu không làm thì sao</h3><ul><li>Tiếp tục in, gửi bưu điện, nhập tay: tốn nhân sự, thất lạc, người vi phạm không biết để chấp hành.</li><li>Tồn đọng quyết định chưa tống đạt tăng dần theo số camera được lắp thêm.</li></ul></div></div></section>
 <!-- toritech:foot -->
-<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="vmgportal-ai-sms.html"><img src="../assets/img/du-an/thumb/vmgportal-ai-sms.webp" alt="" loading="lazy" width="112" height="59"><span><b>VMGPortal – AI Agent vận hành Nền tảng nhắn tin SMS của VMG</b><small>Trang sản phẩm</small></span></a></li><li><a href="tu-dong-ban-bao-hiem-xe-qua-zalo.html"><img src="../assets/img/du-an/thumb/tu-dong-ban-bao-hiem-xe-qua-zalo.webp" alt="" loading="lazy" width="112" height="59"><span><b>Tự động bán bảo hiểm xe qua Zalo</b><small>Trang sản phẩm</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="vmgportal-ai-sms.html"><img src="../assets/img/du-an/thumb/vmgportal-ai-sms.webp" alt="" loading="lazy" width="112" height="59"><span><b>VMGPortal – AI Agent vận hành Nền tảng nhắn tin SMS của VMG</b><small>Trang sản phẩm</small></span></a></li><li><a href="tu-dong-ban-bao-hiem-xe-qua-zalo.html"><img src="../assets/img/du-an/thumb/tu-dong-ban-bao-hiem-xe-qua-zalo.webp" alt="" loading="lazy" width="112" height="59"><span><b>Tự động bán bảo hiểm xe qua Zalo</b><small>Trang sản phẩm</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
 <!-- /toritech:foot -->
 </body></html>

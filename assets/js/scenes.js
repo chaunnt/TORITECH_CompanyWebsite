@@ -432,7 +432,7 @@
       g.alpha(m, function () {
         g.queue(6.9, function () { g.box(4.1, 2.6, 0, 1.1, .9, .8, '#334155'); g.box(4.1, 2.6, .8, 1.1, .9, .08, '#22d3ee'); g.text(4.65, 3.05, 1.35, 'Scan', { size: .28, bg: 'rgba(15,23,42,.88)' }); });
         g.queue(10.5, function () { var fl = Math.sin(t * 2) * .1; g.box(5.0, 5.0, .4 + fl, .9, .9, .9, '#22d3ee', { top: '#a5f3fc' }); g.text(5.45, 5.45, 1.95 + fl, 'AI Agent', { size: .32, bg: rgba(C.cyan, .95), color: '#062029' }); });
-        var phones = [[8.2, 2.6, 'App ngân hàng'], [8.6, 4.9, 'Ví điện tử'], [8.0, 7.2, 'ePass / VETC']];
+        var phones = [[8.2, 2.6, 'App ngân hàng'], [8.6, 4.9, 'Ví điện tử'], [8.0, 7.2, 'Ví thu phí ETC']];
         phones.forEach(function (p, i) {
           g.line([5.45, 5.45, 1.0], [p[0], p[1], .5], rgba(C.cyan, .4), .05, .18, t * 1.5);
           var u = (t * .5 + i / 3) % 1;

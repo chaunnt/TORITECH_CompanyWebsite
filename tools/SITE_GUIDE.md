@@ -2,6 +2,13 @@
 
 Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và cho tác vụ đồng bộ artifact hằng ngày.
 
+## 0a. Bảo mật nội dung (chủ sở hữu 20/11/2026 – bắt buộc)
+- **Công văn, đề xuất/kiến nghị gửi cơ quan là tài liệu CƠ MẬT → KHÔNG đăng** dưới bất kỳ hình thức nào (kể cả thẻ tóm tắt). Artifact dạng công văn (có "Kính gửi", "Kiến nghị", số hiệu văn bản, chữ ký…) → `add_work.py --doc` (chỉ ghi vào `skipped`). Website chỉ đăng **mô hình, dự án**.
+- **Không nêu tên riêng của đơn vị triển khai / đối tác** (cơ quan, sở, cục, ngân hàng, ví điện tử, nhà mạng, hãng bảo hiểm, nền tảng của đối tác…) **trừ khi chủ sở hữu ghi rõ trong yêu cầu**. Dùng tên chung: "cơ quan quản lý đô thị", "Sở quản lý", "CSGT", "cơ quan đăng kiểm", "ứng dụng giao thông", "ví điện tử", "ngân hàng", "ví thu phí ETC", "hãng bảo hiểm"…
+  - Đã được phép nêu: **VMG** ("Nền tảng nhắn tin SMS của VMG").
+  - Được giữ: tên văn bản pháp luật và cơ quan ban hành khi trích dẫn căn cứ pháp lý; công nghệ/kênh phổ thông (Zalo, Google Drive, Claude, ChatGPT…).
+  - Artifact mới có tên riêng đơn vị/đối tác: thay bằng tên chung trong bản trên website (chỉ đổi chữ hiển thị, không đổi mã/logic), hoặc `--skip` với lý do "cần chủ sở hữu duyệt" nếu tên gắn liền với nội dung (thương hiệu trang, danh sách cơ sở thật).
+
 ## 0. Quy tắc làm việc tiết kiệm (đọc trước)
 - **Mọi phần chung đều do script làm.** Header/chân trang site, header + chân trang + "Cùng hạng mục" + thẻ SEO/OG của trang dự án, ảnh đại diện, thumbnail, trang hạng mục, sitemap, llms.txt, trang chuyển hướng → `python3 tools/build.py`. **Không** sửa tay file `.html` đã sinh, **không** đọc/ghi từng dòng danh sách; sửa ở `tools/` rồi build.
 - Thêm dự án: `python3 tools/add_work.py ...` (xem docstring) → `python3 tools/build.py`. Không cần mở `projects.json`.
@@ -16,13 +23,13 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 - Pháp nhân: CÔNG TY TNHH TORITECH · MST 0317545179 · Hotline/Zalo 0343 902 960 · Email liên hệ: chau.nguyen@toritech.vn (`email_support`; email security/DPO chưa có).
 
 ## 2. Kiến trúc nội dung (Platform Hub)
-- Header: Giải pháp (AI Vision & VMS · Nền tảng Đặt lịch · Hệ sinh thái MCP) · Dự án & Hồ sơ (menu: Tất cả + 4 hạng mục) · Bảo mật & Tuân thủ · Tài liệu kỹ thuật · Về chúng tôi · CTA "Liên hệ tư vấn".
+- Header: Giải pháp (AI Vision & VMS · Nền tảng Đặt lịch · Hệ sinh thái MCP) · Dự án (menu: Tất cả + 4 hạng mục) · Bảo mật & Tuân thủ · Tài liệu kỹ thuật · Về chúng tôi · CTA "Liên hệ tư vấn".
 - Hero: 2 luồng CTA – Doanh nghiệp/Đối tác ("Đặt lịch Demo", "Khám phá MCP") và Cơ quan quản lý/Hạ tầng ("Hồ sơ năng lực & Tiêu chuẩn kỹ thuật").
 - 3 trụ cột (`cat`): `vision` = AI Camera Vision & VMS · `booking` = Đặt lịch & Điều phối · `mcp` = MCP & AI Agent (Dịch vụ công / Doanh nghiệp / Trợ lý nhân viên).
 - Mục phụ `game` = Game & Giải trí (game, mô phỏng giải trí do công ty làm) – không có trang giải pháp riêng.
 - **Mọi dự án/hồ sơ phải có `cat`** (build báo lỗi nếu thiếu). Cấu hình hạng mục: `CATS` trong `build.py`.
 - Cấu trúc URL dự án:
-  - `du-an.html` – tổng hợp, chia section theo hạng mục.
+  - `du-an.html` – "Dự án & Mô hình", chia section theo hạng mục (không có công văn/hồ sơ đề xuất).
   - Trang hạng mục: `du-an-ai-vision-vms.html`, `du-an-dat-lich.html`, `du-an-mcp-ai-agent.html`, `du-an-game-giai-tri.html` (thẻ dùng **ảnh WebP**, không nhúng iframe/HTML5 – nhẹ trang).
   - Trang dự án: `du-an/<ten-khong-dau>.html` (HTML gốc artifact + khối build chèn: header chung về trang hạng mục, chân trang có danh sách cùng hạng mục). Ảnh: `assets/img/du-an/<ten>.jpg` (OG 1200×630) và `assets/img/du-an/thumb/<ten>.webp`.
 - Phần **Phản biện** trong trang dự án là nội dung viết tay (khối `<section id="phan-bien">` ngay trước `<!-- toritech:foot -->`), không nằm trong marker của build → build giữ nguyên. Khi thay bản HTML mới của artifact, phải giữ/viết lại phần này.
@@ -57,7 +64,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 2. Với mỗi artifact mới, quyết định:
    - Chủ sở hữu (20/11/2026): artifact là showcase dự án của công ty → mặc định đưa lên. Liên quan 1 trong 3 trụ cột → `vision`/`booking`/`mcp`; game/giải trí → `game`. Chỉ `skipped` khi là việc cá nhân, đối soát, nội dung quảng bá thuần cho bên thứ ba, hoặc vướng an toàn dữ liệu ở bước 3.
    - Trang HTML trình diễn/sản phẩm/kiến trúc → `works`: tải HTML (Artifact read `path: index.html` → file trong scratchpad) rồi `tools/add_work.py --src <file> --name <ten-khong-dau> ...` (artifact nhiều file: tải đủ file phụ vào `du-an/`; thư viện `/_runtime/...` → vendor vào `du-an/vendor/`).
-   - Docs (công văn, đề xuất gửi cơ quan, bản nháp có chỗ trống `[…]`) → `docs`: chỉ thẻ tóm tắt 1–2 câu, không đăng toàn văn.
+   - Docs / công văn / đề xuất gửi cơ quan → **không đăng** (`add_work.py --doc` chỉ ghi vào `skipped`).
 3. Kiểm tra an toàn trước khi đăng: không chứa SĐT/email cá nhân, CCCD, token/API key thật, dữ liệu khách hàng thật, mật khẩu; không mạo danh cơ quan; nếu có → `skipped` với lý do "cần người duyệt" (không tự sửa nội dung artifact).
 4. Viết `title` (giữ tên artifact, chỉnh cho rõ), `desc` 1–2 câu theo checklist mục 4, `kind` (Mô hình tương tác / Mô phỏng 2.5D / Trang sản phẩm / Đề xuất dự án / Đề xuất kiến trúc / Ứng dụng web). Phản biện thuộc nội dung artifact (người làm artifact tự viết); tác vụ đồng bộ không tự thêm vào trang.
 5. `python3 tools/build.py` (tự chụp ảnh còn thiếu qua `tools/og_shots.js`, tạo thumbnail, chèn khối `<!-- toritech:meta|top|foot -->` – chạy lại không nhân bản, nội dung artifact giữ nguyên), kiểm tra nhanh (mục 0), rồi commit & push `main`.

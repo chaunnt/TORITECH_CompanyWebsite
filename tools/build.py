@@ -71,7 +71,7 @@ NAV = [
         ("dat-lich.html", "Nền tảng Đặt lịch & Điều phối", "Chịu tải cao, đa kênh, chống nghẽn"),
         ("mcp.html", "Hệ sinh thái MCP & AI Agent", "Dịch vụ công · Doanh nghiệp · Nhân sự"),
     ]),
-    ("Dự án & Hồ sơ", [("du-an.html", "Tất cả dự án & hồ sơ", "Toàn bộ theo hạng mục")] + [(c["page"], c["name"], c["lead"].split(":")[0].split(",")[0]) for c in CATS.values()]),
+    ("Dự án", [("du-an.html", "Tất cả dự án & mô hình", "Toàn bộ theo hạng mục")] + [(c["page"], c["name"], c["lead"].split(":")[0].split(",")[0]) for c in CATS.values()]),
     ("trust-center.html", "Bảo mật & Tuân thủ"),
     ("tai-lieu.html", "Tài liệu kỹ thuật"),
     ("ve-chung-toi.html", "Về chúng tôi"),
@@ -123,7 +123,7 @@ def footer():
  <div><h4>Sản phẩm</h4><ul>
   <li><a href="ai-vision-vms.html">AI Camera &amp; VMS</a></li><li><a href="dat-lich.html">Hệ thống Đặt lịch</a></li>
   <li><a href="mcp.html#dvc">MCP Dịch vụ công</a></li><li><a href="mcp.html#doanh-nghiep">MCP Doanh nghiệp</a></li><li><a href="mcp.html#nhan-su">MCP Nhân sự</a></li>
-  <li><a href="du-an.html">Dự án &amp; Hồ sơ</a></li></ul></div>
+  <li><a href="du-an.html">Dự án &amp; Mô hình</a></li></ul></div>
  <div><h4>Tài nguyên</h4><ul>
   <li><a href="tai-lieu.html#api">Tài liệu API / MCP</a></li><li><a href="tai-lieu.html#kien-truc">Kiến trúc hệ thống</a></li>
   <li><a href="tai-lieu.html#trang-thai">Trạng thái dịch vụ</a></li><li><a href="tai-lieu.html#faq">Câu hỏi thường gặp</a></li>
@@ -246,7 +246,7 @@ import du_an  # noqa: E402
 with open(os.path.join(os.path.dirname(__file__), "projects.json"), encoding="utf-8") as _f:
     _PRJ = json.load(_f)
 WORKS = _PRJ["works"]   # trang dự án HTML trong du-an/
-DOCS = _PRJ["docs"]     # công văn / đề xuất: chỉ thẻ tóm tắt
+DOCS = []  # công văn/đề xuất là tài liệu cơ mật: KHÔNG đăng lên website (chủ sở hữu 20/11/2026)
 for _x in WORKS + DOCS:
     if _x.get("cat") not in CATS:
         raise SystemExit(f'projects.json: "{_x.get("title")}" thiếu hạng mục hợp lệ (cat ∈ {list(CATS)})')
@@ -275,10 +275,10 @@ def cat_cards(cat):
 
 INTEGRATIONS = [
     ("Camera IP · ONVIF / RTSP", "đa hãng"), ("Đầu ghi NVR", "chuẩn QCVN 103:2024/BGTVT"),
-    ("Ví điện tử", "MoMo, ZaloPay, ShopeePay, Viettel Money"), ("Ngân hàng", "BIDV, Agribank, VietinBank, VPBank"),
-    ("Thu phí tự động", "ePass, VETC"), ("Hoá đơn điện tử", "theo NĐ 123/2020/NĐ-CP"),
+    ("Ví điện tử", "các ví điện tử phổ biến"), ("Ngân hàng", "app ngân hàng số, cổng thanh toán"),
+    ("Thu phí tự động", "ví thu phí ETC"), ("Hoá đơn điện tử", "theo NĐ 123/2020/NĐ-CP"),
     ("Thông báo đa kênh", "Zalo OA/ZNS, SMS, Email, Push"), ("LLM", "Claude, ChatGPT, Gemini, Copilot"),
-    ("Lưu trữ & văn phòng", "Google Drive, OneDrive, Excel, Gmail, Outlook"), ("Dịch vụ công", "Cổng BHXH, cổng thuế, VNeTraffic"),
+    ("Lưu trữ & văn phòng", "Google Drive, OneDrive, Excel, Gmail, Outlook"), ("Dịch vụ công", "Cổng BHXH, cổng thuế, ứng dụng giao thông"),
 ]
 
 
@@ -314,7 +314,7 @@ SC = {
     "mcp": ("Nhân viên đăng nhập từng cổng, tải từng file, gõ lại số liệu giữa ERP, kế toán, thuế, BHXH – 10–15 phút mỗi đơn vị mỗi kỳ, dễ sai và khó truy vết.",
             "AI Agent thao tác qua MCP Server có phân quyền: đọc dữ liệu, tổng hợp, nhắc hạn, soạn báo cáo; lệnh quan trọng cần người duyệt, mọi hành động có Audit Log."),
     "notice": ("Mỗi vụ vi phạm sinh thông báo, biên bản, quyết định phải gửi người dân: văn thư gấp phong bì, ghi địa chỉ, gửi bưu cục; thư bị chuyển hoàn, chậm chấp hành.",
-               "Văn thư chỉ cần scan cả tập. AI Agent đọc, phân loại theo biển số, gửi thông báo qua cổng đa kênh tới app ngân hàng, ví điện tử, ePass/VETC trong cùng ngày."),
+               "Văn thư chỉ cần scan cả tập. AI Agent đọc, phân loại theo biển số, gửi thông báo qua cổng đa kênh tới app ngân hàng, ví điện tử, ví thu phí ETC trong cùng ngày."),
     "trust": ("Video, ảnh khuôn mặt, CCCD, biển số nằm rải rác ở nhiều máy, không phân quyền, không ai biết ai đã xem hay tải gì.",
               "Phân lớp bảo vệ: lưu trữ tại Việt Nam, mã hoá đầu cuối, RBAC cho cả người và AI Agent, nhật ký kiểm toán bất biến, lựa chọn triển khai On-Premise/Private Cloud."),
 }
@@ -385,8 +385,8 @@ def p_index():
 
 <section style="padding-top:0"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Ecosystem &amp; Integration</span><h2>Kết nối mượt với hạ tầng sẵn có</h2></div>{integrations_html()}</div></section>
 
-<section style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Dự án &amp; Hồ sơ</span><h2>Bản trình diễn và đề xuất tiêu biểu</h2><p class="lead">Các mô phỏng, kiến trúc và đề xuất TORITECH đã xây dựng cho bài toán đăng kiểm, giao thông và dịch vụ công.</p></div>
-<div class="grid g3">{featured}</div><p style="margin-top:22px"><a class="btn btn-dark" href="du-an.html">Xem tất cả {len(WORKS) + len(DOCS)} dự án &amp; hồ sơ →</a></p></div></section>
+<section style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Dự án &amp; Mô hình</span><h2>Dự án và mô hình tiêu biểu</h2><p class="lead">Các mô phỏng, kiến trúc và đề xuất TORITECH đã xây dựng cho bài toán đăng kiểm, giao thông và dịch vụ công.</p></div>
+<div class="grid g3">{featured}</div><p style="margin-top:22px"><a class="btn btn-dark" href="du-an.html">Xem tất cả {len(WORKS)} dự án &amp; mô hình →</a></p></div></section>
 
 <section><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Mô hình hợp tác</span><h2>Triển khai theo 4 bước, bắt đầu bằng thí điểm</h2></div><div class="grid g4">{steps}</div></div></section>
 
@@ -528,11 +528,11 @@ def p_projects():
 <div class="grid g3">{w}{d}</div><p style="margin-top:22px"><a class="btn btn-dark" href="{c["page"]}">Mở hạng mục {c["name"]} →</a></p></div></section>''')
         table += [f'<tr><td><a href="{c["page"]}">{c["name"]}</a></td><td>{x["title"]}</td><td>{x.get("kind", "Công văn / Đề xuất")}</td></tr>' for x in WORKS + DOCS if x["cat"] == k]
     jump = '<div class="filters" role="navigation" aria-label="Hạng mục">' + "".join(f'<a class="tool" href="{c["page"]}">{c["name"]}</a>' for c in CATS.values()) + "</div>"
-    body = page_hero("Dự án &amp; Hồ sơ", "Portfolio", "Dự án, bản trình diễn &amp; hồ sơ đề xuất",
-                     f"{len(WORKS)} dự án và {len(DOCS)} hồ sơ đề xuất của TORITECH, chia theo {len(CATS)} hạng mục. Mở từng dự án để xem trực tiếp; hồ sơ gửi cơ quan quản lý được cung cấp theo yêu cầu.", extra=jump, title="Dự án & Hồ sơ – TORITECH") + "".join(secs) + f'''
+    body = page_hero("Dự án &amp; Mô hình", "Portfolio", "Dự án &amp; mô hình trình diễn",
+                     f"{len(WORKS)} dự án và mô hình trình diễn của TORITECH, chia theo {len(CATS)} hạng mục. Mở từng dự án để xem trực tiếp.", extra=jump, title="Dự án & Hồ sơ – TORITECH") + "".join(secs) + f'''
 <section><div class="wrap"><div class="prose reveal" style="max-width:none"><h2>Danh mục theo hạng mục</h2><table><thead><tr><th>Hạng mục</th><th>Tên</th><th>Loại</th></tr></thead><tbody>{"".join(table)}</tbody></table>
 <p class="meta-line">Dữ liệu trong các dự án trình diễn là dữ liệu mẫu hoặc dữ liệu công khai của cơ sở kinh doanh (địa chỉ, giờ làm việc, hotline); thông tin cá nhân đã được che hoặc thay bằng dữ liệu giả lập.</p></div></div></section>{cta_band()}'''
-    return layout("du-an.html", "Dự án & Hồ sơ", "Dự án và hồ sơ đề xuất của TORITECH theo hạng mục: AI Vision & VMS, Đặt lịch & Điều phối, MCP & AI Agent, Game & Giải trí.", body, scenes=False)
+    return layout("du-an.html", "Dự án & Mô hình", "Dự án và mô hình trình diễn của TORITECH theo hạng mục: AI Vision & VMS, Đặt lịch & Điều phối, MCP & AI Agent, Game & Giải trí.", body, scenes=False)
 
 
 def p_category(k):
@@ -546,7 +546,7 @@ def p_category(k):
     body += f'<section id="ho-so" style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Hồ sơ đề xuất</span><h2>Công văn &amp; đề xuất</h2><p class="lead">Bản tóm tắt; bản đầy đủ cung cấp theo yêu cầu.</p></div><div class="grid g3">{d}</div></div></section>' if d else ""
     items = [{"@type": "ListItem", "position": i + 1, "url": SITE_URL + x["href"], "name": x["title"]} for i, x in enumerate(x for x in WORKS if x["cat"] == k)]
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f'Dự án {c["name"]}', "url": SITE_URL + c["page"], "mainEntity": {"@type": "ItemList", "itemListElement": items}}]
-    return layout(c["page"], f'Dự án {c["name"]}', f'{c["lead"]} Danh sách dự án và hồ sơ đề xuất của TORITECH.', body + cta_band(), active="du-an.html", jsonld=ld, scenes=False,
+    return layout(c["page"], f'Dự án {c["name"]}', f'{c["lead"]} Danh sách dự án và mô hình của TORITECH.', body + cta_band(), active="du-an.html", jsonld=ld, scenes=False,
                   og_image=SITE_URL + du_an.img_rel(first) if first else None)
 
 
@@ -634,18 +634,18 @@ def p_profile():
         ("OAuth 2.0, TLS", "Xác thực, mã hoá kênh truyền"),
     ])
     body = page_hero("Hồ sơ năng lực", "Dành cho cơ quan quản lý &amp; đối tác hạ tầng", "Hồ sơ năng lực &amp; Tiêu chuẩn kỹ thuật",
-                     "Bản tóm tắt để thẩm định: pháp nhân, danh mục sản phẩm, mô hình triển khai, tiêu chuẩn áp dụng và hồ sơ đề xuất đã thực hiện. Bấm “In / PDF” để lưu thành tệp PDF.", title="Hồ sơ năng lực TORITECH") + f'''
+                     "Bản tóm tắt để thẩm định: pháp nhân, danh mục sản phẩm, mô hình triển khai, tiêu chuẩn áp dụng và các dự án, mô hình đã thực hiện. Bấm “In / PDF” để lưu thành tệp PDF.", title="Hồ sơ năng lực TORITECH") + f'''
 <section><div class="wrap"><div class="prose" style="max-width:none">
 <h2>1. Thông tin pháp nhân</h2>{entity_table()}
 <h2>2. Danh mục sản phẩm</h2><table><thead><tr><th>Sản phẩm</th><th>Chức năng chính</th><th>Đối tượng</th></tr></thead><tbody>{prod}</tbody></table>
 <h2>3. Mô hình triển khai</h2><table><thead><tr><th>Mô hình</th><th>Phù hợp</th></tr></thead><tbody>
 <tr><td>SaaS – Cloud đặt tại Việt Nam</td><td>Doanh nghiệp cần triển khai nhanh</td></tr><tr><td>Private Cloud</td><td>Doanh nghiệp lớn, ngân hàng, ví điện tử</td></tr><tr><td>On-Premise</td><td>Cơ quan nhà nước, dữ liệu không rời hạ tầng nội bộ</td></tr></tbody></table>
 <h2>4. Tiêu chuẩn &amp; căn cứ áp dụng</h2><table><thead><tr><th>Văn bản / tiêu chuẩn</th><th>Phạm vi</th></tr></thead><tbody>{std}</tbody></table>
-<h2>5. Hồ sơ đề xuất &amp; bản trình diễn</h2><ul>{"".join(f"<li><b>{w['title']}</b> – {w['desc']}</li>" for w in WORKS + DOCS)}</ul>
+<h2>5. Dự án &amp; mô hình trình diễn</h2><ul>{"".join(f"<li><b>{w['title']}</b> – {w['desc']}</li>" for w in WORKS + DOCS)}</ul>
 <h2>6. Bộ tài liệu tuân thủ</h2><ul>{"".join(f'<li><a href="{h}">{t}</a></li>' for h, t in LEGAL_LINKS)}</ul>
 <div class="note">Hợp đồng, phụ lục SLA, DPA và hồ sơ pháp lý (giấy chứng nhận đăng ký doanh nghiệp…) được cung cấp bản chính thức khi có yêu cầu thẩm định.</div>
 </div></div></section>{cta_band("Cần trao đổi trực tiếp với kỹ sư giải pháp?", "Chúng tôi sẵn sàng trình bày kiến trúc và demo trên hạ tầng thử nghiệm của đơn vị.")}'''
-    return layout("ho-so-nang-luc.html", "Hồ sơ năng lực & Tiêu chuẩn kỹ thuật", "Hồ sơ năng lực TORITECH: pháp nhân, sản phẩm, mô hình triển khai, tiêu chuẩn áp dụng và hồ sơ đề xuất – in thành PDF để thẩm định.", body, scenes=False)
+    return layout("ho-so-nang-luc.html", "Hồ sơ năng lực & Tiêu chuẩn kỹ thuật", "Hồ sơ năng lực TORITECH: pháp nhân, sản phẩm, mô hình triển khai, tiêu chuẩn áp dụng và dự án tiêu biểu – in thành PDF để thẩm định.", body, scenes=False)
 
 
 def p_contact():
@@ -658,7 +658,7 @@ def p_contact():
 <a class="card contact-ch reveal" href="https://zalo.me/{CO["zalo"]}" rel="noopener" target="_blank"><span class="eyebrow">Zalo</span><h3>{CO["hotline"]}</h3><p>Nhắn Zalo để gửi hình ảnh, tài liệu hoặc hẹn lịch gọi video.</p><span class="btn btn-ghost btn-sm">Nhắn Zalo →</span></a>
 </div></section>
 <section style="padding-top:0"><div class="wrap"><div class="card"><h3>Thông tin pháp nhân</h3><div class="prose" style="padding:0;border:0">{entity_table()}</div></div></div></section>
-<script>(function(){{var T={{demo:"Đặt lịch Demo giải pháp",vision:"Tư vấn AI Camera Vision & VMS",booking:"Tư vấn nền tảng đặt lịch",mcp:"Tư vấn hệ sinh thái MCP / AI Agent",hoso:"Yêu cầu hồ sơ năng lực / hồ sơ đề xuất",dulieu:"Yêu cầu về dữ liệu cá nhân"}};var t=new URLSearchParams(location.search).get("topic");if(t&&T[t]){{var a=document.getElementById("ct-email");a.href="mailto:{em}?subject="+encodeURIComponent(T[t]+" – TORITECH");}}}})();</script>'''
+<script>(function(){{var T={{demo:"Đặt lịch Demo giải pháp",vision:"Tư vấn AI Camera Vision & VMS",booking:"Tư vấn nền tảng đặt lịch",mcp:"Tư vấn hệ sinh thái MCP / AI Agent",hoso:"Yêu cầu hồ sơ năng lực",dulieu:"Yêu cầu về dữ liệu cá nhân"}};var t=new URLSearchParams(location.search).get("topic");if(t&&T[t]){{var a=document.getElementById("ct-email");a.href="mailto:{em}?subject="+encodeURIComponent(T[t]+" – TORITECH");}}}})();</script>'''
     return layout("lien-he.html", "Liên hệ tư vấn & Đặt lịch Demo", f"Liên hệ TORITECH qua email {em} hoặc hotline/Zalo {CO['hotline']} để đặt lịch demo AI Camera Vision & VMS, nền tảng đặt lịch, hệ sinh thái MCP, hoặc nhận hồ sơ năng lực.", body, scenes=False)
 
 
@@ -726,7 +726,7 @@ Liên hệ: hotline/Zalo {CO["hotline"]} · Trụ sở: {CO["address"]}
 ## Tài nguyên
 - [Tài liệu kỹ thuật]({SITE_URL}tai-lieu.html)
 - [Hồ sơ năng lực & tiêu chuẩn kỹ thuật]({SITE_URL}ho-so-nang-luc.html)
-- [Dự án & hồ sơ]({SITE_URL}du-an.html)
+- [Dự án & mô hình]({SITE_URL}du-an.html)
 """ + "".join(f"  - [{w['title']}]({SITE_URL}{w['href']}): {w['desc']}\n" for w in WORKS)
     write("llms.txt", llms)
     write(".nojekyll", "")

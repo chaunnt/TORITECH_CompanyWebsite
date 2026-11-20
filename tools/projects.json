@@ -6,7 +6,7 @@
       "href": "du-an/kien-truc-du-lieu-dang-kiem.html",
       "cat": "vision",
       "title": "Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh",
-      "desc": "Bộ mô hình 2.5D: Sở Xây dựng tiếp nhận, giám sát và điều hành dữ liệu đăng kiểm theo thời gian thực; IOC phát hiện xe hết hạn, điều phối hạ tầng.",
+      "desc": "Bộ mô hình 2.5D: cơ quan quản lý địa phương tiếp nhận, giám sát và điều hành dữ liệu đăng kiểm theo thời gian thực; trung tâm điều hành (IOC) phát hiện xe hết hạn, điều phối hạ tầng.",
       "kind": "Mô hình tương tác",
       "old_href": "showcase/kien-truc-du-lieu-dang-kiem.html"
     },
@@ -15,7 +15,7 @@
       "href": "du-an/van-thu-so-vi-pham-giao-thong.html",
       "cat": "mcp",
       "title": "Văn thư số xử lý vi phạm giao thông",
-      "desc": "Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic.",
+      "desc": "Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent gửi qua cổng đa kênh với gửi bưu cục và nhập tay lên ứng dụng giao thông.",
       "kind": "Mô phỏng 2.5D",
       "old_href": "showcase/van-thu-so-vi-pham-giao-thong.html"
     },
@@ -29,15 +29,6 @@
       "old_href": "showcase/dvc-connector-ai.html"
     },
     {
-      "artifact_slug": "350aeed0-bcdd-42bb-8147-e8d46a298293",
-      "href": "du-an/kiem-dinh-khi-thai-xe-may.html",
-      "cat": "booking",
-      "title": "Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
-      "desc": "Đề xuất xã hội hoá: đặt lịch & thanh toán cho hơn 11,5 triệu xe máy khi kiểm định khí thải bắt đầu từ 01/7/2027, có trợ lý AI hỗ trợ vận hành.",
-      "kind": "Đề xuất dự án",
-      "old_href": "showcase/kiem-dinh-khi-thai-xe-may.html"
-    },
-    {
       "artifact_slug": "8f9f95bf-27a5-457b-9cde-205429abad61",
       "href": "du-an/dat-lich-da-kenh-phan-tan.html",
       "cat": "booking",
@@ -45,15 +36,6 @@
       "desc": "Kiến trúc Edge node tại ngân hàng/ví điện tử, Core giữ bộ đếm slot chung, sổ sự kiện ký số và đối soát cuối ngày – chịu tải cao, không chia quota.",
       "kind": "Đề xuất kiến trúc",
       "old_href": "showcase/dat-lich-da-kenh-phan-tan.html"
-    },
-    {
-      "artifact_slug": "118514e3-a56a-4982-a413-e37c40be1cf4",
-      "href": "du-an/danh-ba-dang-kiem-ttdk.html",
-      "cat": "booking",
-      "title": "Danh bạ đăng kiểm TTDK",
-      "desc": "Danh bạ trung tâm đăng kiểm, garage, cứu hộ, bảo hiểm trên toàn quốc từ TTDK API: bản đồ, giờ làm việc, đánh giá, đặt lịch trực tuyến.",
-      "kind": "Ứng dụng web",
-      "old_href": "showcase/danh-ba-dang-kiem-ttdk.html"
     },
     {
       "artifact_slug": "3e53d7de-b397-4de4-a2a6-361e4f8e4db1",
@@ -87,7 +69,7 @@
       "href": "du-an/giam-sat-giao-thong-phat-thai.html",
       "cat": "vision",
       "title": "Giám sát giao thông & phát thải đô thị",
-      "desc": "Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ.",
+      "desc": "Mô hình lấy cơ quan quản lý đô thị làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu đăng ký xe, vi phạm và đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ.",
       "kind": "Mô phỏng 2.5D",
       "old_href": "showcase/giam-sat-giao-thong-phat-thai.html"
     },
@@ -126,25 +108,32 @@
       "kind": "Trang sản phẩm"
     }
   ],
-  "docs": [
+  "docs": [],
+  "skipped": [
     {
       "artifact_slug": "d4d316b7-e6c6-4a8a-bac0-7b8df89e9b3e",
-      "cat": "vision",
       "title": "Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera",
-      "desc": "Đề xuất thí điểm 03 tháng, chủ động bố trí nguồn lực, không thu phí, tại Sở Xây dựng và 06 cơ sở đăng kiểm thuộc 3 khu vực TP.HCM."
+      "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật"
     },
     {
       "artifact_slug": "9474c57a-c232-46ad-977d-cf7269974d6c",
-      "cat": "booking",
       "title": "Công văn đề xuất bản đồ số mạng lưới kiểm định khí thải xe máy TP.HCM",
-      "desc": "Hệ thống thông tin bản đồ số mạng lưới cơ sở đăng kiểm, kiểm định khí thải, bảo hành, bảo dưỡng; lộ trình 4 giai đoạn 12/2026 – 2030."
+      "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật"
     },
     {
       "artifact_slug": "e0508616-0fbe-42e9-93e9-93d8a9301e9e",
-      "cat": "mcp",
       "title": "Đề xuất tự động hoá văn thư & thông báo vi phạm giao thông",
-      "desc": "Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."
+      "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật"
+    },
+    {
+      "artifact_slug": "350aeed0-bcdd-42bb-8147-e8d46a298293",
+      "title": "Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
+      "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật (trang là đề xuất có phần Kính gửi/Kiến nghị gửi cơ quan, nêu tên đơn vị và đối tác)"
+    },
+    {
+      "artifact_slug": "118514e3-a56a-4982-a413-e37c40be1cf4",
+      "title": "Danh bạ đăng kiểm TTDK",
+      "reason": "gỡ khỏi website (20/11/2026), cần chủ sở hữu duyệt: trang mang tên riêng nền tảng TTDK và tên các trung tâm đăng kiểm thật"
     }
-  ],
-  "skipped": []
+  ]
 }

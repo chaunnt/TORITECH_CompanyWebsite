@@ -118,7 +118,7 @@ tr.new{animation:slide .5s ease}
 <!-- /toritech:top -->
 <div class="wrap">
 <header>
-  <div class="tag">Mô hình 2.5D · Trụ ETC + Camera AI + VNeTraffic</div>
+  <div class="tag">Mô hình 2.5D · Trụ ETC + Camera AI + CSDL đăng ký xe</div>
   <h1>Giám sát bãi giữ xe học đường</h1>
   <p>Xe chạy qua trụ ETC tại cổng không cần dừng: quét thẻ ETC + nhận dạng biển số, tự động tra cứu dữ liệu đăng ký xe và gửi cảnh báo khi phát hiện vi phạm.</p>
 </header>
@@ -141,7 +141,7 @@ tr.new{animation:slide .5s ease}
 
 <div class="grid">
   <section class="card"><h3>Các bước xử lý</h3><ol class="steps" id="steps"></ol></section>
-  <section class="card"><h3>Kết quả tra cứu VNeTraffic / Cục CSGT</h3><div id="lookup" class="lk"></div></section>
+  <section class="card"><h3>Kết quả tra cứu CSDL đăng ký xe / CSGT</h3><div id="lookup" class="lk"></div></section>
   <section class="card"><h3>Thông báo đã gửi</h3><div id="notifs" class="notifs"></div></section>
 </div>
 
@@ -172,9 +172,9 @@ const SC={
   tag:'3416 1F0A 0045 6781',p1:[[2.3,7.6],[2.3,9.6],[8.3,9.6]],pB:[[8.3,9.6],[11,9.6]],p2:[[11,9.6],[13.4,9.6],[13.4,7.6]],
   rows:[['Chủ xe','Trần Thị Lan (phụ huynh)',''],['Loại phương tiện','Mô tô hai bánh',''],['Dung tích xi-lanh','150 cm³ · vượt 50 cm³','bad'],['HS đăng ký gửi xe','Trần Quốc Bảo · 11A2 · 16 tuổi',''],['GPLX hạng A1','Không có','bad'],['Lịch sử vi phạm','Chưa có → lần 1','warn']],
   vtext:'✕ Vi phạm: học sinh chưa đủ điều kiện điều khiển mô tô trên 50 cm³.',
-  step5:'Gửi cảnh báo: VNeTraffic → chủ xe · Hiệu trưởng · App trường → phụ huynh & học sinh',
+  step5:'Gửi cảnh báo: App giao thông → chủ xe · Hiệu trưởng · App trường → phụ huynh & học sinh',
   recipients:['owner','school','parent','student'],
-  msg:{owner:['VNeTraffic → Chủ xe','Xe 59-X1 456.78 (mô tô 150 cm³) đứng tên bà Trần Thị Lan do học sinh 16 tuổi điều khiển vào trường lúc 06:47. Đề nghị chủ xe nhắc nhở. Lần 1.','Nhắc nhở lần 1'],
+  msg:{owner:['App giao thông → Chủ xe','Xe 59-X1 456.78 (mô tô 150 cm³) đứng tên bà Trần Thị Lan do học sinh 16 tuổi điều khiển vào trường lúc 06:47. Đề nghị chủ xe nhắc nhở. Lần 1.','Nhắc nhở lần 1'],
    school:['Hệ thống trường → Hiệu trưởng','Cảnh báo: HS Trần Quốc Bảo (11A2) đi mô tô 150 cm³ không đúng quy định. Lần vi phạm thứ 1/3.','Cảnh báo HS 11A2'],
    parent:['App trường → Phụ huynh','Con Trần Quốc Bảo đến trường bằng mô tô trên 50 cm³, chưa đủ điều kiện điều khiển. Phụ huynh vui lòng nhắc nhở.','Đã báo phụ huynh'],
    student:['App trường → Học sinh','Em đang điều khiển xe không phù hợp độ tuổi. Đây là lần nhắc nhở 1/3 – tái phạm sẽ bị lập biên bản phạt nguội.','Nhắc nhở 1/3']}},
@@ -185,8 +185,8 @@ const SC={
   vtext:'⚠ Tái phạm vượt ngưỡng: tự động lập biên bản phạt nguội, chuyển CSGT xử lý.',
   step5:'Tái phạm lần 3 → lập biên bản phạt nguội gửi CSGT, đồng thời báo chủ xe, nhà trường, PH & HS',
   recipients:['csgt','owner','school','parent','student'],
-  msg:{csgt:['Biên bản phạt nguội → Cục CSGT','Biên bản số PN-2026/001245: xe 59-X1 456.78 giao xe cho người chưa đủ điều kiện điều khiển, kèm ảnh camera 3 lần (03/11, 10/11, 17/11).','PN-2026/001245'],
-   owner:['VNeTraffic → Chủ xe','Xe 59-X1 456.78 vi phạm lần 3 sau 2 lần nhắc nhở. Hồ sơ đã chuyển CSGT xử lý phạt nguội. Tra cứu chi tiết trên VNeTraffic.','Thông báo phạt nguội'],
+  msg:{csgt:['Biên bản phạt nguội → CSGT','Biên bản số PN-2026/001245: xe 59-X1 456.78 giao xe cho người chưa đủ điều kiện điều khiển, kèm ảnh camera 3 lần (03/11, 10/11, 17/11).','PN-2026/001245'],
+   owner:['App giao thông → Chủ xe','Xe 59-X1 456.78 vi phạm lần 3 sau 2 lần nhắc nhở. Hồ sơ đã chuyển CSGT xử lý phạt nguội. Tra cứu chi tiết trên ứng dụng giao thông.','Thông báo phạt nguội'],
    school:['Hệ thống trường → Hiệu trưởng','HS Trần Quốc Bảo (11A2) tái phạm lần 3. Đã lập biên bản phạt nguội PN-2026/001245.','Tái phạm 11A2'],
    parent:['App trường → Phụ huynh','Con Trần Quốc Bảo tái phạm lần 3. Biên bản phạt nguội đã được lập gửi cơ quan CSGT.','Báo PH: phạt nguội'],
    student:['App trường → Học sinh','Em đã vi phạm 3 lần. Biên bản phạt nguội đã được lập. Vui lòng sử dụng phương tiện phù hợp.','Lần 3 – biên bản']}},
@@ -195,9 +195,9 @@ const SC={
   tag:'3416 2B7C 0888 8812',p1:[[-0.6,9.6],[7.9,9.6]],pB:[[7.9,9.6],[11.2,9.6]],p2:[[11.2,9.6],[14.0,9.6],[14.0,11.2]],
   rows:[['Chủ xe','Lê Văn Phúc (phụ huynh lớp 10A5)',''],['Loại phương tiện','Ô tô con 5 chỗ',''],['Hạn đăng kiểm','Hết hạn 02/09/2026','bad'],['Bảo hiểm TNDS','Hết hạn 15/10/2026','bad'],['Đối tượng','Phụ huynh / cán bộ – không giới hạn độ tuổi','']],
   vtext:'! Xe hết hạn đăng kiểm và bảo hiểm – gửi nhắc nhở gia hạn.',
-  step5:'Nhắc nhở hết hạn đăng kiểm / bảo hiểm: chủ xe (VNeTraffic) · nhà trường · App trường',
+  step5:'Nhắc nhở hết hạn đăng kiểm / bảo hiểm: chủ xe (ứng dụng giao thông) · nhà trường · App trường',
   recipients:['owner','school','parent'],
-  msg:{owner:['VNeTraffic → Chủ xe','Ô tô 51K-888.88 đã hết hạn đăng kiểm (02/09/2026) và bảo hiểm TNDS (15/10/2026). Vui lòng đăng kiểm và gia hạn bảo hiểm trước khi lưu thông.','Nhắc ĐK + BH'],
+  msg:{owner:['App giao thông → Chủ xe','Ô tô 51K-888.88 đã hết hạn đăng kiểm (02/09/2026) và bảo hiểm TNDS (15/10/2026). Vui lòng đăng kiểm và gia hạn bảo hiểm trước khi lưu thông.','Nhắc ĐK + BH'],
    school:['Hệ thống trường → Ban giám hiệu','Xe 51K-888.88 (PH Lê Văn Phúc) vào trường lúc 07:05, hết hạn đăng kiểm và bảo hiểm. Đã gửi nhắc nhở chủ xe.','Ghi nhận xe hết hạn'],
    parent:['App trường → Phụ huynh','Kính gửi PH Lê Văn Phúc: xe 51K-888.88 đã hết hạn đăng kiểm và bảo hiểm. Nhà trường đề nghị gia hạn để đảm bảo an toàn.','Nhắc PH gia hạn']}}
 ,
@@ -208,7 +208,7 @@ const SC={
   vtext:'✓ Xe hợp lệ – đã xử lý bằng camera thay ETC. Gửi nhắc đăng ký thẻ ETC.',
   step5:'Chưa có thẻ ETC → camera xử lý thay, gửi nhắc đăng ký ETC: chủ xe · phụ huynh · học sinh',
   recipients:['owner','parent','student'],
-  msg:{owner:['VNeTraffic → Chủ xe','Xe 59-AA 218.09 chưa gắn thẻ ETC nên được nhận dạng bằng camera tại cổng trường. Vui lòng đăng ký và dán thẻ ETC để qua cổng nhanh hơn.','Nhắc đăng ký ETC'],
+  msg:{owner:['App giao thông → Chủ xe','Xe 59-AA 218.09 chưa gắn thẻ ETC nên được nhận dạng bằng camera tại cổng trường. Vui lòng đăng ký và dán thẻ ETC để qua cổng nhanh hơn.','Nhắc đăng ký ETC'],
    parent:['App trường → Phụ huynh','Xe con Lê Ngọc Mai đang dùng chưa có thẻ ETC. Phụ huynh vui lòng đăng ký thẻ ETC cho xe để vào bãi giữ xe không cần dừng.','Nhắc PH đăng ký ETC'],
    student:['App trường → Học sinh','Xe của em chưa có thẻ ETC, hôm nay camera đã nhận dạng thay. Nhắc phụ huynh đăng ký thẻ ETC để vào cổng nhanh hơn nhé.','Nhắc HS: thẻ ETC']}}
 };
@@ -401,7 +401,7 @@ function vehicleDrawable(v,cx,cy,dir,s){
 }
 
 /* ================= NODES ================= */
-const NODEINFO={csgt:['🚓','CSGT · Phạt nguội','Cục CSGT'],owner:['📲','Chủ xe','qua VNeTraffic'],parent:['👪','Phụ huynh','App nhà trường'],student:['🎒','Học sinh','App nhà trường']};
+const NODEINFO={csgt:['🚓','CSGT · Phạt nguội','CSGT'],owner:['📲','Chủ xe','qua ứng dụng giao thông'],parent:['👪','Phụ huynh','App nhà trường'],student:['🎒','Học sinh','App nhà trường']};
 const NS={};['csgt','cloud','owner','parent','student','school'].forEach(k=>NS[k]={flash:0,badge:0,bubble:'',bt:0,col:'#ef4444'});
 const P={
  kiosk:()=>iso(9.5,11.6,50), cam:()=>iso(9.55,10.57,71), rfid:()=>iso(9.95,9.95,62), school:()=>iso(10.97,4.4,57),
@@ -422,8 +422,8 @@ function drawCloud(){
  ctx.fillStyle=n.flash>0?'#dbeafe':'#f8fbff';
  ctx.beginPath();blobs.forEach(([x,y,r])=>{ctx.moveTo(cx+x*K+r*K,cy+y*K);ctx.arc(cx+x*K,cy+y*K,r*K,0,7);});ctx.fill();ctx.restore();
  ctx.textAlign='center';ctx.textBaseline='middle';
- ctx.font=F(15,800);ctx.fillStyle='#1d4ed8';ctx.fillText('VNeTraffic',cx,cy+2*K);
- ctx.font=F(10,600);ctx.fillStyle='#475569';ctx.fillText('Cục CSGT · CSDL đăng ký xe',cx,cy+19*K);
+ ctx.font=F(15,800);ctx.fillStyle='#1d4ed8';ctx.fillText('App giao thông',cx,cy+2*K);
+ ctx.font=F(10,600);ctx.fillStyle='#475569';ctx.fillText('CSGT · CSDL đăng ký xe',cx,cy+19*K);
  if(state.cloudBusy){ctx.strokeStyle='#2563eb';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy-22*K,9*K,T*7,T*7+4.2);ctx.stroke();
   pill('Đang tra cứu…',cx,cy+48*K,'#1d4ed8','#fff',10);}
  bubble('cloud',cx,cy+50*K);
@@ -478,7 +478,7 @@ function enterPhase(id){
  const s=cur,car=s.v==='car';
  if(id==='travel'){renderSteps(0);cap(car?'Bước 1 · Phụ huynh / cán bộ lái ô tô đến trường':'Bước 1 · Học sinh đi xe từ nhà đến trường');state.kioskColor='#38bdf8';state.lightCol='#22c55e';}
  if(id==='scan'){renderSteps(1);state.lightCol='#38bdf8';if(!s.tag){at(T+.45,()=>{state.lightCol='#f59e0b';cap('Bước 2 · Không phát hiện thẻ ETC → camera ANPR đọc biển số '+s.plateText+' thay thế');});}cap('Bước 2 · Xe chạy qua trụ ETC: quét thẻ ETC + đọc biển số '+s.plateText+' – không cần dừng');}
- if(id==='lookup'){renderSteps(2);cap('Bước 3 · Tự động tra cứu đăng ký xe từ VNeTraffic / Cục CSGT');
+ if(id==='lookup'){renderSteps(2);cap('Bước 3 · Tự động tra cứu đăng ký xe từ CSDL đăng ký xe / CSGT');
   send('kiosk','cloud',1.0,'#2563eb','🔎 '+s.plateText,()=>{NS.cloud.flash=1;state.cloudBusy=1;
    at(T+.85,()=>{state.cloudBusy=0;send('cloud','kiosk',1.0,VCOL[s.verdict],'📄 Dữ liệu xe',()=>renderLookup(s));});});}
  if(id==='result'){renderSteps(3);state.verdict=1;state.kioskColor=VCOL[s.verdict];state.lightCol=VCOL[s.verdict];
@@ -607,7 +607,7 @@ function renderSteps(active){
  const items=[
   s.v==='car'?'Phụ huynh / cán bộ lái ô tô đến trường':'Học sinh mang xe đi từ nhà đến trường',
   s.tag?'Xe chạy qua trụ ETC tại cổng: quét thẻ ETC + camera đọc biển số (không dừng xe)':'Không phát hiện thẻ ETC → camera ANPR đọc biển số thay thế (xe vẫn không dừng)',
-  'Tự động tra cứu đăng ký xe từ VNeTraffic / Cục CSGT',
+  'Tự động tra cứu đăng ký xe từ CSDL đăng ký xe / CSGT',
   s.verdict==='ok'?'Xe phù hợp → không làm gì, chỉ ghi nhận lịch sử':s.verdict==='etc'?'Xe phù hợp → ghi nhận lịch sử, đánh dấu chưa có thẻ ETC':(s.v==='car'?'Đối chiếu hạn đăng kiểm & bảo hiểm → phát hiện hết hạn':'Đối chiếu loại xe được phép → phát hiện vi phạm'),
   s.step5];
  const cls=s.verdict==='warn'||s.verdict==='etc'?'warnc':'bad';
@@ -670,7 +670,7 @@ requestAnimationFrame(frame);
 </style>
 <section id="phan-bien" aria-labelledby="pb-h"><h2 id="pb-h">Phản biện: vì sao nên làm?</h2><p>Đánh giá thẳng giá trị của mô hình và cái giá nếu tiếp tục cách làm hiện tại.</p><div class="pb-g"><div class="pb-c"><h3>Vì sao nên làm</h3><ul><li>Bãi xe trường học có lượng xe ra vào lớn vào giờ cao điểm; nhận dạng biển số tự động giảm thời gian kiểm soát và tăng an ninh.</li><li>Lịch sử ra vào giúp xử lý nhanh khi mất xe hoặc có phương tiện lạ.</li></ul></div><div class="pb-c no"><h3>Nếu không làm thì sao</h3><ul><li>Ghi vé, kiểm tra thủ công gây ùn ứ ở cổng trường, khó truy vết khi có sự cố.</li><li>Phương tiện không đủ điều kiện vẫn ra vào mà không được phát hiện.</li></ul></div></div></section>
 <!-- toritech:foot -->
-<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: AI Vision &amp; VMS</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="kien-truc-du-lieu-dang-kiem.html"><img src="../assets/img/du-an/thumb/kien-truc-du-lieu-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh</b><small>Mô hình tương tác</small></span></a></li><li><a href="ket-noi-du-lieu-tin-tuc-giao-thong.html"><img src="../assets/img/du-an/thumb/ket-noi-du-lieu-tin-tuc-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kết nối dữ liệu sản xuất tin tức giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="giam-sat-giao-thong-phat-thai.html"><img src="../assets/img/du-an/thumb/giam-sat-giao-thong-phat-thai.webp" alt="" loading="lazy" width="112" height="59"><span><b>Giám sát giao thông &amp; phát thải đô thị</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="../du-an-ai-vision-vms.html#ho-so"><span><b>Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-ai-vision-vms.html">Xem toàn bộ hạng mục AI Vision &amp; VMS →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: AI Vision &amp; VMS</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="kien-truc-du-lieu-dang-kiem.html"><img src="../assets/img/du-an/thumb/kien-truc-du-lieu-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh</b><small>Mô hình tương tác</small></span></a></li><li><a href="ket-noi-du-lieu-tin-tuc-giao-thong.html"><img src="../assets/img/du-an/thumb/ket-noi-du-lieu-tin-tuc-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kết nối dữ liệu sản xuất tin tức giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="giam-sat-giao-thong-phat-thai.html"><img src="../assets/img/du-an/thumb/giam-sat-giao-thong-phat-thai.webp" alt="" loading="lazy" width="112" height="59"><span><b>Giám sát giao thông &amp; phát thải đô thị</b><small>Mô phỏng 2.5D</small></span></a></li></ul><a class="tt-more" href="../du-an-ai-vision-vms.html">Xem toàn bộ hạng mục AI Vision &amp; VMS →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
 <!-- /toritech:foot -->
 </body>
 </html>

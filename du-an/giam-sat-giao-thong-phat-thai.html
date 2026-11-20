@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <!-- toritech:meta -->
-<meta name="description" content="Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><link rel="canonical" href="https://toritech.vn/du-an/giam-sat-giao-thong-phat-thai.html">
+<meta name="description" content="Mô hình lấy cơ quan quản lý đô thị làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu đăng ký xe, vi phạm và đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><link rel="canonical" href="https://toritech.vn/du-an/giam-sat-giao-thong-phat-thai.html">
 <link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
 <meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
-<meta property="og:title" content="Giám sát giao thông &amp; phát thải đô thị – AI Vision &amp; VMS | TORITECH"><meta property="og:description" content="Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><meta property="og:url" content="https://toritech.vn/du-an/giam-sat-giao-thong-phat-thai.html">
+<meta property="og:title" content="Giám sát giao thông &amp; phát thải đô thị – AI Vision &amp; VMS | TORITECH"><meta property="og:description" content="Mô hình lấy cơ quan quản lý đô thị làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu đăng ký xe, vi phạm và đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><meta property="og:url" content="https://toritech.vn/du-an/giam-sat-giao-thong-phat-thai.html">
 <meta property="og:image" content="https://toritech.vn/assets/img/du-an/giam-sat-giao-thong-phat-thai.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Giám sát giao thông &amp; phát thải đô thị – AI Vision &amp; VMS | TORITECH"><meta name="twitter:description" content="Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/giam-sat-giao-thong-phat-thai.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Giám sát giao thông &amp; phát thải đô thị – AI Vision &amp; VMS | TORITECH"><meta name="twitter:description" content="Mô hình lấy cơ quan quản lý đô thị làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu đăng ký xe, vi phạm và đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/giam-sat-giao-thong-phat-thai.jpg">
 <!-- /toritech:meta -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mô hình 2.5D – Giám sát giao thông & phát thải (Sở Xây dựng)</title>
+<title>Mô hình 2.5D – Giám sát giao thông & phát thải đô thị</title>
 <style>
 :root{--bg:#0b1220;--panel:#111a2c;--line:#22304a;--txt:#e6edf7;--mut:#8b9bb4;
 --so:#22d3ee;--csgt:#fbbf24;--dk:#34d399;--etc:#a78bfa;--cam:#f472b6;--owner:#60a5fa;--gara:#fb923c;--danger:#ef4444}
@@ -107,8 +107,8 @@ aside{width:360px;display:flex;flex-direction:column;gap:10px;min-height:0}
 <div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-ai-vision-vms.html">AI Vision &amp; VMS</a> / Giám sát giao thông &amp; phát thải đô thị</nav><a class="tt-btn" href="../du-an-ai-vision-vms.html">← Về hạng mục AI Vision &amp; VMS</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
 <!-- /toritech:top -->
 <header>
-  <h1>Mô hình giám sát giao thông – Sở Xây dựng làm trung tâm dữ liệu</h1>
-  <span class="sub">Kết nối dữ liệu Cục CSGT (đăng ký xe, vi phạm) &amp; Cục Đăng kiểm VN (thông tin xe, khí thải)</span>
+  <h1>Mô hình giám sát giao thông – Cơ quan quản lý đô thị làm trung tâm dữ liệu</h1>
+  <span class="sub">Kết nối dữ liệu CSGT (đăng ký xe, vi phạm) &amp; Cơ quan đăng kiểm (thông tin xe, khí thải)</span>
 </header>
 <div id="flows"></div>
 <main>
@@ -122,9 +122,9 @@ aside{width:360px;display:flex;flex-direction:column;gap:10px;min-height:0}
       <button id="spd" title="Tốc độ" style="font-size:12px">1×</button>
     </div>
     <div id="legend">
-      <span><i style="background:var(--so)"></i>Sở XD</span>
-      <span><i style="background:var(--csgt)"></i>Cục CSGT</span>
-      <span><i style="background:var(--dk)"></i>Cục Đăng kiểm</span>
+      <span><i style="background:var(--so)"></i>Sở quản lý</span>
+      <span><i style="background:var(--csgt)"></i>CSGT</span>
+      <span><i style="background:var(--dk)"></i>Cơ quan đăng kiểm</span>
       <span><i style="background:var(--etc)"></i>Trạm ETC</span>
       <span><i style="background:var(--cam)"></i>Camera AI</span>
       <span><i style="background:var(--owner)"></i>Chủ xe</span>
@@ -141,7 +141,7 @@ aside{width:360px;display:flex;flex-direction:column;gap:10px;min-height:0}
       <div id="notis"><div class="empty">Chưa có thông báo.</div></div>
     </div>
     <div class="card" id="logbox">
-      <h4>🖥️ Nhật ký trung tâm dữ liệu Sở XD</h4>
+      <h4>🖥️ Nhật ký trung tâm dữ liệu Sở quản lý</h4>
       <div id="log"></div>
     </div>
   </aside>
@@ -308,20 +308,20 @@ function stepsDone(){[...$('steps').children].forEach(li=>li.className='done');}
 /* ---------- FLOWS ---------- */
 const FLOWS=[
 {name:'Vào vùng LEZ',title:'Luồng 1 · Xe đi vào vùng phát thải thấp (LEZ)',clock:'08:15',
- desc:'Trụ ETC tại cửa ngõ LEZ tự động quét thẻ ETC, dữ liệu về Sở XD để đối chiếu và thông báo cho chủ xe.',
- steps:['Ô tô đi qua trụ ETC tại biển báo LEZ','ETC quét thẻ, gửi mã thẻ + biển số về Sở XD','Sở XD tra cứu Cục Đăng kiểm: khí thải ĐẠT','Sở XD gửi thông báo "Xe đi vào vùng phát thải thấp"'],
+ desc:'Trụ ETC tại cửa ngõ LEZ tự động quét thẻ ETC, dữ liệu về Sở quản lý để đối chiếu và thông báo cho chủ xe.',
+ steps:['Ô tô đi qua trụ ETC tại biển báo LEZ','ETC quét thẻ, gửi mã thẻ + biển số về Sở quản lý','Sở quản lý tra cứu Cơ quan đăng kiểm: khí thải ĐẠT','Sở quản lý gửi thông báo "Xe đi vào vùng phát thải thấp"'],
  async fn(r){
   const v=spawn('car',[[24.5,18.5],[18.5,18.5],[18.5,9.6],[18.5,7.2],[18.5,-1.5]],{color:'#38bdf8',plate:'51H-286.15'});
   step(0);await driveTo(v,2,r);
-  step(1);scan('etc1',v);log('ETC','Trụ ETC-LEZ01 quét thẻ ePass xe <b>51H-286.15</b>');driveTo(v,3,r).catch(()=>{});
+  step(1);scan('etc1',v);log('ETC','Trụ ETC-LEZ01 quét thẻ ETC xe <b>51H-286.15</b>');driveTo(v,3,r).catch(()=>{});
   await packet('etc1','so','Thẻ ETC + biển số',COL.etc,r);pulse('so',COL.so);log('SỞ XD','Ghi nhận xe vào vùng LEZ – lưu hành trình');
   step(2);await packet('so','dk','Tra cứu khí thải',COL.so,r);await packet('dk','so','Khí thải: ĐẠT',COL.dk,r);log('ĐĂNG KIỂM','Xe 51H-286.15: tiêu chuẩn khí thải <b>ĐẠT</b>');
   step(3);await packet('so',v,'Thông báo',COL.owner,r);bubble(v,'🔔 Xe đi vào vùng phát thải thấp',COL.ok);
   notify('Xe đi vào vùng phát thải thấp','Xe 51H-286.15 vừa vào vùng LEZ trung tâm. Xe đạt chuẩn khí thải, không phát sinh phí.','ok');log('CHỦ XE','Đã gửi thông báo vào LEZ');
   stepsDone();await wait(2200,r);await driveTo(v,4,r);remove(v);}},
 {name:'Thu phí phát thải',title:'Luồng 2 · Xe không đạt chuẩn khí thải vào LEZ → thu phí phát thải',clock:'09:05',
- desc:'Xe có kiểm định nhưng không đạt tiêu chuẩn khí thải vùng LEZ: Sở XD ra lệnh cho ETC tự động thu phí phát thải.',
- steps:['Xe máy đi qua trụ ETC cửa ngõ LEZ','ETC gửi dữ liệu về Sở XD','Cục Đăng kiểm trả kết quả: khí thải KHÔNG ĐẠT chuẩn LEZ','Sở XD lệnh ETC tự động thu phí phát thải','Thông báo trừ phí cho chủ xe'],
+ desc:'Xe có kiểm định nhưng không đạt tiêu chuẩn khí thải vùng LEZ: Sở quản lý ra lệnh cho ETC tự động thu phí phát thải.',
+ steps:['Xe máy đi qua trụ ETC cửa ngõ LEZ','ETC gửi dữ liệu về Sở quản lý','Cơ quan đăng kiểm trả kết quả: khí thải KHÔNG ĐẠT chuẩn LEZ','Sở quản lý lệnh ETC tự động thu phí phát thải','Thông báo trừ phí cho chủ xe'],
  async fn(r){
   const v=spawn('moto',[[10.5,24.5],[10.5,5.5],[11.9,5.5],[15.5,5.5],[24.8,5.5]],{color:'#f97316',plate:'59X2-418.27',speed:2.6});
   step(0);await driveTo(v,2,r);
@@ -335,8 +335,8 @@ const FLOWS=[
   notify('Thu phí phát thải vùng LEZ','Xe 59X2-418.27 không đạt chuẩn khí thải LEZ. Hệ thống ETC đã tự động thu 50.000đ (minh hoạ).','warn');
   stepsDone();await wait(2200,r);await driveTo(v,4,r);remove(v);}},
 {name:'Nhắc kiểm định',title:'Luồng 3 · Xe không đạt kiểm định → nhắc nhở kiểm định',clock:'10:20',
- desc:'Camera AI nhận diện biển số, Sở XD đối chiếu kết quả kiểm định từ Cục Đăng kiểm và gửi nhắc nhở.',
- steps:['Camera AI nhận diện biển số ô tô','Gửi hình ảnh + biển số về Sở XD','Cục Đăng kiểm trả kết quả: KHÔNG ĐẠT kiểm định','Sở XD gửi nhắc nhở kiểm định lại'],
+ desc:'Camera AI nhận diện biển số, Sở quản lý đối chiếu kết quả kiểm định từ Cơ quan đăng kiểm và gửi nhắc nhở.',
+ steps:['Camera AI nhận diện biển số ô tô','Gửi hình ảnh + biển số về Sở quản lý','Cơ quan đăng kiểm trả kết quả: KHÔNG ĐẠT kiểm định','Sở quản lý gửi nhắc nhở kiểm định lại'],
  async fn(r){
   const v=spawn('car',[[10.5,24.5],[10.5,15.4],[10.5,12.6],[10.5,-1.5]],{color:'#eab308',plate:'51G-772.09'});
   step(0);await driveTo(v,1,r);camDetect('cam2',v);log('CAMERA','CAM-02 nhận diện <b>51G-772.09</b>');driveTo(v,2,r).catch(()=>{});
@@ -346,8 +346,8 @@ const FLOWS=[
   notify('Nhắc nhở kiểm định','Xe 51G-772.09 chưa đạt kiểm định. Vui lòng khắc phục và đặt lịch kiểm định lại.','warn');
   stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
 {name:'Chưa đăng ký thông tin',title:'Luồng 4 · Xe chưa đăng ký thông tin → tra cứu đăng ký & nhắc chủ xe',clock:'11:40',
- desc:'Camera nhận diện xe chưa có trong cơ sở dữ liệu địa phương; Sở XD tra cứu đăng ký xe từ Cục CSGT để tìm chủ xe và gửi nhắc nhở.',
- steps:['Camera AI nhận diện biển số','Sở XD: biển số chưa có thông tin trong CSDL địa phương','Sở XD tra cứu đăng ký xe tại Cục CSGT','Cục CSGT trả thông tin chủ xe','Gửi thông báo nhắc chủ xe tra cứu, cập nhật thông tin'],
+ desc:'Camera nhận diện xe chưa có trong cơ sở dữ liệu địa phương; Sở quản lý tra cứu đăng ký xe từ CSGT để tìm chủ xe và gửi nhắc nhở.',
+ steps:['Camera AI nhận diện biển số','Sở quản lý: biển số chưa có thông tin trong CSDL địa phương','Sở quản lý tra cứu đăng ký xe tại CSGT','CSGT trả thông tin chủ xe','Gửi thông báo nhắc chủ xe tra cứu, cập nhật thông tin'],
  async fn(r){
   const v=spawn('car',[[-0.5,10.5],[13.4,10.5],[16.5,10.5],[24.8,10.5]],{color:'#a3e635',plate:'60A-315.88'});
   step(0);await driveTo(v,1,r);camDetect('cam4',v);log('CAMERA','CAM-04 nhận diện <b>60A-315.88</b>');driveTo(v,2,r).catch(()=>{});
@@ -359,8 +359,8 @@ const FLOWS=[
   notify('Nhắc tra cứu thông tin xe','Xe 60A-315.88 chưa có thông tin trên hệ thống giám sát địa phương. Vui lòng tra cứu và cập nhật thông tin xe.','');
   stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
 {name:'Hết hạn đăng kiểm',title:'Luồng 5 · Xe chưa đăng kiểm / hết hạn đăng kiểm lưu thông',clock:'14:10',
- desc:'Camera phát hiện xe đang lưu thông; Sở XD đối chiếu hạn đăng kiểm (Cục ĐK) và thông tin chủ xe (Cục CSGT), rồi gửi cảnh báo.',
- steps:['Camera AI phát hiện xe lưu thông trên đường','Sở XD tra cứu hạn đăng kiểm tại Cục Đăng kiểm','Kết quả: hết hạn đăng kiểm','Tra cứu liên hệ chủ xe tại Cục CSGT','Gửi cảnh báo cho người dân'],
+ desc:'Camera phát hiện xe đang lưu thông; Sở quản lý đối chiếu hạn đăng kiểm (cơ quan đăng kiểm) và thông tin chủ xe (CSGT), rồi gửi cảnh báo.',
+ steps:['Camera AI phát hiện xe lưu thông trên đường','Sở quản lý tra cứu hạn đăng kiểm tại Cơ quan đăng kiểm','Kết quả: hết hạn đăng kiểm','Tra cứu liên hệ chủ xe tại CSGT','Gửi cảnh báo cho người dân'],
  async fn(r){
   const v=spawn('car',[[24.5,18.5],[8.2,18.5],[5.5,18.5],[-0.8,18.5]],{color:'#f43f5e',plate:'51F-063.41'});
   step(0);await driveTo(v,1,r);camDetect('cam1',v);log('CAMERA','CAM-01 phát hiện <b>51F-063.41</b>');driveTo(v,2,r).catch(()=>{});
@@ -372,8 +372,8 @@ const FLOWS=[
   notify('Cảnh báo: xe hết hạn đăng kiểm','Xe 51F-063.41 đang lưu thông khi đã hết hạn đăng kiểm. Vui lòng đặt lịch đăng kiểm sớm.','danger');
   stepsDone();await wait(2200,r);await driveTo(v,3,r);remove(v);}},
 {name:'Bảo dưỡng & tái kiểm',title:'Luồng 6 · Đăng kiểm không đạt → bảo dưỡng → kiểm định lại',clock:'15:30',
- desc:'Trạm đăng kiểm gửi kết quả không đạt về Cục ĐK, Sở XD nhận và hướng dẫn chủ xe mang xe đi bảo dưỡng, sau đó kiểm định lại.',
- steps:['Xe vào trạm đăng kiểm','Kết quả KHÔNG ĐẠT gửi Cục Đăng kiểm → Sở XD','Sở XD thông báo chủ xe mang xe đi bảo dưỡng','Xe bảo dưỡng tại gara, gara cập nhật về Sở','Xe kiểm định lại: ĐẠT, Sở cập nhật trạng thái'],
+ desc:'Trạm đăng kiểm gửi kết quả không đạt về Cục ĐK, Sở quản lý nhận và hướng dẫn chủ xe mang xe đi bảo dưỡng, sau đó kiểm định lại.',
+ steps:['Xe vào trạm đăng kiểm','Kết quả KHÔNG ĐẠT gửi Cơ quan đăng kiểm → Sở quản lý','Sở quản lý thông báo chủ xe mang xe đi bảo dưỡng','Xe bảo dưỡng tại gara, gara cập nhật về Sở','Xe kiểm định lại: ĐẠT, Sở cập nhật trạng thái'],
  async fn(r){
   let v=spawn('car',[[24.5,18.5],[3.5,18.5],[3.5,16.4]],{color:'#c084fc',plate:'51K-905.12',speed:3.2});
   step(0);await driveTo(v,2,r);pulse('tram',COL.dk,1200);bubble('tram','🔍 Đang kiểm định…',COL.dk,1600);log('TRẠM ĐK','Xe 51K-905.12 vào kiểm định');await wait(1700,r);
@@ -391,8 +391,8 @@ const FLOWS=[
   notify('Đạt kiểm định','Xe 51K-905.12 đã đạt kiểm định sau bảo dưỡng. Giấy chứng nhận đã được cập nhật.','ok');
   stepsDone();await wait(2000,r);remove(v);}},
 {name:'Xe tải vào nội đô sai giờ',title:'Luồng 7 · Xe tải / xe khách vào nội đô sai giờ quy định',clock:'07:45',
- desc:'Camera tại cửa ngõ nội đô phát hiện xe tải trong khung giờ cấm; Sở XD đối chiếu dữ liệu và gửi cảnh báo cho chủ xe và bộ phận điều hành của Sở.',
- steps:['Camera cửa ngõ nội đô phát hiện xe tải lúc 07:45','Sở XD tra cứu đăng ký (CSGT) & loại xe, tải trọng (Đăng kiểm)','Đối chiếu khung giờ cấm 06:00–22:00 → vi phạm','Cảnh báo chủ xe và bộ phận điều hành Sở XD','Đồng bộ dữ liệu vi phạm với Cục CSGT'],
+ desc:'Camera tại cửa ngõ nội đô phát hiện xe tải trong khung giờ cấm; Sở quản lý đối chiếu dữ liệu và gửi cảnh báo cho chủ xe và bộ phận điều hành của Sở.',
+ steps:['Camera cửa ngõ nội đô phát hiện xe tải lúc 07:45','Sở quản lý tra cứu đăng ký (CSGT) & loại xe, tải trọng (Đăng kiểm)','Đối chiếu khung giờ cấm 06:00–22:00 → vi phạm','Cảnh báo chủ xe và bộ phận điều hành Sở quản lý','Đồng bộ dữ liệu vi phạm với CSGT'],
  async fn(r){
   const v=spawn('truck',[[10.5,24.5],[10.5,10.5],[5.5,10.5],[5.5,9.7],[5.5,6.4]],{color:'#2563eb',plate:'51C-777.88',speed:2.2});
   step(0);await driveTo(v,3,r);camDetect('cam3',v);log('CAMERA','CAM-03 (cửa ngõ nội đô) phát hiện xe tải <b>51C-777.88</b> lúc 07:45');driveTo(v,4,r).catch(()=>{});
@@ -401,7 +401,7 @@ const FLOWS=[
   await Promise.all([packet('csgt','so','Chủ xe: Cty VT ***',COL.csgt,r),packet('dk','so','Xe tải 8 tấn',COL.dk,r)]);
   step(2);log('SỞ XD','Xe tải 8 tấn vào nội đô trong khung giờ cấm → <b style="color:#fca5a5">vi phạm</b>');
   step(3);alertT=simT+3500;bubble('so','🚨 Cảnh báo: xe tải vào nội đô sai giờ',COL.danger,3500);
-  notify('Cảnh báo điều hành','Xe tải 51C-777.88 vào nội đô lúc 07:45 (giờ cấm 06:00–22:00).','danger','Sở XD – Bộ phận điều hành');
+  notify('Cảnh báo điều hành','Xe tải 51C-777.88 vào nội đô lúc 07:45 (giờ cấm 06:00–22:00).','danger','Sở quản lý – Bộ phận điều hành');
   await packet('so',v,'Cảnh báo',COL.danger,r);bubble(v,'⚠️ Sai giờ quy định',COL.danger);
   notify('Cảnh báo: sai giờ lưu thông nội đô','Xe 51C-777.88 đi vào khu vực nội đô trong giờ cấm. Vui lòng rời khu vực / điều chỉnh lộ trình.','danger');
   step(4);await packet('so','csgt','Dữ liệu vi phạm',COL.so,r);log('CSGT','Đã nhận dữ liệu vi phạm để xử lý theo quy định');
@@ -559,7 +559,7 @@ setTimeout(runAll,500);
 </style>
 <section id="phan-bien" aria-labelledby="pb-h"><h2 id="pb-h">Phản biện: vì sao nên làm?</h2><p>Đánh giá thẳng giá trị của mô hình và cái giá nếu tiếp tục cách làm hiện tại.</p><div class="pb-g"><div class="pb-c"><h3>Vì sao nên làm</h3><ul><li>Vùng phát thải thấp và thu phí phát thải chỉ thực thi được khi dữ liệu ETC, camera, đăng kiểm và CSGT được liên thông.</li><li>Sở có công cụ đo hiệu quả chính sách bằng số liệu thay vì ước tính.</li></ul></div><div class="pb-c no"><h3>Nếu không làm thì sao</h3><ul><li>Chính sách ban hành nhưng thiếu công cụ giám sát, khó thực thi và khó đánh giá.</li><li>Mỗi cơ quan giữ một phần dữ liệu, xử lý vi phạm chậm và chồng chéo.</li></ul></div></div></section>
 <!-- toritech:foot -->
-<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: AI Vision &amp; VMS</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="kien-truc-du-lieu-dang-kiem.html"><img src="../assets/img/du-an/thumb/kien-truc-du-lieu-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh</b><small>Mô hình tương tác</small></span></a></li><li><a href="ket-noi-du-lieu-tin-tuc-giao-thong.html"><img src="../assets/img/du-an/thumb/ket-noi-du-lieu-tin-tuc-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kết nối dữ liệu sản xuất tin tức giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="giam-sat-bai-xe-hoc-duong.html"><img src="../assets/img/du-an/thumb/giam-sat-bai-xe-hoc-duong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Giám sát bãi giữ xe học đường</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="../du-an-ai-vision-vms.html#ho-so"><span><b>Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-ai-vision-vms.html">Xem toàn bộ hạng mục AI Vision &amp; VMS →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: AI Vision &amp; VMS</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="kien-truc-du-lieu-dang-kiem.html"><img src="../assets/img/du-an/thumb/kien-truc-du-lieu-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh</b><small>Mô hình tương tác</small></span></a></li><li><a href="ket-noi-du-lieu-tin-tuc-giao-thong.html"><img src="../assets/img/du-an/thumb/ket-noi-du-lieu-tin-tuc-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kết nối dữ liệu sản xuất tin tức giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="giam-sat-bai-xe-hoc-duong.html"><img src="../assets/img/du-an/thumb/giam-sat-bai-xe-hoc-duong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Giám sát bãi giữ xe học đường</b><small>Mô phỏng 2.5D</small></span></a></li></ul><a class="tt-more" href="../du-an-ai-vision-vms.html">Xem toàn bộ hạng mục AI Vision &amp; VMS →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
 <!-- /toritech:foot -->
 </body>
 </html>
