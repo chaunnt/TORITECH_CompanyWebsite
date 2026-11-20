@@ -115,6 +115,14 @@
       "desc": "Mô hình trang review đơn vị dịch vụ, minh hoạ bằng trạm đăng kiểm: danh bạ toàn quốc lấy từ API, bản đồ, giờ làm việc, đánh giá của khách hàng và đặt lịch trực tuyến. Áp dụng được cho garage, cứu hộ, bảo hiểm và các loại cơ sở dịch vụ khác.",
       "kind": "Mô hình tương tác",
       "old_href": "showcase/danh-ba-dang-kiem-ttdk.html"
+    },
+    {
+      "artifact_slug": "5fb07d09-0c0e-48ae-8279-456526268702",
+      "href": "du-an/tro-ly-giao-thong-bao-hiem-tnds.html",
+      "cat": "mcp",
+      "title": "Tặng gói trợ lý giao thông kèm bảo hiểm TNDS ô tô, xe máy",
+      "desc": "Mô hình hợp tác giúp hãng bảo hiểm tăng tỷ lệ gia hạn và có khách mới bằng quà tặng gói trợ lý giao thông (phạt nguội, nhắc đăng kiểm, hỗ trợ bồi thường); chỉ trả tiền khi khách kích hoạt, không chia phí bảo hiểm. Có bảng dự toán 4 phương án sửa được và giả lập trên điện thoại.",
+      "kind": "Mô hình tương tác"
     }
   ],
   "docs": [],
