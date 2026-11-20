@@ -232,7 +232,7 @@ with open(os.path.join(os.path.dirname(__file__), "showcase.json"), encoding="ut
     _SHOW = json.load(_f)
 WORKS = _SHOW["works"]   # bản trình diễn HTML trong showcase/
 DOCS = _SHOW["docs"]     # công văn / đề xuất: chỉ thẻ tóm tắt
-CATS = {"vision": ("AI Vision & VMS", "v"), "booking": ("Đặt lịch & Điều phối", "b"), "mcp": ("MCP & AI Agent", "m")}
+CATS = {"vision": ("AI Vision & VMS", "v"), "booking": ("Đặt lịch & Điều phối", "b"), "mcp": ("MCP & AI Agent", "m"), "game": ("Game & Giải trí", "g")}
 
 
 def work_card(w, live=True):
@@ -504,7 +504,7 @@ def p_projects():
     js = '''<script>document.addEventListener('DOMContentLoaded',function(){var bs=document.querySelectorAll('[data-f]');bs.forEach(function(b){b.addEventListener('click',function(){var f=b.getAttribute('data-f');bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});document.querySelectorAll('.work[data-cat]').forEach(function(c){c.style.display=(f==='all'||c.getAttribute('data-cat')===f)?'':'none'})})})});</script>'''
     table = "".join(f"<tr><td>{CATS[w['cat']][0]}</td><td>{w['title']}</td><td>{w.get('kind', 'Công văn / Đề xuất')}</td></tr>" for w in WORKS + DOCS)
     body = page_hero("Dự án &amp; Hồ sơ", "Portfolio", "Dự án, bản trình diễn &amp; hồ sơ đề xuất",
-                     f"Toàn bộ {len(WORKS)} bản trình diễn tương tác và {len(DOCS)} hồ sơ đề xuất, phân theo ba trụ cột giải pháp. Bản trình diễn mở được trực tiếp; hồ sơ gửi cơ quan quản lý được cung cấp theo yêu cầu.", title="Dự án & Hồ sơ – TORITECH") + f'''
+                     f"Toàn bộ {len(WORKS)} bản trình diễn tương tác và {len(DOCS)} hồ sơ đề xuất, phân theo ba trụ cột giải pháp và mảng Game &amp; Giải trí. Bản trình diễn mở được trực tiếp; hồ sơ gửi cơ quan quản lý được cung cấp theo yêu cầu.", title="Dự án & Hồ sơ – TORITECH") + f'''
 <section><div class="wrap">{filt}<div class="grid g3">{cards}</div>
 <div class="prose reveal" style="max-width:none;margin-top:40px"><h2>Danh mục theo hạng mục</h2><table><thead><tr><th>Hạng mục</th><th>Tên</th><th>Loại</th></tr></thead><tbody>{table}</tbody></table>
 <p class="meta-line">Dữ liệu trong các bản trình diễn là dữ liệu mẫu hoặc dữ liệu công khai của cơ sở kinh doanh (địa chỉ, giờ làm việc, hotline); thông tin cá nhân đã được che hoặc thay bằng dữ liệu giả lập.</p></div></div></section>{js}{cta_band()}'''

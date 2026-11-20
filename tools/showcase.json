@@ -80,6 +80,22 @@
       "title": "Giám sát giao thông & phát thải đô thị",
       "desc": "Mô hình đề xuất lấy Sở Xây dựng làm trung tâm dữ liệu, kết nối trụ ETC và camera AI với dữ liệu của Cục CSGT và Cục Đăng kiểm qua 7 luồng: vùng phát thải thấp (LEZ), thu phí phát thải, nhắc kiểm định, xe hết hạn đăng kiểm, xe tải vào nội đô sai giờ. Dữ liệu và biển số minh hoạ.",
       "kind": "Mô phỏng 2.5D"
+    },
+    {
+      "artifact_slug": "df02dad6-49d6-48c4-b872-29c944021053",
+      "href": "showcase/tram-giao-thong-so.html",
+      "cat": "booking",
+      "title": "Trạm Giao Thông Số – Trung tâm tiện ích xe cộ",
+      "desc": "Gom đặt lịch đăng kiểm, tra cứu phạt nguội, bảo dưỡng, cứu hộ và bảo hiểm vào một lõi dịch vụ, mở qua mini app trên ví, ngân hàng số hoặc quét QR tại trạm; có Open API và MCP server cho AI Agent. Giao diện và dữ liệu minh hoạ.",
+      "kind": "Mô hình tương tác"
+    },
+    {
+      "artifact_slug": "9defa8cc-e05e-493f-9f2b-0b63853437d4",
+      "href": "showcase/tran-bong-ngau-nhien.html",
+      "cat": "game",
+      "title": "Trận bóng ngẫu nhiên",
+      "desc": "Mô phỏng trận bóng đá 11 người chạy hoàn toàn trên trình duyệt: AI cầu thủ tự chuyền, sút, tắc bóng; có thống kê trực tiếp và bình luận viên đọc tiếng Việt bằng Web Speech API.",
+      "kind": "Ứng dụng web"
     }
   ],
   "docs": [
@@ -102,16 +118,5 @@
       "desc": "Số hoá hồ sơ xử phạt, gửi thông báo qua cổng chuyển tiếp đa kênh, đề nghị thí điểm và kết nối API VNeTraffic cho trường hợp chưa nhận thông báo."
     }
   ],
-  "skipped": [
-    {
-      "artifact_slug": "df02dad6-49d6-48c4-b872-29c944021053",
-      "title": "Trạm Giao Thông Số – Trung tâm tiện ích xe cộ tích hợp mọi nền tảng",
-      "reason": "cần chủ sở hữu duyệt: màn hình 'Công dân số' dùng logo sao vàng nền đỏ trong luồng chia sẻ thông tin định danh, dễ bị hiểu là ứng dụng định danh của cơ quan nhà nước; mục 'Dùng được với' liệt kê thương hiệu AI bên thứ ba (Claude, OpenAI, Google, Microsoft…) như đối tác. Nội dung liên quan sản phẩm (cat dự kiến: booking)."
-    },
-    {
-      "artifact_slug": "9defa8cc-e05e-493f-9f2b-0b63853437d4",
-      "title": "Trận bóng ngẫu nhiên",
-      "reason": "game mô phỏng bóng đá giải trí, không liên quan sản phẩm TORITECH."
-    }
-  ]
+  "skipped": []
 }

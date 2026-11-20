@@ -13,6 +13,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 - Header: Giải pháp (AI Vision & VMS · Nền tảng Đặt lịch · Hệ sinh thái MCP) · Dự án & Hồ sơ · Bảo mật & Tuân thủ · Tài liệu kỹ thuật · Về chúng tôi · CTA "Liên hệ tư vấn".
 - Hero: 2 luồng CTA – Doanh nghiệp/Đối tác ("Đặt lịch Demo", "Khám phá MCP") và Cơ quan quản lý/Hạ tầng ("Hồ sơ năng lực & Tiêu chuẩn kỹ thuật").
 - 3 trụ cột (`cat`): `vision` = AI Camera Vision & VMS · `booking` = Đặt lịch & Điều phối · `mcp` = MCP & AI Agent (Dịch vụ công / Doanh nghiệp / Trợ lý nhân viên).
+- Mục phụ `game` = Game & Giải trí (game, mô phỏng giải trí do công ty làm) – chỉ hiện ở Dự án & Hồ sơ, không có trang giải pháp riêng.
 - Mỗi giải pháp: cảnh 2.5D (Vấn đề ↔ Giải pháp), năng lực, lợi ích theo vai trò (quản lý vs kỹ thuật), bảng thông số, dự án liên quan, CTA.
 - Footer 4 cột (Pháp nhân · Sản phẩm · Tài nguyên · Pháp lý) + dải pháp lý.
 - Mọi trang: nút Chia sẻ (FB, Zalo, LinkedIn, X, Telegram, Email, copy, Web Share), In/PDF, Xuất MP4 (trang có cảnh 2.5D); OG image, JSON-LD, canonical; cập nhật `sitemap.xml`, `llms.txt` (build.py tự làm).
@@ -39,7 +40,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 ## 5. Quy trình bổ sung artifact vào website (thủ công hoặc tác vụ hằng ngày)
 1. Liệt kê artifact của chủ tài khoản (`list_artifacts`, chỉ `rel = mine`, bỏ `soft_deleted`). So với `artifact_slug` trong `tools/showcase.json` (`works`, `docs`, `skipped`).
 2. Với mỗi artifact mới, quyết định:
-   - Liên quan tới 1 trong 3 trụ cột → phân `cat`. Không liên quan sản phẩm TORITECH (game, nội dung quảng bá bên thứ ba, việc cá nhân, đối soát…) → thêm vào `skipped` kèm lý do.
+   - Chủ sở hữu (20/11/2026): artifact là showcase dự án của công ty → mặc định đưa lên. Liên quan 1 trong 3 trụ cột → `vision`/`booking`/`mcp`; game/giải trí → `game`. Chỉ `skipped` khi là việc cá nhân, đối soát, nội dung quảng bá thuần cho bên thứ ba, hoặc vướng an toàn dữ liệu ở bước 3.
    - Trang HTML trình diễn/sản phẩm/kiến trúc → `works`: tải về `showcase/<slug-tieng-viet-khong-dau>.html` (artifact nhiều file: tải đủ file phụ; thư viện `/_runtime/...` → vendor vào `showcase/vendor/`).
    - Docs (công văn, đề xuất gửi cơ quan, bản nháp có chỗ trống `[…]`) → `docs`: chỉ thẻ tóm tắt 1–2 câu, không đăng toàn văn.
 3. Kiểm tra an toàn trước khi đăng: không chứa SĐT/email cá nhân, CCCD, token/API key thật, dữ liệu khách hàng thật, mật khẩu; không mạo danh cơ quan; nếu có → `skipped` với lý do "cần người duyệt" (không tự sửa nội dung artifact).

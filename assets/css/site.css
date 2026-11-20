@@ -148,7 +148,7 @@ section{padding:84px 0}
 .work .body p{color:var(--muted);font-size:.93rem;margin:0}
 .work .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:4px 9px;border-radius:999px;background:#e6f7fb;color:#0e5a6f}
-.tag.v{background:#ecfeff;color:#0e7490}.tag.b{background:#f0fdfa;color:#0f766e}.tag.m{background:#f5f3ff;color:#6d28d9}.tag.d{background:#fff7ed;color:#9a3412}
+.tag.v{background:#ecfeff;color:#0e7490}.tag.b{background:#f0fdfa;color:#0f766e}.tag.m{background:#f5f3ff;color:#6d28d9}.tag.g{background:#fef2f2;color:#b91c1c}.tag.d{background:#fff7ed;color:#9a3412}
 .doc-thumb{display:grid;place-items:center;height:100%;background:linear-gradient(135deg,#0f1f3d,#1e3a6e);color:#fff;text-align:center;padding:20px}
 .doc-thumb svg{width:44px;height:44px;opacity:.85;margin:0 auto 10px}
 .doc-thumb b{display:block;font-size:.9rem;line-height:1.35}

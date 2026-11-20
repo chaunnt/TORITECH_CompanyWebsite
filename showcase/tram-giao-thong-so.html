@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trạm Giao Thông Số – Trung tâm tiện ích xe cộ tích hợp mọi nền tảng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1f5eff; --blue2:#3d7bff; --navy:#0b1b4a; --ink:#14213d; --muted:#5b6782;
+  --bg:#f4f7ff; --card:#fff; --line:#e3e9f7; --orange:#ff8a00; --green:#16a34a; --red:#e5383b; --violet:#6d5dfc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);background:#e8efff;padding:6px 12px;border-radius:99px}
+h2.title{font-size:clamp(26px,3.4vw,38px);line-height:1.2;font-weight:800;margin:14px 0 12px;letter-spacing:-.01em}
+p.lead{color:var(--muted);font-size:17px;max-width:720px}
+
+/* HERO */
+.hero{background:radial-gradient(1200px 500px at 80% -10%,#3d7bff 0%,transparent 60%),linear-gradient(160deg,#0b1b4a 0%,#13307e 55%,#1f5eff 100%);color:#fff;padding:72px 0 96px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;inset:auto -10% -1px -10%;height:80px;background:var(--bg);border-radius:50% 50% 0 0/100% 100% 0 0}
+.hero .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.08;font-weight:800;letter-spacing:-.02em;margin:16px 0}
+.hero h1 span{background:linear-gradient(90deg,#ffd166,#ff8a00);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:#d6e0ff;max-width:600px}
+.hero .eyebrow{background:rgba(255,255,255,.12);color:#fff}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:12px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font-family:inherit;font-size:15px}
+.btn.primary{background:#fff;color:var(--blue)}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:99px;font-size:13.5px;color:#e6ecff}
+.modes{display:grid;gap:14px}
+.mode{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:20px;backdrop-filter:blur(6px)}
+.mode .h{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px}
+.mode .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
+.mode p{font-size:14.5px;margin-top:8px;color:#cfdaff}
+
+/* MODEL */
+.model{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:36px}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;position:relative;overflow:hidden}
+.mcard .tag{position:absolute;top:22px;right:22px;font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px}
+.mcard h3{font-size:21px;margin:12px 0 6px}
+.mcard>p{color:var(--muted);font-size:15px}
+.flow{list-style:none;margin-top:18px;display:grid;gap:10px;counter-reset:f}
+.flow li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;counter-increment:f}
+.flow li:before{content:counter(f);flex:0 0 26px;height:26px;border-radius:50%;background:#eef3ff;color:var(--blue);font-weight:700;display:grid;place-items:center;font-size:13px}
+.mcard.off .flow li:before{background:#fff3e5;color:var(--orange)}
+
+/* DEMO */
+.demo{background:linear-gradient(180deg,var(--bg),#e9efff)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 26px}
+.tab{border:1px solid var(--line);background:#fff;padding:10px 16px;border-radius:12px;font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer;color:var(--ink);display:flex;align-items:center;gap:8px}
+.tab .dot{width:8px;height:8px;border-radius:50%}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stage{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:start}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:14px}
+.caption{width:310px;min-height:64px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:13.5px;color:var(--muted);box-shadow:0 6px 20px rgba(20,33,61,.06)}
+.caption b{color:var(--ink);display:block;font-size:14px;margin-bottom:2px}
+.controls{display:flex;gap:8px}
+.cbtn{border:1px solid var(--line);background:#fff;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.cbtn:hover{border-color:var(--blue);color:var(--blue)}
+.side h3{font-size:22px;margin-bottom:6px}
+.side>p{color:var(--muted);font-size:15px;margin-bottom:18px}
+.steps{list-style:none;display:grid;gap:8px}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:#fff;border:1px solid var(--line);cursor:pointer;transition:.25s}
+.steps li .n{flex:0 0 28px;height:28px;border-radius:9px;background:#eef3ff;color:var(--blue);font-weight:700;display:grid;place-items:center;font-size:13px;transition:.25s}
+.steps li .t{font-weight:600;font-size:14.5px}
+.steps li .d{font-size:13px;color:var(--muted);margin-top:2px}
+.steps li.on{border-color:var(--blue);box-shadow:0 8px 22px rgba(31,94,255,.14);transform:translateX(4px)}
+.steps li.on .n{background:var(--blue);color:#fff}
+.steps li.done .n{background:#dcfce7;color:var(--green)}
+.prog{height:4px;background:#e3e9f7;border-radius:4px;overflow:hidden;margin:16px 0 0}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--violet));transition:width .4s}
+.board-wrap{margin-top:22px;display:none}
+.board-wrap.show{display:block}
+
+/* PHONE */
+.phone{width:310px;height:640px;border-radius:48px;background:#0d1324;padding:11px;box-shadow:0 30px 60px rgba(11,27,74,.28),inset 0 0 0 2px #2b3550;position:relative;flex:0 0 auto}
+.phone:before{content:"";position:absolute;left:-3px;top:120px;width:3px;height:60px;background:#2b3550;border-radius:2px;box-shadow:0 80px 0 #2b3550}
+.scr{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;background:#fff}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:92px;height:26px;background:#000;border-radius:20px;z-index:50}
+.view{position:absolute;inset:0;background:#f5f7fb;display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .45s}
+.view.enter{transform:translateX(100%)}
+.view.leave{transform:translateX(-28%);opacity:.4}
+.sb{height:40px;flex:0 0 40px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 24px 6px;font-size:12.5px;font-weight:700;color:#111}
+.sb.light{color:#fff}
+.sb .ic{display:flex;gap:5px;align-items:center}
+.finger{position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.35);border:2.5px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 2px rgba(31,94,255,.5);z-index:60;left:70%;top:85%;transform:translate(-50%,-50%);transition:left .7s cubic-bezier(.4,.1,.2,1),top .7s cubic-bezier(.4,.1,.2,1),opacity .3s,transform .15s;pointer-events:none;opacity:0}
+.finger.show{opacity:1}
+.finger.tap{transform:translate(-50%,-50%) scale(.78);background:rgba(31,94,255,.35)}
+.ripple{position:absolute;width:20px;height:20px;border-radius:50%;background:rgba(31,94,255,.35);transform:translate(-50%,-50%) scale(0);z-index:59;pointer-events:none;animation:rip .6s ease-out forwards}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(4);opacity:0}}
+.pressed{filter:brightness(.92);transform:scale(.96)}
+[data-t]{transition:transform .15s,filter .15s,box-shadow .2s,background .2s}
+
+/* in-phone UI */
+.ph{font-size:12px;color:#1b2236}
+.hdr{display:flex;align-items:center;gap:8px;padding:8px 12px 10px;background:#fff;border-bottom:1px solid #edf0f6}
+.hdr .back{font-size:20px;line-height:1;color:#333;width:18px}
+.hdr .ttl{font-weight:700;font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.hostpill{white-space:nowrap}
+.capsule{display:flex;align-items:center;gap:8px;border:1px solid #e3e6ee;border-radius:99px;padding:3px 9px;font-size:11px;color:#444}
+.hostpill{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:#eef3ff;color:var(--blue)}
+.body{flex:1;overflow:hidden;position:relative}
+.inner{padding:12px;transition:transform .6s}
+.banner{border-radius:14px;padding:12px 14px;color:#fff;background:linear-gradient(120deg,#2a5bff,#6d8dff);position:relative;overflow:hidden;height:82px}
+.banner b{font-size:13.5px;display:block;font-weight:800;letter-spacing:.01em}
+.banner small{font-size:10.5px;opacity:.9}
+.banner:after{content:"";position:absolute;right:-18px;bottom:-26px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.15)}
+.sec{font-weight:700;font-size:12.5px;margin:12px 2px 7px}
+.tiles{background:#fff;border-radius:14px;padding:10px 4px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px 2px;box-shadow:0 2px 8px rgba(20,33,61,.04)}
+.tile{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;font-size:9.6px;line-height:1.25;padding:3px 2px;border-radius:10px}
+.tile .ti{width:34px;height:34px;border-radius:11px;display:grid;place-items:center}
+.field{background:#fff;border:1px solid #e3e7f0;border-radius:11px;padding:8px 11px;margin-bottom:9px}
+.field label{display:block;font-size:10px;color:#7a849b;margin-bottom:2px}
+.field .v{font-weight:600;font-size:13px;min-height:19px;letter-spacing:.02em}
+.field.focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,94,255,.12)}
+.caret{display:inline-block;width:1.5px;height:14px;background:var(--blue);vertical-align:-2px;animation:blink 1s steps(1) infinite;margin-left:1px}
+@keyframes blink{50%{opacity:0}}
+.ph-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pc{border:1px solid #dfe4ef;background:#fff;border-radius:10px;padding:6px 9px;font-size:10.5px;font-weight:600;text-align:center}
+.pc small{display:block;font-weight:400;color:#7a849b;font-size:9.5px}
+.pc.sel{background:var(--blue);border-color:var(--blue);color:#fff}
+.pc.sel small{color:#dbe5ff}
+.pbtn{display:block;width:100%;text-align:center;background:var(--blue);color:#fff;font-weight:700;border-radius:12px;padding:11px;font-size:13px}
+.pbtn.alt{background:#eef3ff;color:var(--blue)}
+.foot{padding:10px 12px 22px;background:#fff;border-top:1px solid #edf0f6}
+.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(20,33,61,.05);margin-bottom:10px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:11.5px}
+.row span:first-child{color:#7a849b}
+.row span:last-child{font-weight:600;text-align:right}
+.sheet-bg{position:absolute;inset:0;background:rgba(10,16,35,.45);z-index:20;animation:fade .3s}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:16px 16px 26px;z-index:21;animation:up .4s cubic-bezier(.2,.8,.2,1)}
+.sheet .grab{width:38px;height:4px;border-radius:4px;background:#dde2ec;margin:-4px auto 12px}
+@keyframes up{from{transform:translateY(100%)}}
+@keyframes fade{from{opacity:0}}
+.toast{position:absolute;left:14px;right:14px;top:50px;background:#0f1a33;color:#fff;border-radius:14px;padding:10px 12px;font-size:11.5px;display:flex;gap:9px;align-items:center;z-index:30;animation:drop .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes drop{from{transform:translateY(-140%)}}
+.loader{width:34px;height:34px;border-radius:50%;border:3px solid #dfe6ff;border-top-color:var(--blue);animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.okc{width:70px;height:70px;border-radius:50%;background:#dcfce7;display:grid;place-items:center;margin:8px auto 10px;animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.3)}}
+.check{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #f0f2f7;font-size:12px}
+.check .bx{width:18px;height:18px;border-radius:6px;border:1.5px solid #c9d0de;display:grid;place-items:center}
+.check.on .bx{background:var(--blue);border-color:var(--blue)}
+.gar{display:flex;gap:10px;background:#fff;border-radius:14px;padding:10px;margin-bottom:9px;box-shadow:0 2px 8px rgba(20,33,61,.05);align-items:center}
+.gar .img{width:52px;height:52px;border-radius:11px;flex:0 0 52px;display:grid;place-items:center}
+.gar .mini{font-size:10px;color:#7a849b}
+.gar .bk{font-size:10.5px;font-weight:700;color:#fff;background:var(--blue);padding:6px 10px;border-radius:9px;white-space:nowrap}
+/* host apps */
+.wallet-top{background:linear-gradient(150deg,#a5006e,#d6257f);color:#fff;padding:0 0 46px}
+.bank-top{background:linear-gradient(150deg,#004d40,#0f8a6e);color:#fff;padding:0 0 46px}
+.host-hi{padding:6px 16px 0;font-size:12px;opacity:.9}
+.host-bal{padding:2px 16px;font-size:20px;font-weight:800;letter-spacing:.05em}
+.host-grid{margin:-34px 12px 0;background:#fff;border-radius:16px;padding:12px 6px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px 2px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.host-grid .tile{font-size:9.8px}
+.hl{position:relative}
+.hl:after{content:"Mới";position:absolute;top:-3px;right:4px;background:var(--orange);color:#fff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:6px}
+.promo{margin:12px;border-radius:14px;padding:12px;background:#fff;display:flex;gap:10px;align-items:center;box-shadow:0 2px 8px rgba(20,33,61,.05)}
+/* camera */
+.cam{background:#0b0f19;color:#fff}
+.vf{position:relative;width:210px;height:210px;margin:40px auto 0}
+.vf i{position:absolute;width:34px;height:34px;border:4px solid #fff}
+.vf i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0;border-radius:12px 0 0 0}
+.vf i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0;border-radius:0 12px 0 0}
+.vf i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0;border-radius:0 0 0 12px}
+.vf i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0;border-radius:0 0 12px 0}
+.vf .scan{position:absolute;left:10px;right:10px;height:2px;background:linear-gradient(90deg,transparent,#4ade80,transparent);box-shadow:0 0 12px #4ade80;animation:scan 1.6s ease-in-out infinite}
+@keyframes scan{0%,100%{top:14px}50%{top:192px}}
+.vf .qrimg{position:absolute;inset:26px;background:#fff;border-radius:8px;padding:10px;transform:perspective(500px) rotateX(12deg) rotateZ(-4deg);transition:.4s}
+.vf.ok .qrimg{box-shadow:0 0 0 4px #4ade80}
+.detect{margin:22px auto 0;width:max-content;max-width:88%;background:#fff;color:#111;border-radius:14px;padding:9px 13px;display:flex;gap:9px;align-items:center;font-size:11.5px;opacity:0;transform:translateY(10px);transition:.4s}
+.detect.show{opacity:1;transform:none}
+.camhint{text-align:center;font-size:11.5px;color:#aab3c8;margin-top:18px}
+.bgscene{position:absolute;inset:0;background:radial-gradient(400px 300px at 50% 35%,#24304d,#0b0f19)}
+
+/* STATION BOARD */
+.board{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}
+.board .bt{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:12px}
+.qrgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qrt{border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;font-size:12px;font-weight:600;transition:.3s}
+.qrt svg{width:100%;max-width:80px;display:block;margin:0 auto 6px}
+.qrt.hot{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,138,0,.2);transform:scale(1.04)}
+
+/* SERVICES */
+.svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:32px}
+.sv{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;gap:14px}
+.sv .si{width:46px;height:46px;border-radius:14px;flex:0 0 46px;display:grid;place-items:center}
+.sv h4{font-size:15.5px;margin-bottom:3px}
+.sv p{font-size:13.5px;color:var(--muted)}
+.sv .grp{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+
+/* INTEGRATION */
+.integ{background:var(--navy);color:#fff}
+.integ p.lead{color:#c3cff5}
+.integ .eyebrow{background:rgba(255,255,255,.1);color:#9fb8ff}
+.igrid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;margin-top:30px}
+.hub svg{width:100%;height:auto;display:block}
+.flowline{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+.methods{display:grid;gap:12px}
+.meth{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;display:flex;gap:14px}
+.meth .mi{width:42px;height:42px;border-radius:12px;flex:0 0 42px;display:grid;place-items:center;background:rgba(255,255,255,.1)}
+.meth h4{font-size:15.5px}
+.meth p{font-size:13.5px;color:#c3cff5;margin-top:2px}
+.onboard{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:40px}
+.ob{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;position:relative}
+.ob .k{font-size:28px;font-weight:800;color:#ffd166;line-height:1}
+.ob h5{font-size:14.5px;margin:8px 0 4px}
+.ob p{font-size:12.5px;color:#c3cff5}
+.code{margin-top:28px;background:#061235;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px 18px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#cfe0ff;overflow:auto;white-space:pre;line-height:1.6}
+.code .c{color:#6f86c7}.code .s{color:#ffd166}.code .k2{color:#7dd3fc}
+
+/* VALUE */
+.vals{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+.val{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
+.val h4{font-size:18px;margin:12px 0 10px}
+.val ul{list-style:none;display:grid;gap:8px}
+.val li{font-size:14px;color:var(--muted);display:flex;gap:9px}
+.val li:before{content:"";flex:0 0 7px;height:7px;border-radius:50%;background:var(--blue);margin-top:8px}
+footer{background:#fff;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* lookup form */
+.mf{position:relative;border:1px solid #c4c4c4;border-radius:6px;padding:12px 12px 10px;margin:14px 0 4px;background:#fff}
+.mf label{position:absolute;top:-8px;left:9px;background:#fff;padding:0 4px;font-size:10.5px;color:#666}
+.mf .v{min-height:19px;font-size:13.5px}
+.mf.focus{border-color:#2a2fe6;box-shadow:0 0 0 1px #2a2fe6}.mf.focus label{color:#2a2fe6}
+.mf .arr{position:absolute;right:12px;top:50%;border:5px solid transparent;border-top-color:#777;margin-top:-2px}
+.mbtn{background:#2a2fe6;color:#fff;text-align:center;padding:11px;border-radius:4px;font-size:13px;letter-spacing:.04em;box-shadow:0 3px 6px rgba(42,47,230,.3);margin-top:16px}
+.alertbox{background:#df5f57;color:#fff;border-radius:10px;padding:14px;text-align:center;margin-top:16px;animation:pop .4s}
+.alertbox b{display:block;font-size:13.5px;line-height:1.35}
+.alertbox span{display:inline-block;margin-top:8px;font-size:12px;text-decoration:underline}
+.vt{border:1px solid #e3e3e3;border-radius:10px;overflow:hidden;background:#fff}
+.vt .r{display:grid;grid-template-columns:88px 1fr;border-bottom:1px solid #e8e8e8;font-size:11.5px}
+.vt .r:last-child{border-bottom:0}
+.vt .r>div{padding:9px 10px}
+.vt .r>div:first-child{background:#f7f7f7;color:#333}
+.badge-red{display:inline-block;background:#fde8e7;color:#e0443c;padding:2px 9px;border-radius:99px;font-size:10.5px}
+/* map */
+.map{position:absolute;inset:0;background:#f5f0e6;overflow:hidden}
+.map svg.base{position:absolute;inset:0;width:100%;height:100%}
+.blob{position:absolute;border-radius:50%;background:rgba(140,150,255,.26);transform:translate(-50%,-50%)}
+.pin{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:4px;background:#fff;border:2px solid #6d4fe0;color:#6d4fe0;border-radius:99px;padding:3px 9px 3px 6px;font-weight:700;font-size:11px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:opacity .4s,transform .3s,filter .15s}
+.pin.red{border-color:#e5534b;color:#e5534b}
+.pin.faint{opacity:.55}
+.pin.hide{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+.pin.pressed{transform:translate(-50%,-50%) scale(.92)}
+.mapsb{position:absolute;top:0;left:0;right:0;z-index:5;background:linear-gradient(#f5f0e6,rgba(245,240,230,0))}
+.zoom{position:absolute;left:10px;top:46px;background:#fff;border:1px solid #ddd;border-radius:8px;width:30px;display:flex;flex-direction:column;align-items:center;font-size:16px;font-weight:600;z-index:3}
+.zoom span{height:28px;display:grid;place-items:center;width:100%;border-bottom:1px solid #eee}
+.zoom span:last-child{border:0;font-size:9px}
+.mapfoot{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:12px 14px 22px;z-index:4;box-shadow:0 -4px 14px rgba(0,0,0,.06)}
+.filterbtn{border:1px solid #d6d9e0;border-radius:99px;padding:10px;text-align:center;font-weight:600;font-size:13px;display:flex;gap:8px;justify-content:center;align-items:center;background:#f7f8fa}
+.mapdim{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:10;animation:fade .3s}
+.modal{position:absolute;left:10px;right:10px;top:88px;background:#fff;border-radius:16px;z-index:11;overflow:hidden;animation:pop .35s}
+.modal .mh{background:#f6f7fa;padding:12px 14px;border-bottom:1px solid #e4e6ec;position:relative}
+.modal .mh b{font-size:13.5px;display:block;padding-right:24px;line-height:1.3}
+.modal .mh small{color:#555;font-size:11px}
+.modal .mh .x{position:absolute;right:10px;top:10px;padding:2px}
+.mt{margin:10px;border:1px solid #e1e3e8;border-radius:8px;overflow:hidden;font-size:10.5px}
+.mt .tr{display:grid;grid-template-columns:64px 1fr 62px;border-bottom:1px solid #eceef2}
+.mt .tr:last-child{border-bottom:0}
+.mt .tr>div{padding:7px 5px}.mt .tr>div:last-child{font-size:9.5px}
+.mt .th{background:#eceef3;font-weight:700}
+.mpage{display:flex;align-items:center;gap:8px;padding:0 12px 12px;font-size:11.5px}
+.mpage span{flex:1}
+.mpage .pv{border:1px solid #d9dbe5;border-radius:99px;padding:6px 14px;color:#7d7fdc}
+.mpage .nx{background:#2a2fe6;color:#fff;border-radius:99px;padding:6px 18px}
+/* standee */
+.standee{width:100%;max-width:360px;margin:0 auto;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#e6f2ff 0%,#cfe5ff 26%,#eef6ff 62%,#1a4bb8 100%);box-shadow:0 24px 50px rgba(11,27,74,.22);position:relative;padding:0 12px 12px}
+.st-top{position:relative;height:156px;text-align:center;padding-top:14px}
+.st-top svg.sky{position:absolute;left:-12px;right:-12px;top:0;width:calc(100% + 24px);height:100%}
+.st-title{position:relative;font-weight:800;font-style:italic;line-height:.95;letter-spacing:-.01em;background:linear-gradient(180deg,#0b3a9e,#1f6be0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.st-title .a{font-size:44px;position:relative}
+.st-title .b{font-size:31px;display:block;margin-top:2px}
+.st-wifi{position:absolute;right:68px;top:8px}
+.st-code{position:relative;display:inline-block;margin-top:9px;background:#0b3a9e;color:#fff;border-radius:99px;padding:5px 16px;font-size:11px;font-weight:600}
+.st-code i{display:inline-block;width:80px;border-bottom:1px solid rgba(255,255,255,.6);margin-left:4px}
+.stc{display:grid;grid-template-columns:94px 1fr 80px;background:#fff;border-radius:14px;overflow:hidden;margin-top:9px;border:1px solid rgba(0,0,0,.05);transition:.3s;position:relative}
+.stc .lp{color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 8px 12px 4px;font-weight:800;font-size:11px;text-align:center;clip-path:polygon(0 0,100% 0,86% 100%,0 100%)}
+.stc .lp .ring{width:46px;height:46px;border-radius:50%;border:2.5px solid #fff;display:grid;place-items:center;background:rgba(255,255,255,.12)}
+.stc ul{list-style:none;padding:9px 6px 9px 4px;display:grid;gap:6px;align-content:center}
+.stc li{font-size:9.3px;line-height:1.3;display:flex;gap:4px;color:#223}
+.stc li i{flex:0 0 11px;height:11px;border-radius:50%;display:grid;place-items:center;margin-top:1px}
+.stc .rp{border-left:1px dashed #e2e6ee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px}
+.stc .rp small{font-size:6.6px;font-weight:800;letter-spacing:.02em;white-space:nowrap}
+.stc .rp .q{width:58px;border:1.5px solid;border-radius:6px;padding:3px;background:#fff}
+.stc .rp .go{font-size:7.5px;font-weight:800;color:#fff;border-radius:99px;padding:3px 7px;white-space:nowrap}
+.stc.hot{box-shadow:0 0 0 3px #ffb020,0 8px 20px rgba(255,138,0,.35);transform:scale(1.03);z-index:2}
+.st-foot{display:grid;grid-template-columns:repeat(3,1fr);margin-top:10px;background:#0b2f86;border-radius:12px;padding:9px 4px;color:#fff;font-size:8.3px;font-weight:600;text-align:left}
+.st-foot div{display:flex;align-items:center;gap:5px;justify-content:center;line-height:1.2}
+.stsec{display:grid;grid-template-columns:380px 1fr;gap:44px;align-items:center;margin-top:30px}
+.stpoints{display:grid;gap:12px}
+.stp{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;gap:14px}
+.stp h4{font-size:15.5px}.stp p{font-size:13.5px;color:var(--muted)}
+/* API & MCP */
+.api{background:#fff}
+.apigrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px;align-items:start}
+.apic{border:1px solid var(--line);border-radius:22px;padding:22px;background:var(--bg);min-width:0}
+.apic h3{font-size:20px;margin:10px 0 6px}
+.apic>p{color:var(--muted);font-size:14.5px}
+.feat{list-style:none;display:grid;gap:9px;margin:14px 0}
+.feat li{display:flex;gap:10px;font-size:14px}
+.feat li span{flex:0 0 22px;height:22px;border-radius:7px;background:#e7f8ee;display:grid;place-items:center}
+.models{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.mdl{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;gap:9px;align-items:center;min-width:0}
+.mdl .mg{width:34px;height:34px;border-radius:10px;flex:0 0 34px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px}
+.mdl b{font-size:13.5px;display:block;line-height:1.2}
+.mdl small{font-size:11px;color:var(--muted)}
+.mcpflow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px;margin:18px 0 6px}
+.mcpn{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;font-size:12.5px;font-weight:700}
+.mcpn small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.mcpn.core{background:var(--navy);color:#fff;border-color:var(--navy)}.mcpn.core small{color:#c3cff5}
+.arrow{color:var(--blue);font-weight:800;font-size:18px}
+.chat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:9px;margin-top:14px}
+.bub{max-width:90%;padding:9px 12px;border-radius:14px;font-size:13.5px}
+.bub.u{justify-self:end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.bub.a{background:#f1f4fb;border-bottom-left-radius:4px}
+.tool{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#0b1b4a;color:#cfe0ff;border-radius:10px;padding:7px 10px;justify-self:start;max-width:100%;overflow:auto}
+.tool em{color:#7ee0c4;font-style:normal}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tools code{font-size:11.5px;background:#fff;border:1px solid var(--line);padding:4px 8px;border-radius:8px}
+.note{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+@media (max-width:920px){
+  .hero .grid,.model,.igrid,.stage,.stsec,.apigrid{grid-template-columns:1fr}
+  .mcpflow{grid-template-columns:1fr}.mcpflow .arrow{transform:rotate(90deg);justify-self:center}
+  .stage{gap:28px}
+  .onboard{grid-template-columns:1fr 1fr}
+  .vals{grid-template-columns:1fr}
+  section{padding:56px 0}
+}
+@media (max-width:420px){
+  .wrap{padding:0 14px}
+  .models{grid-template-columns:repeat(2,1fr)}
+  .onboard{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow">Mô hình trạm giao thông số</span>
+      <h1>Mọi dịch vụ cho <span>ô tô &amp; xe máy</span> tại một điểm chạm</h1>
+      <p>Trạm Giao Thông Số gom đăng kiểm, phạt nguội, bảo dưỡng, cứu hộ… vào một trung tâm tiện ích duy nhất. Có mạng thì mở mini app ngay trong ứng dụng quen thuộc. Đang đứng ở trạm thì chỉ cần quét mã QR của từng dịch vụ.</p>
+      <div class="cta">
+        <a class="btn primary" href="#demo">▶ Xem mô phỏng thao tác</a>
+        <a class="btn ghost" href="#tich-hop">Cách tích hợp</a>
+      </div>
+      <div class="chips">
+        <span class="chip">10+ dịch vụ xe cộ</span>
+        <span class="chip">Mini app · Web · QR</span>
+        <span class="chip">SSO theo tài khoản nền tảng</span>
+        <span class="chip">Open API</span>
+        <span class="chip">MCP cho AI Agent</span>
+      </div>
+    </div>
+    <div class="modes">
+      <div class="mode">
+        <div class="h"><span class="ico" style="background:#2a5bff" id="hIco1"></span>Online · Mini app</div>
+        <p>Người dân mở ví điện tử, app công dân số, ngân hàng số… và vào thẳng "Trạm Giao Thông Số". Không cần cài thêm app, không cần đăng ký tài khoản mới.</p>
+      </div>
+      <div class="mode">
+        <div class="h"><span class="ico" style="background:#ff8a00" id="hIco2"></span>Offline · Quét QR tại trạm</div>
+        <p>Tại trung tâm đăng kiểm, gara, bãi xe, trạm dừng nghỉ… mỗi dịch vụ có một mã QR riêng. Quét mã là vào đúng dịch vụ, không phải tìm.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MODEL -->
+<section id="mo-hinh">
+  <div class="wrap">
+    <span class="eyebrow">Mô hình hoạt động</span>
+    <h2 class="title">Hai cửa vào, một hệ dịch vụ</h2>
+    <p class="lead">Online hay offline thì người dân đều tới cùng một lõi dịch vụ, nên dữ liệu, lịch hẹn và thông báo luôn khớp nhau dù họ bắt đầu từ đâu.</p>
+    <div class="model">
+      <div class="mcard">
+        <span class="tag" style="background:#eef3ff;color:var(--blue)">ONLINE</span>
+        <div id="mIco1"></div>
+        <h3>Mini app trong nền tảng lớn</h3>
+        <p>Nhúng như một tiện ích trong ứng dụng mà người dân đã dùng hằng ngày.</p>
+        <ul class="flow">
+          <li>Mở ứng dụng chủ (ví, công dân số, ngân hàng…) và chạm tiện ích "Trạm Giao Thông Số"</li>
+          <li>Đồng ý chia sẻ thông tin cơ bản, đăng nhập một chạm (SSO)</li>
+          <li>Chọn dịch vụ: đăng kiểm, phạt nguội, bảo dưỡng, cứu hộ…</li>
+          <li>Thanh toán và nhận thông báo ngay trong ứng dụng chủ</li>
+        </ul>
+      </div>
+      <div class="mcard off">
+        <span class="tag" style="background:#fff3e5;color:var(--orange)">OFFLINE</span>
+        <div id="mIco2"></div>
+        <h3>Bảng QR tại trạm vật lý</h3>
+        <p>Dán tại điểm có đông người đi xe: trung tâm đăng kiểm, gara, cây xăng, bãi xe, trạm dừng nghỉ.</p>
+        <ul class="flow">
+          <li>Người dân thấy bảng "Trạm Giao Thông Số" có các mã QR theo từng dịch vụ</li>
+          <li>Mở camera điện thoại hoặc app bất kỳ để quét</li>
+          <li>Mở thẳng màn hình của dịch vụ đó (deep link), không qua trang chủ</li>
+          <li>Hoàn tất ngay tại chỗ, có thể lưu vào mini app để dùng lần sau</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDEE -->
+<section id="standee" style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow">Điểm chạm offline</span>
+    <h2 class="title">Standee QR: mỗi dịch vụ một mã</h2>
+    <p class="lead">Standee đặt tại trung tâm đăng kiểm, gara, cây xăng, bãi xe hay trạm dừng nghỉ. Người dân quét đúng mã của dịch vụ mình cần là vào thẳng màn hình đó.</p>
+    <div class="stsec">
+      <div id="standeeMain"></div>
+      <div class="stpoints">
+        <div class="stp"><span id="sp1"></span><div><h4>Mỗi mã là một deep link</h4><p>Mã Phạt nguội mở form tra cứu, mã Đăng kiểm mở form đặt lịch… Người dân không phải tìm trong menu.</p></div></div>
+        <div class="stp"><span id="sp2"></span><div><h4>"Mã đơn vị" để ghi nhận nguồn</h4><p>Mỗi standee gắn mã của trạm hoặc đối tác đặt. Từ đó đo được lượt quét, giao dịch và chia sẻ doanh thu theo từng điểm.</p></div></div>
+        <div class="stp"><span id="sp3"></span><div><h4>Không cần cài ứng dụng</h4><p>Quét bằng camera, Zalo hay app ngân hàng đều mở được. Sau đó có thể lưu vào mini app trên nền tảng quen dùng.</p></div></div>
+        <div class="stp"><span id="sp4"></span><div><h4>Dễ mở rộng danh mục</h4><p>Thêm hoặc bớt ô dịch vụ (bảo dưỡng, nhận thông báo phạt nguội…) chỉ bằng cách in lại standee, phía hệ thống không phải sửa gì.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section id="demo" class="demo">
+  <div class="wrap">
+    <span class="eyebrow">Mô phỏng trên điện thoại</span>
+    <h2 class="title">Xem người dân thao tác từng bước</h2>
+    <p class="lead">Chọn một kịch bản. Điện thoại sẽ tự chạy; bạn có thể tạm dừng hoặc chạm vào một bước bất kỳ để xem lại.</p>
+    <div class="tabs" id="tabs"></div>
+    <div class="stage">
+      <div class="phone-col">
+        <div class="phone"><div class="scr" id="scr"><div class="island"></div><div class="finger" id="finger"></div></div></div>
+        <div class="caption" id="caption"></div>
+        <div class="controls">
+          <button class="cbtn" id="bPrev" title="Bước trước"></button>
+          <button class="cbtn" id="bPlay" title="Tạm dừng / Tiếp tục"></button>
+          <button class="cbtn" id="bNext" title="Bước sau"></button>
+          <button class="cbtn" id="bRe" title="Chạy lại"></button>
+        </div>
+      </div>
+      <div class="side">
+        <h3 id="scTitle"></h3>
+        <p id="scDesc"></p>
+        <ul class="steps" id="steps"></ul>
+        <div class="prog"><i id="prog"></i></div>
+        <div class="board-wrap" id="boardWrap">
+          <div style="font-weight:700;margin-bottom:10px;display:flex;gap:10px;align-items:center"><span id="bIco"></span>Standee QR đặt tại trạm: mã đang được quét sẽ sáng lên</div>
+          <div id="standeeDemo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="dich-vu">
+  <div class="wrap">
+    <span class="eyebrow">Danh mục dịch vụ</span>
+    <h2 class="title">Một trạm, đủ các nhu cầu quanh chiếc xe</h2>
+    <p class="lead">Mỗi dịch vụ là một module độc lập, có mã QR và đường dẫn riêng. Đối tác bật đúng các module mình cần.</p>
+    <div class="svc" id="svc"></div>
+  </div>
+</section>
+
+<!-- INTEGRATION -->
+<section id="tich-hop" class="integ">
+  <div class="wrap">
+    <span class="eyebrow">Tích hợp nền tảng</span>
+    <h2 class="title">Cắm vào bất kỳ nền tảng lớn nào</h2>
+    <p class="lead">Trạm Giao Thông Số được thiết kế để làm "tiện ích con": đối tác giữ người dùng và trải nghiệm của mình, còn chúng tôi lo nghiệp vụ, kết nối dữ liệu và vận hành dịch vụ xe cộ.</p>
+    <div class="igrid">
+      <div class="hub" id="hub"></div>
+      <div class="methods" id="methods"></div>
+    </div>
+    <div class="onboard">
+      <div class="ob"><div class="k">01</div><h5>Ký kết đối tác</h5><p>Chọn module dịch vụ và mô hình chia sẻ doanh thu.</p></div>
+      <div class="ob"><div class="k">02</div><h5>Cấp khoá tích hợp</h5><p>App ID, khoá bí mật, môi trường sandbox để thử.</p></div>
+      <div class="ob"><div class="k">03</div><h5>Nhúng mini app</h5><p>Thêm một tiện ích vào màn hình chính hoặc danh mục.</p></div>
+      <div class="ob"><div class="k">04</div><h5>Nối SSO &amp; thanh toán</h5><p>Dùng tài khoản và cổng thanh toán sẵn có của nền tảng.</p></div>
+      <div class="ob"><div class="k">05</div><h5>Đi vào vận hành</h5><p>Có dashboard theo dõi lượt dùng, giao dịch, đối soát.</p></div>
+    </div>
+<div class="code"><span class="c">// Ví dụ: mở đúng dịch vụ từ ứng dụng đối tác (deep link)</span>
+<span class="k2">openMiniApp</span>({
+  appId: <span class="s">"tram-giao-thong-so"</span>,
+  path:  <span class="s">"/dang-kiem/dat-lich"</span>,     <span class="c">// hoặc /phat-nguoi/tra-cuu, /bao-duong ...</span>
+  params:{ plate: <span class="s">"51K-123.45"</span>, source: <span class="s">"partner_home"</span> },
+  sso:   <span class="k2">partner</span>.<span class="k2">getAuthCode</span>(),        <span class="c">// đăng nhập một chạm</span>
+  pay:   <span class="s">"partner_wallet"</span>                  <span class="c">// thanh toán qua cổng của nền tảng</span>
+});
+
+<span class="c">// QR tại trạm trỏ cùng đường dẫn: https://…/s/dang-kiem?station=Q7-01</span></div>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section id="gia-tri">
+  <div class="wrap">
+    <span class="eyebrow">Giá trị mang lại</span>
+    <h2 class="title">Ba bên cùng được lợi</h2>
+    <div class="vals">
+      <div class="val"><div id="vIco1"></div><h4>Người dân</h4><ul>
+        <li>Không cần cài app mới, dùng ngay trong app quen thuộc</li>
+        <li>Đứng ở trạm thì quét QR, xong việc trong vài phút</li>
+        <li>Nhắc lịch đăng kiểm, báo phạt nguội tự động</li>
+      </ul></div>
+      <div class="val"><div id="vIco2"></div><h4>Nền tảng đối tác</h4><ul>
+        <li>Có thêm nhóm tiện ích xe cộ mà không phải tự xây</li>
+        <li>Tăng tần suất mở app và giao dịch thanh toán</li>
+        <li>Tích hợp nhanh, đúng chuẩn mini app / API sẵn có</li>
+      </ul></div>
+      <div class="val"><div id="vIco3"></div><h4>Đơn vị dịch vụ &amp; quản lý</h4><ul>
+        <li>Phân luồng lịch hẹn, giảm ùn ứ tại trung tâm</li>
+        <li>Lan toả thông tin phạt nguội tới đúng chủ xe</li>
+        <li>Dữ liệu tập trung, dễ thống kê và giám sát</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN API & MCP -->
+<section id="open-api" class="api">
+  <div class="wrap">
+    <span class="eyebrow">Kết nối cho nhà phát triển &amp; AI</span>
+    <h2 class="title">Open API để kết nối, MCP cho AI Agent</h2>
+    <p class="lead">Ngoài mini app và QR, mọi dịch vụ của Trạm còn mở qua Open API cho hệ thống của đối tác, và qua MCP server để các trợ lý AI tra cứu, đặt lịch thay người dùng.</p>
+    <div class="apigrid">
+      <div class="apic">
+        <div id="apiIco"></div>
+        <h3>Open API</h3>
+        <p>REST/JSON chuẩn, có tài liệu Swagger và môi trường sandbox để thử trước khi chạy thật.</p>
+        <ul class="feat" id="featApi"></ul>
+<div class="code" style="margin-top:6px"><span class="c"># Tra cứu phạt nguội theo biển số</span>
+<span class="k2">POST</span> /open-api/v1/phat-nguoi/tra-cuu
+x-api-key: <span class="s">&lt;partner_key&gt;</span>
+
+{ <span class="s">"plate"</span>: <span class="s">"51G12345"</span>, <span class="s">"vehicleType"</span>: <span class="s">"oto"</span> }
+
+<span class="c"># → { success: true, data: { total: 1, items: [ … ] } }</span>
+<span class="c"># Webhook: vi_pham_moi · nhac_lich_dang_kiem · lich_hen_cap_nhat</span></div>
+      </div>
+      <div class="apic">
+        <div id="mcpIco"></div>
+        <h3>MCP server cho AI Agent</h3>
+        <p>Theo chuẩn Model Context Protocol, nên AI agent nào hỗ trợ MCP cũng gọi được các dịch vụ của Trạm bằng ngôn ngữ tự nhiên.</p>
+        <div class="mcpflow">
+          <div class="mcpn">AI Agent<small>trợ lý của người dùng</small></div><span class="arrow">⇄</span>
+          <div class="mcpn core">MCP server<small>Trạm Giao Thông Số</small></div><span class="arrow">⇄</span>
+          <div class="mcpn">Dịch vụ<small>đăng kiểm · phạt nguội…</small></div>
+        </div>
+        <div style="font-weight:700;font-size:14px;margin-top:14px">Dùng được với các mô hình &amp; agent phổ biến</div>
+        <div class="models" id="models"></div>
+        <div class="tools" id="mcpTools"></div>
+        <div class="chat">
+          <div class="bub u">Xe 51K-123.45 của tôi có phạt nguội không? Sắp hết hạn đăng kiểm thì đặt lịch giúp nhé.</div>
+          <div class="tool"><em>▸ tra_cuu_phat_nguoi</em>({ plate: "51K-123.45" }) → 0 vi phạm</div>
+          <div class="tool"><em>▸ kiem_tra_han_dang_kiem</em>({ plate: "51K-123.45" }) → còn 12 ngày</div>
+          <div class="tool"><em>▸ tim_khung_gio_trong</em>({ near: "Quận 7" }) → 3 khung giờ</div>
+          <div class="bub a">Xe không có vi phạm nào. Hạn đăng kiểm còn 12 ngày; khung trống gần nhất là 09:30 thứ Tư tại Trung tâm ĐK Quận 7. Bạn xác nhận để mình đặt nhé?</div>
+        </div>
+        <p class="note">Thao tác tạo lịch, thanh toán hay gửi thông báo luôn cần người dùng xác nhận trước khi agent thực hiện.</p>
+<div class="code" style="margin-top:12px"><span class="c">// Khai báo trong ứng dụng AI hỗ trợ MCP</span>
+{ <span class="s">"mcpServers"</span>: {
+    <span class="s">"tram-giao-thong-so"</span>: {
+      <span class="s">"url"</span>: <span class="s">"https://…/mcp"</span>,
+      <span class="s">"headers"</span>: { <span class="s">"x-api-key"</span>: <span class="s">"&lt;partner_key&gt;"</span> } } } }</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Trạm Giao Thông Số · Tài liệu mô tả mô hình</span><span>Giao diện trong mô phỏng chỉ để minh hoạ, dữ liệu là giả lập.</span></div></footer>
+
+<script>
+/* ---------- ICONS ---------- */
+const P={
+car:'<path d="M3 15l2-5.5A2 2 0 0 1 6.9 8h10.2a2 2 0 0 1 1.9 1.5L21 15v4H3z"/><circle cx="7.5" cy="15.5" r="1.3"/><circle cx="16.5" cy="15.5" r="1.3"/>',
+cal:'<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+shield:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+cam:'<rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8 7l1.5-3h5L16 7"/>',
+fire:'<path d="M12 21c-4 0-6.5-2.7-6.5-6 0-4 3.5-5.5 4-10 3 2 4 4 4.5 6 1-1 1.5-2 1.5-3.5 2 1.8 3 4.5 3 7.5 0 3.3-2.5 6-6.5 6z"/>',
+phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
+bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+building:'<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2M10 21v-3h4v3"/>',
+wrench:'<path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L3.5 17.5l3 3 5.7-5.7a4 4 0 0 0 5.3-5.3l-2.5 2.5-2.5-.5-.5-2.5z"/>',
+tow:'<path d="M2 17V9h9v8M11 12h5l3 3v2h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="16" cy="17.5" r="1.8"/><path d="M4 9l3-4"/>',
+qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h3M20 18v3"/>',
+wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/>',
+bank:'<path d="M3 9l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+id:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.8-1.6 2-2.3 3.5-2.3s2.7.7 3.5 2.3M15 10h3M15 13h3"/>',
+check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+send:'<path d="M4 12h15M14 7l5 5-5 5"/>',
+plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>',
+users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.5 4"/>',
+bolt:'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
+bag:'<path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+grid:'<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/>',
+umbrella:'<path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 1-4 0"/>',
+receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+drop:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+moto:'<circle cx="5.5" cy="16.5" r="3"/><circle cx="18.5" cy="16.5" r="3"/><path d="M8.5 16.5h5l3-6h-4l-2 3H6M14 7h3l1.5 3.5"/>',
+code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/>',
+link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+play:'<path d="M7 4.5v15l12-7.5z" fill="currentColor"/>',
+pause:'<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/>',
+prev:'<path d="M15 5l-7 7 7 7"/>',next:'<path d="M9 5l7 7-7 7"/>',
+re:'<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/>',
+x:'<path d="M6 6l12 12M18 6L6 18"/>'
+};
+const ic=(n,s=20,c='currentColor',w=1.8)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+const box=(n,bg,fg,s=46,is=24,r=14)=>`<span style="display:inline-grid;place-items:center;width:${s}px;height:${s}px;border-radius:${r}px;background:${bg}">${ic(n,is,fg)}</span>`;
+
+/* ---------- PSEUDO QR ---------- */
+function qrSvg(seed,dark='#111'){
+  let s=seed*9301+49297; const rnd=()=>((s=(s*9301+49297)%233280)/233280);
+  const N=21; let r='';
+  const fin=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="${dark}"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="${dark}"/>`;
+  const inF=(x,y)=>(x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){ if(!inF(x,y)&&rnd()>.52) r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${dark}"/>`; }
+  return `<svg viewBox="-1 -1 23 23" shape-rendering="crispEdges"><rect x="-1" y="-1" width="23" height="23" fill="#fff"/>${fin(0,0)}${fin(14,0)}${fin(0,14)}${r}</svg>`;
+}
+
+/* ---------- STATIC FILL ---------- */
+document.getElementById('hIco1').innerHTML=ic('grid',22,'#fff');
+document.getElementById('hIco2').innerHTML=ic('qr',22,'#fff');
+document.getElementById('mIco1').innerHTML=box('grid','#eef3ff','#1f5eff');
+document.getElementById('mIco2').innerHTML=box('qr','#fff3e5','#ff8a00');
+document.getElementById('vIco1').innerHTML=box('users','#eef3ff','#1f5eff');
+document.getElementById('vIco2').innerHTML=box('plug','#f1edff','#6d5dfc');
+document.getElementById('vIco3').innerHTML=box('building','#e7f8ee','#16a34a');
+document.getElementById('bIco').innerHTML=box('qr','#fff3e5','#ff8a00',30,18,9);
+document.getElementById('bPrev').innerHTML=ic('prev',18);
+document.getElementById('bNext').innerHTML=ic('next',18);
+document.getElementById('bRe').innerHTML=ic('re',18);
+
+const SERVICES=[
+ {k:'dk',n:'Đặt lịch đăng kiểm',i:'cal',g:'Đăng kiểm',c:'#1f5eff',bg:'#eef3ff',d:'Chọn trung tâm, ngày giờ trống; nhận mã lịch và nhắc trước hạn.'},
+ {k:'mien',n:'Miễn kiểm định lần đầu',i:'shield',g:'Đăng kiểm',c:'#16a34a',bg:'#e7f8ee',d:'Tra cứu và nộp hồ sơ cho xe mới thuộc diện được miễn kiểm định.'},
+ {k:'hoso',n:'Kiểm tra hồ sơ đăng kiểm',i:'doc',g:'Đăng kiểm',c:'#6d5dfc',bg:'#f1edff',d:'Xem hạn đăng kiểm, lịch sử kiểm định, giấy tờ cần mang.'},
+ {k:'pn',n:'Tra cứu phạt nguội',i:'cam',g:'Phạt nguội',c:'#ff8a00',bg:'#fff3e5',d:'Nhập biển số để xem vi phạm qua camera, thời gian và địa điểm.'},
+ {k:'map',n:'Bản đồ điểm nóng vi phạm',i:'fire',g:'Phạt nguội',c:'#e5383b',bg:'#fde9ea',d:'Bản đồ AI chỉ ra các nút giao hay xảy ra vi phạm để đi cẩn thận hơn.'},
+ {k:'csgt',n:'Danh bạ liên hệ CSGT',i:'phone',g:'Phạt nguội',c:'#1f5eff',bg:'#eef3ff',d:'Đầu mối liên hệ theo địa bàn khi cần giải quyết vi phạm.'},
+ {k:'tb',n:'Nhận thông báo phạt nguội',i:'bell',g:'Phạt nguội',c:'#ff8a00',bg:'#fff3e5',d:'Đăng ký một lần, có vi phạm mới là được báo qua ứng dụng.'},
+ {k:'tt',n:'Trung tâm đăng kiểm',i:'building',g:'Điểm dịch vụ',c:'#1f5eff',bg:'#eef3ff',d:'Danh sách, giờ mở cửa, chỉ đường và mức độ đông theo giờ.'},
+ {k:'baoduong',n:'Bảo dưỡng ô tô, xe máy',i:'wrench',g:'Điểm dịch vụ',c:'#ff8a00',bg:'#fff3e5',d:'Đặt lịch gara gần nhất, chọn gói thay dầu, phanh, điều hoà…'},
+ {k:'cuuho',n:'Cứu hộ ô tô',i:'tow',g:'Điểm dịch vụ',c:'#e5383b',bg:'#fde9ea',d:'Gửi vị trí và gọi đơn vị cứu hộ gần nhất chỉ với một chạm.'},
+ {k:'bh',n:'Bảo hiểm TNDS & vật chất',i:'umbrella',g:'Mở rộng',c:'#16a34a',bg:'#e7f8ee',d:'Mua, gia hạn bảo hiểm xe; chứng nhận điện tử lưu ngay trong app.'},
+ {k:'moto',n:'Dịch vụ cho xe máy',i:'moto',g:'Mở rộng',c:'#6d5dfc',bg:'#f1edff',d:'Tra cứu phạt nguội, bảo dưỡng, bảo hiểm bắt buộc cho xe máy.'}
+];
+const SV=Object.fromEntries(SERVICES.map(s=>[s.k,s]));
+document.getElementById('svc').innerHTML=SERVICES.map(s=>`<div class="sv"><span class="si" style="background:${s.bg}">${ic(s.i,24,s.c)}</span><div><div class="grp" style="color:${s.c}">${s.g}</div><h4>${s.n}</h4><p>${s.d}</p></div></div>`).join('');
+
+/* hub diagram */
+(function(){
+  const nodes=[
+    {t:'Ví điện tử',i:'wallet',c:'#d6257f'},{t:'Công dân số',i:'id',c:'#e5383b'},{t:'Ngân hàng số',i:'bank',c:'#0f8a6e'},
+    {t:'App giao thông số',i:'car',c:'#ff8a00'},{t:'Mini app nhắn tin',i:'send',c:'#3d7bff'},{t:'QR tại trạm',i:'qr',c:'#ffd166'}
+  ];
+  const cx=260,cy=230,R=170; let lines='',ns='';
+  nodes.forEach((n,k)=>{
+    const a=-Math.PI/2+k*Math.PI*2/nodes.length, x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+    lines+=`<line class="flowline" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${n.c}" stroke-width="2" opacity=".75" style="animation-delay:${-k*.2}s"/>`;
+    ns+=`<g transform="translate(${x},${y})"><circle r="34" fill="#13265f" stroke="${n.c}" stroke-width="2"/><g transform="translate(-12,-14)">${ic(n.i,24,n.c,1.9).replace('<svg','<svg x="0" y="0"')}</g><text y="54" text-anchor="middle" fill="#e6ecff" font-size="13" font-weight="600" font-family="Be Vietnam Pro">${n.t}</text></g>`;
+  });
+  document.getElementById('hub').innerHTML=`<svg viewBox="0 0 520 480">
+    <defs><radialGradient id="g1"><stop offset="0" stop-color="#3d7bff"/><stop offset="1" stop-color="#1f5eff"/></radialGradient></defs>
+    <circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+    ${lines}
+    <circle cx="${cx}" cy="${cy}" r="72" fill="url(#g1)"/><circle cx="${cx}" cy="${cy}" r="82" fill="none" stroke="rgba(61,123,255,.45)" stroke-width="2"><animate attributeName="r" values="76;92;76" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;.2;1" dur="3s" repeatCount="indefinite"/></circle>
+    <g transform="translate(${cx-13},${cy-40})">${ic('car',26,'#fff',2)}</g>
+    <text x="${cx}" y="${cy+8}" text-anchor="middle" fill="#fff" font-size="15" font-weight="800" font-family="Be Vietnam Pro">TRẠM GIAO</text>
+    <text x="${cx}" y="${cy+27}" text-anchor="middle" fill="#fff" font-size="15" font-weight="800" font-family="Be Vietnam Pro">THÔNG SỐ</text>
+    ${ns}</svg>`;
+  document.getElementById('methods').innerHTML=[
+    ['grid','Mini app / WebView','Nhúng nguyên bộ giao diện vào khung mini app của nền tảng; tự đổi màu theo thương hiệu đối tác.'],
+    ['link','Deep link theo dịch vụ','Mỗi dịch vụ có đường dẫn riêng, dùng cho banner, thông báo đẩy và mã QR tại trạm.'],
+    ['code','API / SDK','Đối tác muốn tự làm giao diện thì gọi API: tra cứu phạt nguội, đặt lịch, danh sách trung tâm…'],
+    ['id','SSO & thanh toán của nền tảng','Đăng nhập bằng tài khoản sẵn có; thanh toán qua cổng của ví hoặc ngân hàng đối tác.']
+  ].map(m=>`<div class="meth"><span class="mi">${ic(m[0],22,'#9fb8ff')}</span><div><h4>${m[1]}</h4><p>${m[2]}</p></div></div>`).join('');
+})();
+
+/* standee */
+const STD=[
+ {k:'pn',n:'PHẠT NGUỘI',i:'cam',c:'#1f63e6',g:'linear-gradient(160deg,#2f7bff,#0b3fb8)',b:['Tra cứu vi phạm giao thông qua hình ảnh.','Cập nhật nhanh chóng, chính xác.','Thanh toán dễ dàng, tiện lợi.']},
+ {k:'dk',n:'ĐĂNG KIỂM',i:'doc',c:'#21a148',g:'linear-gradient(160deg,#38c35f,#13843a)',b:['Đặt lịch đăng kiểm nhanh chóng.','Tra cứu lịch sử đăng kiểm, hạn kiểm định.','Nhắc lịch đăng kiểm tự động.']},
+ {k:'cuuho',n:'CỨU HỘ',i:'tow',c:'#f47a0a',g:'linear-gradient(160deg,#ff9a2e,#ea6a00)',b:['Yêu cầu cứu hộ 24/7 nhanh chóng.','Định vị vị trí, theo dõi hành trình cứu hộ.','Đội ngũ hỗ trợ chuyên nghiệp.']},
+ {k:'bh',n:'BẢO HIỂM',i:'shield',c:'#7a4fe0',g:'linear-gradient(160deg,#9a72ff,#5f37c8)',b:['Tra cứu thông tin bảo hiểm nhanh chóng.','So sánh & lựa chọn gói bảo hiểm phù hợp.','Mua bảo hiểm online an toàn, tiện lợi.']}
+];
+function standee(){
+  const sky=`<svg class="sky" viewBox="0 0 384 156" preserveAspectRatio="none">
+    ${[[0,40,22],[20,62,18],[36,30,16],[300,52,20],[318,24,18],[340,70,22],[362,44,22]].map(b=>`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${156-b[1]}" fill="#7fb6f5" opacity=".55"/>${Array.from({length:6},(_,j)=>`<rect x="${b[0]+4}" y="${b[1]+8+j*14}" width="${b[2]-8}" height="3" fill="#fff" opacity=".5"/>`).join('')}`).join('')}
+    <path d="M0 150 C80 120 120 140 192 128 S320 110 384 140 V156 H0z" fill="#1f5fd0" opacity=".85"/>
+    <path d="M0 154 C90 128 130 148 192 136 S320 120 384 148" stroke="#bfe0ff" stroke-width="2" fill="none" stroke-dasharray="8 6"/>
+    <path d="M40 80 l14 0 l-6-6 M40 80 l8 6 M56 80 l14 0" stroke="#33a1ff" stroke-width="3" fill="none" opacity=".8"/>
+    <path d="M344 80 l-14 0 l6-6 M344 80 l-8 6 M328 80 l-14 0" stroke="#33a1ff" stroke-width="3" fill="none" opacity=".8"/></svg>`;
+  const wifi=`<svg class="st-wifi" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1f6be0" stroke-width="2.6" stroke-linecap="round"><path d="M5 19a2 2 0 0 0 0 .1M5 13a6 6 0 0 1 6 6M5 7a12 12 0 0 1 12 12"/></svg>`;
+  return `<div class="standee"><div class="st-top">${sky}<div class="st-title"><span class="a">TRẠM</span>${wifi}<span class="b">GIAO THÔNG SỐ</span></div><div class="st-code">Mã đơn vị:<i></i></div></div>
+   ${STD.map((s,i)=>`<div class="stc" data-q="${s.k}"><div class="lp" style="background:${s.g}"><span class="ring">${ic(s.i,24,'#fff',2)}</span>${s.n}</div>
+     <ul>${s.b.map(t=>`<li><i style="background:${s.c}">${ic('check',8,'#fff',4)}</i>${t}</li>`).join('')}</ul>
+     <div class="rp"><small>QUÉT QR ĐỂ SỬ DỤNG</small><div class="q" style="border-color:${s.c}">${qrSvg(i+3)}</div><span class="go" style="background:${s.c}">📷 QUÉT NGAY</span></div></div>`).join('')}
+   <div class="st-foot"><div>${ic('shield',16,'#7cc4ff')}AN TOÀN<br>BẢO MẬT</div><div>${ic('bolt',16,'#7cc4ff')}NHANH CHÓNG<br>TIỆN LỢI</div><div>${ic('users',16,'#7cc4ff')}DỄ DÀNG<br>SỬ DỤNG</div></div></div>`;
+}
+document.getElementById('standeeMain').innerHTML=standee();
+document.getElementById('standeeDemo').innerHTML=standee();
+['link','building','qr','grid'].forEach((n,i)=>document.getElementById('sp'+(i+1)).innerHTML=box(n,'#eef3ff','#1f5eff',42,22,12));
+
+/* API & MCP */
+document.getElementById('apiIco').innerHTML=box('code','#eef3ff','#1f5eff');
+document.getElementById('mcpIco').innerHTML=box('plug','#f1edff','#6d5dfc');
+document.getElementById('featApi').innerHTML=['Xác thực bằng API key; SSO/OAuth2 cho luồng có người dùng','Đủ các nhóm: đăng kiểm, phạt nguội, điểm nóng, bảo dưỡng, cứu hộ, bảo hiểm','Webhook báo vi phạm mới, nhắc hạn đăng kiểm, cập nhật lịch hẹn','Sandbox, Swagger, giới hạn lượt gọi và nhật ký gọi API cho từng đối tác']
+  .map(t=>`<li><span>${ic('check',13,'#16a34a',3)}</span>${t}</li>`).join('');
+document.getElementById('models').innerHTML=[['Claude','Anthropic','#c96442'],['GPT / ChatGPT','OpenAI','#10a37f'],['Gemini','Google','#4f7df3'],['Copilot','Microsoft','#0f6cbd'],['Llama','Meta','#0866ff'],['Mistral','Mistral AI','#f2711c'],['DeepSeek','DeepSeek','#4d6bfe'],['Qwen','Alibaba Cloud','#615ced'],['Grok','xAI','#222']]
+  .map(m=>`<div class="mdl"><span class="mg" style="background:${m[2]}">${m[0][0]}</span><div style="min-width:0"><b>${m[0]}</b><small>${m[1]}</small></div></div>`).join('');
+document.getElementById('mcpTools').innerHTML=['search_api','get_api_schema','call_api','tra_cuu_phat_nguoi','ban_do_diem_nong','kiem_tra_han_dang_kiem','dat_lich_dang_kiem','tim_trung_tam','dat_bao_duong','goi_cuu_ho'].map(t=>`<code>${t}</code>`).join('');
+
+/* ---------- PHONE SCREENS ---------- */
+const SB=(light)=>`<div class="sb ${light?'light':''}"><span>9:41</span><span class="ic"><svg width="16" height="10" viewBox="0 0 16 10"><rect x="0" y="6" width="3" height="4" rx="1" fill="currentColor"/><rect x="4.3" y="4" width="3" height="6" rx="1" fill="currentColor"/><rect x="8.6" y="2" width="3" height="8" rx="1" fill="currentColor"/><rect x="12.9" y="0" width="3" height="10" rx="1" fill="currentColor"/></svg><svg width="22" height="11" viewBox="0 0 22 11"><rect x=".5" y=".5" width="18" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="2" width="13" height="7" rx="1.5" fill="currentColor"/><rect x="19.5" y="3.5" width="1.6" height="4" rx=".8" fill="currentColor"/></svg></span></div>`;
+const T=(k,label,extra='')=>{const s=SV[k];return `<div class="tile" data-t="${k}" ${extra}><span class="ti" style="background:${s.bg}">${ic(s.i,19,s.c)}</span>${label||s.n}</div>`};
+const MAPPBAR=(title,host)=>`<div class="hdr"><span class="back">‹</span><span class="ttl">${title}</span>${host?`<span class="hostpill">${host}</span>`:''}<span class="capsule">•••<span style="opacity:.4">|</span>${ic('x',11,'#444',2.4)}</span></div>`;
+
+const CDSLOGO=`<span style="width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:0 0 38px"><svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="11" fill="#d71920"/><path d="M12 4.6l1.8 5.1h5.4l-4.4 3.2 1.7 5.2L12 14.9l-4.5 3.2 1.7-5.2-4.4-3.2h5.4z" fill="#ffd400"/></svg></span>`;
+/* [x, y, count, red, faint] in a 290x620 screen */
+const MAPPINS=[[100,96,236],[226,124,437,0,0],[150,218,2128,0,1],[62,236,111,1,1],[112,262,223],[205,252,264],[46,296,110,1],[160,292,716,0,1],[238,282,150,1,1],[138,328,424,0,1],[140,356,278],[252,334,185],[40,390,133,1,1],[100,400,275],[190,398,117,1,1],[36,440,244],[214,436,296],[84,492,391]];
+const MAPSVG=`<svg class="base" viewBox="0 0 290 620" preserveAspectRatio="xMidYMid slice">
+  <rect width="290" height="620" fill="#f5f0e6"/>
+  <ellipse cx="40" cy="170" rx="34" ry="20" fill="#dcebd0"/><ellipse cx="250" cy="60" rx="30" ry="16" fill="#dcebd0"/><ellipse cx="70" cy="560" rx="40" ry="18" fill="#dcebd0"/>
+  <path d="M120 -10 C95 50 180 80 160 140 S80 210 150 270 S270 330 236 410 S290 520 262 640" stroke="#bfdce6" stroke-width="20" fill="none"/>
+  <path d="M160 140 C200 160 230 150 300 170" stroke="#c9e2ea" stroke-width="8" fill="none"/>
+  <path d="M236 410 C200 470 120 470 60 540 S0 600 -10 610" stroke="#c9e2ea" stroke-width="7" fill="none"/>
+  <g stroke="#f4d77c" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M-10 120 C80 110 160 90 300 60"/><path d="M60 -10 C70 120 40 260 70 360 S60 520 90 640"/>
+    <path d="M-10 330 C90 300 200 320 300 290"/><path d="M-10 470 C100 450 180 470 300 430"/><path d="M180 -10 C200 120 260 200 300 230"/></g>
+  <g stroke="#fff" stroke-width="2" fill="none">${Array.from({length:14},(_,i)=>`<path d="M${i*22-20} ${40+i*37} q60 ${i%2?-20:20} 140 ${i%3?10:-15}"/>`).join('')}</g>
+  <g stroke="#cbb79c" stroke-width="1" stroke-dasharray="3 3" fill="none"><path d="M10 200 C80 240 120 180 200 210 S260 260 290 250"/><path d="M0 520 C60 480 140 520 210 500"/></g>
+  <text x="168" y="318" font-size="15" font-weight="700" fill="#8a8f9c" opacity=".55" font-family="Be Vietnam Pro">HO CHI MINH CITY</text>
+</svg>`;
+const MROWS=[[['61K0***12','Điều khiển xe chạy quá tốc độ quy định từ 05 km/h đến dưới 10 km/h','16/4/2026'],['50F0***53','Điều khiển xe chạy quá tốc độ quy định từ 05 km/h đến dưới 10 km/h','16/4/2026'],['60A7***83','Điều khiển xe chạy quá tốc độ quy định từ 10 km/h đến 20 km/h','16/4/2026']],
+  [['51H2***07','Không chấp hành hiệu lệnh của đèn tín hiệu giao thông','15/4/2026'],['59C1***41','Dừng, đỗ xe không đúng nơi quy định','15/4/2026'],['61A9***26','Điều khiển xe chạy quá tốc độ quy định từ 05 km/h đến dưới 10 km/h','15/4/2026']]];
+const mrows=(pg)=>`<div class="tr th"><div>Biển số</div><div>Loại vi phạm</div><div>Thời gian</div></div>${MROWS[pg].map(r=>`<div class="tr"><div>${r[0]}</div><div>${r[1]}</div><div>${r[2]}</div></div>`).join('')}`;
+const MODAL=`<div class="mapdim"></div><div class="modal"><div class="mh"><b>QL1A, Phường An Phú Đông, Quận 12</b><small>Hồ Chí Minh</small><span class="x" data-t="close">${ic('x',18,'#333',2)}</span></div>
+  <div class="mt" id="mt">${mrows(0)}</div><div class="mpage"><span id="pgno">Trang 1/12</span><div class="pv">Trước</div><div class="nx" data-t="nx">Sau</div></div></div>`;
+const SCREENS={
+  wallet:()=>`${''}<div class="wallet-top">${SB(true)}<div class="host-hi">Xin chào, Minh 👋</div><div class="host-bal">•••••• đ</div><div style="padding:0 16px;font-size:10.5px;opacity:.85">Ví điện tử (ứng dụng chủ – minh hoạ)</div></div>
+   <div class="host-grid">
+    ${[['send','Chuyển tiền','#d6257f'],['bolt','Nạp điện thoại','#d6257f'],['receipt','Thanh toán hoá đơn','#d6257f'],['umbrella','Bảo hiểm','#d6257f'],['bag','Mua sắm','#d6257f'],['star','Ưu đãi','#d6257f']].map(x=>`<div class="tile"><span class="ti" style="background:#fdeaf3">${ic(x[0],19,x[2])}</span>${x[1]}</div>`).join('')}
+    <div class="tile hl" data-t="hub"><span class="ti" style="background:#1f5eff">${ic('car',19,'#fff')}</span>Trạm Giao Thông Số</div>
+    <div class="tile"><span class="ti" style="background:#f1f3f8">${ic('grid',19,'#555')}</span>Xem thêm</div>
+   </div>
+   <div class="promo">${box('cal','#eef3ff','#1f5eff',38,20,11)}<div><b style="font-size:11.5px">Xe sắp tới hạn đăng kiểm?</b><div style="font-size:10px;color:#7a849b">Đặt lịch ngay trong Ví, không cần xếp hàng</div></div></div>
+   <div class="promo">${box('bell','#fff3e5','#ff8a00',38,20,11)}<div><b style="font-size:11.5px">Nhận thông báo phạt nguội</b><div style="font-size:10px;color:#7a849b">Theo dõi biển số của bạn tự động</div></div></div>`,
+
+  bank:()=>`<div class="bank-top">${SB(true)}<div class="host-hi">Ngân hàng số (ứng dụng chủ – minh hoạ)</div><div class="host-bal">TK •••• 6789</div><div style="padding:0 16px;font-size:10.5px;opacity:.85">Số dư: ••••••</div></div>
+   <div class="host-grid">
+    ${[['send','Chuyển khoản'],['qr','Quét QR'],['receipt','Hoá đơn'],['wallet','Tiết kiệm'],['umbrella','Bảo hiểm'],['bag','Mua sắm'],['star','Ưu đãi']].map(x=>`<div class="tile"><span class="ti" style="background:#e3f4ef">${ic(x[0],19,'#0f8a6e')}</span>${x[1]}</div>`).join('')}
+    <div class="tile hl" data-t="hub"><span class="ti" style="background:#1f5eff">${ic('car',19,'#fff')}</span>Giao thông số</div>
+   </div>
+   <div class="promo">${box('wrench','#fff3e5','#ff8a00',38,20,11)}<div><b style="font-size:11.5px">Bảo dưỡng xe, thanh toán bằng tài khoản</b><div style="font-size:10px;color:#7a849b">Gara liên kết gần bạn</div></div></div>`,
+
+  splash:(c)=>`${SB()}<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fff">
+    ${box('car','linear-gradient(135deg,#1f5eff,#6d5dfc)','#fff',68,34,20)}<b style="font-size:15px">Trạm Giao Thông Số</b><div style="font-size:11px;color:#7a849b">Mở trong ${c.host}</div><div class="loader" style="margin-top:10px"></div></div>`,
+
+  home:(c)=>`${SB()}${MAPPBAR('Trạm Giao Thông Số',c.hostShort)}
+   <div class="body"><div class="inner">
+    <div class="banner"><b>THÔNG BÁO PHẠT NGUỘI</b><b>NHANH · CHUẨN · ĐẦY ĐỦ</b><small>Đăng ký theo dõi biển số miễn phí</small></div>
+    <div class="sec">Đăng kiểm xe cơ giới</div>
+    <div class="tiles">${T('dk','Đặt lịch đăng kiểm')}${T('mien','Miễn kiểm định lần đầu')}${T('hoso','Kiểm tra hồ sơ')}${T('bh','Bảo hiểm xe')}</div>
+    <div class="sec">Phạt nguội giao thông</div>
+    <div class="tiles">${T('pn','Tra cứu phạt nguội')}${T('map','Bản đồ điểm nóng')}${T('csgt','Liên hệ CSGT')}${T('tb','Nhận thông báo')}</div>
+    <div class="sec">Điểm dịch vụ</div>
+    <div class="tiles">${T('tt','Trung tâm đăng kiểm')}${T('baoduong','Bảo dưỡng ô tô')}${T('cuuho','Cứu hộ ô tô')}${T('moto','Xe máy')}</div>
+   </div></div>`,
+
+  book:(c)=>`${SB()}${MAPPBAR('Đặt lịch đăng kiểm',c.hostShort)}
+   <div class="body"><div class="inner">
+    <div class="field" data-t="plate"><label>Biển số xe</label><div class="v" id="vPlate"></div></div>
+    <div class="field"><label>Loại phương tiện</label><div class="v">Ô tô con dưới 9 chỗ</div></div>
+    <div class="field"><label>Trung tâm đăng kiểm</label><div class="v" style="display:flex;justify-content:space-between">Trung tâm ĐK Quận 7 (demo) <span style="color:#1f5eff;font-size:10.5px">1,8 km</span></div></div>
+    <div style="font-size:10.5px;color:#7a849b;margin:2px 2px 6px">Chọn ngày</div>
+    <div class="ph-chips">${['T2|23/11','T3|24/11','T4|25/11','T5|26/11'].map((d,i)=>`<div class="pc" data-t="d${i}">${d.split('|')[0]}<small>${d.split('|')[1]}</small></div>`).join('')}</div>
+    <div style="font-size:10.5px;color:#7a849b;margin:2px 2px 6px">Khung giờ còn trống</div>
+    <div class="ph-chips">${['07:30','08:30','09:30','13:30','14:30','15:30'].map((h,i)=>`<div class="pc" data-t="h${i}" style="min-width:56px">${h}</div>`).join('')}</div>
+    <div class="card" style="background:#eef3ff;box-shadow:none;font-size:10.5px;color:#334">💡 Khung 09:30 ngày 25/11 dự kiến ít đông, chờ khoảng 10 phút.</div>
+   </div></div>
+   <div class="foot"><div class="pbtn" data-t="next">Tiếp tục</div></div>`,
+
+  confirm:(c)=>`${SB()}${MAPPBAR('Xác nhận lịch hẹn',c.hostShort)}
+   <div class="body"><div class="inner">
+    <div class="card"><div style="font-weight:700;margin-bottom:4px">Thông tin lịch hẹn</div>
+     <div class="row"><span>Chủ xe</span><span>Nguyễn Văn Minh</span></div>
+     <div class="row"><span>Số điện thoại</span><span>09•• ••• 268</span></div>
+     <div class="row"><span>Biển số</span><span>51K-123.45</span></div>
+     <div class="row"><span>Trung tâm</span><span>ĐK Quận 7 (demo)</span></div>
+     <div class="row"><span>Thời gian</span><span>09:30 · T4 25/11/2026</span></div></div>
+    <div class="card"><div style="font-weight:700;margin-bottom:4px">Thanh toán</div>
+     <div class="row"><span>Phí đặt lịch</span><span style="color:#16a34a">Miễn phí</span></div>
+     <div class="row"><span>Phí kiểm định</span><span>Trả tại trung tâm hoặc qua ${c.payName}</span></div></div>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center"><span>🔔 Nhắc lịch qua ${c.hostShort}</span><span style="width:34px;height:20px;border-radius:20px;background:#16a34a;position:relative"><i style="position:absolute;right:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff"></i></span></div>
+    <div style="font-size:10px;color:#7a849b;text-align:center">Thông tin được điền sẵn từ tài khoản ${c.hostShort} (SSO)</div>
+   </div></div>
+   <div class="foot"><div class="pbtn" data-t="ok">Xác nhận đặt lịch</div></div>`,
+
+  done:(c)=>`${SB()}${MAPPBAR(c.doneTitle||'Hoàn tất',c.hostShort)}
+   <div class="body"><div class="inner" style="text-align:center">
+    <div class="okc">${ic('check',36,'#16a34a',2.6)}</div>
+    <b style="font-size:16px">${c.doneHead}</b><div style="font-size:11px;color:#7a849b;margin:3px 0 12px">${c.doneSub}</div>
+    <div class="card" style="text-align:left">
+     <div style="display:flex;gap:12px;align-items:center"><div style="width:86px;flex:0 0 86px">${qrSvg(c.seed||7)}</div>
+     <div style="flex:1">${c.doneRows.map(r=>`<div class="row" style="padding:3px 0"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('')}</div></div>
+     <div style="font-size:10px;color:#7a849b;margin-top:8px">${c.doneNote}</div>
+    </div>
+    <div class="pbtn alt" style="margin-top:4px">Về trang chủ Trạm</div>
+   </div></div>`,
+
+  camera:()=>`<div class="bgscene"></div><div style="position:relative;display:flex;flex-direction:column;height:100%" class="cam">${SB(true)}
+    <div style="display:flex;justify-content:space-between;padding:6px 16px;font-size:12px">${ic('x',18,'#fff')}<b>Quét mã QR</b>${ic('bolt',18,'#fff')}</div>
+    <div class="vf" id="vf"><div class="qrimg">${qrSvg(3)}</div><i></i><i></i><i></i><i></i><div class="scan"></div></div>
+    <div class="camhint">Hướng camera vào mã QR trên bảng tại trạm</div>
+    <div class="detect" id="detect" data-t="open">${box('cam','#fff3e5','#ff8a00',30,17,9)}<div><b>Tra cứu phạt nguội</b><div style="font-size:10px;color:#666">tramgiaothongso.vn/s/phat-nguoi</div></div><span style="color:#1f5eff;font-weight:700;margin-left:4px">Mở</span></div>
+   </div>`,
+
+  pnForm:()=>`${SB()}${MAPPBAR('Tra cứu phạt nguội','QR tại trạm')}
+   <div class="body" style="background:#fff"><div class="inner">
+    <div class="card" style="background:#fff3e5;box-shadow:none;font-size:10.5px;color:#7a4a00;display:flex;gap:8px;align-items:center">${ic('qr',16,'#ff8a00')}<span>Truy cập từ standee QR · Mã đơn vị <b>Q7-01</b></span></div>
+    <div class="mf"><label>Chọn loại xe</label><div class="v">Ô tô</div><span class="arr"></span></div>
+    <div class="mf" data-t="plate"><label>Biển số xe</label><div class="v" id="vPlate"></div></div>
+    <div class="mf" data-t="phone"><label>Số điện thoại</label><div class="v" id="vPhone"></div></div>
+    <div class="mbtn" data-t="go">TRA CỨU</div>
+    <div id="pnRes"></div>
+   </div></div>`,
+
+  pnDetail:()=>`${SB()}${MAPPBAR('Chi tiết vi phạm','QR tại trạm')}
+   <div class="body" style="background:#fff"><div class="inner" id="dIn">
+    <b style="font-size:14px;display:block;margin:2px 0 10px;padding-bottom:10px;border-bottom:1px solid #e5e5e5">Thông tin vi phạm giao thông</b>
+    <div class="vt">${[['Biển số xe:','51G12345'],['Màu biển:','Nền màu trắng, chữ và số màu đen'],['Loại phương tiện:','Ô tô'],['Lỗi vi phạm','Điều khiển xe chạy quá tốc độ quy định từ 10 km/h đến 20 km/h'],['Thời gian vi phạm','14:19 - 02/11/2026'],['Địa điểm vi phạm','Km 13+200 Quốc lộ 1A, TP. Hồ Chí Minh (demo)'],['Trạng thái','<span class="badge-red">Chưa xử phạt</span>'],['Đơn vị phát hiện','Đội CSGT (dữ liệu minh hoạ)']].map(r=>`<div class="r"><div>${r[0]}</div><div>${r[1]}</div></div>`).join('')}</div>
+    <div class="pbtn" data-t="sub" style="margin-top:12px">${ic('bell',14,'#fff',2.2)} Nhận thông báo khi có vi phạm mới</div>
+   </div></div>`,
+
+  cds:()=>`<div class="wallet-top" style="background:linear-gradient(150deg,#9e1218,#e0362c)">${SB(true)}
+    <div style="display:flex;gap:10px;align-items:center;padding:4px 16px 0">${CDSLOGO}<div><b style="font-size:13px">Công dân số</b><div style="font-size:10px;opacity:.85">Ứng dụng dịch vụ công (minh hoạ)</div></div></div>
+    <div class="host-hi" style="padding-top:8px">Xin chào, NGUYỄN VĂN MINH</div><div style="padding:0 16px;font-size:10.5px;opacity:.85">Tài khoản định danh điện tử mức 2</div></div>
+   <div class="host-grid">
+    ${[['doc','Dịch vụ công'],['id','Thẻ căn cước'],['wallet','Ví giấy tờ'],['receipt','Nộp phí, lệ phí'],['send','Phản ánh kiến nghị'],['users','Thông tin cư trú'],['bell','Thông báo']].map(x=>`<div class="tile"><span class="ti" style="background:#fde9ea">${ic(x[0],19,'#c8161d')}</span>${x[1]}</div>`).join('')}
+    <div class="tile hl" data-t="hub"><span class="ti" style="background:#1f5eff">${ic('car',19,'#fff')}</span>Giao thông số</div>
+   </div>
+   <div class="promo">${box('fire','#fde9ea','#e5383b',38,20,11)}<div><b style="font-size:11.5px">Bản đồ điểm nóng vi phạm</b><div style="font-size:10px;color:#7a849b">Biết trước nút giao hay vi phạm để đi an toàn</div></div></div>`,
+
+  map:()=>{
+    const pins=MAPPINS.map(p=>`<div class="blob" style="left:${p[0]}px;top:${p[1]}px;width:${70+(p[2]%5)*12}px;height:${70+(p[2]%5)*12}px"></div>`).join('')
+      + MAPPINS.map(p=>`<div class="pin ${p[3]?'red':''} ${p[4]?'faint':''}" data-t="p${p[2]}" style="left:${p[0]}px;top:${p[1]}px">${ic('map',14,'currentColor',2)}${p[2]}</div>`).join('');
+    return `<div class="map">${MAPSVG}${pins}</div><div class="mapsb">${SB()}</div>
+      <div class="zoom"><span>+</span><span>−</span><span>▲<br>▼</span></div>
+      <div class="mapfoot"><div class="filterbtn" data-t="filter">${ic('grid',15,'#333')} Bộ lọc</div></div>`;
+  },
+
+  garages:(c)=>`${SB()}${MAPPBAR('Bảo dưỡng gần bạn',c.hostShort)}
+   <div class="body"><div class="inner">
+    <div class="field" style="display:flex;gap:8px;align-items:center">${ic('search',15,'#7a849b')}<span style="color:#7a849b">Tìm gara, hãng xe…</span></div>
+    <div class="ph-chips"><div class="pc sel">Gần nhất</div><div class="pc">Còn chỗ hôm nay</div><div class="pc">Ưu đãi</div></div>
+    ${[['Gara An Phát (demo)','0,9 km · ★ 4,8 · Mở tới 19:00','#fff3e5','#ff8a00'],['Auto Care Q7 (demo)','1,6 km · ★ 4,7 · Có xe đưa đón','#eef3ff','#1f5eff'],['Trung tâm DV Minh Long (demo)','2,4 km · ★ 4,6 · Chính hãng','#e7f8ee','#16a34a']].map((g,i)=>`<div class="gar"><span class="img" style="background:${g[2]}">${ic('wrench',24,g[3])}</span><div style="flex:1;min-width:0"><b style="font-size:11.5px">${g[0]}</b><div class="mini">${g[1]}</div><div class="mini" style="color:#16a34a">Giảm 10% khi thanh toán qua ${c.hostShort}</div></div><span class="bk" data-t="g${i}">Đặt</span></div>`).join('')}
+   </div></div>`,
+
+  pkg:(c)=>`${SB()}${MAPPBAR('Gara An Phát (demo)',c.hostShort)}
+   <div class="body"><div class="inner">
+    <div class="card"><div style="font-weight:700;margin-bottom:2px">Chọn hạng mục</div>
+     ${['Thay dầu động cơ + lọc dầu','Kiểm tra hệ thống phanh','Vệ sinh điều hoà','Kiểm tra tổng quát 30 điểm'].map((t,i)=>`<div class="check" data-t="c${i}"><span class="bx"></span>${t}</div>`).join('')}
+    </div>
+    <div style="font-size:10.5px;color:#7a849b;margin:2px 2px 6px">Thời gian mang xe tới</div>
+    <div class="ph-chips">${['Hôm nay 15:00','Hôm nay 16:30','Mai 08:00'].map((h,i)=>`<div class="pc" data-t="s${i}">${h}</div>`).join('')}</div>
+    <div class="card" style="display:flex;justify-content:space-between"><span>Tạm tính</span><b id="est">—</b></div>
+   </div></div>
+   <div class="foot"><div class="pbtn" data-t="ok">Xác nhận & thanh toán qua ${c.hostShort}</div></div>`
+};
+
+/* ---------- SCENARIOS ---------- */
+const sheet=(html)=>({fn:v=>{v.insertAdjacentHTML('beforeend',`<div class="sheet-bg"></div><div class="sheet"><div class="grab"></div>${html}</div>`)}});
+const toast=(html)=>({fn:v=>{v.insertAdjacentHTML('beforeend',`<div class="toast">${html}</div>`)}});
+const sel=(q)=>({fn:v=>{const e=v.querySelector(q);e.parentElement.querySelectorAll('.pc').forEach(x=>x.classList.remove('sel'));e.classList.add('sel')}});
+
+const SCN=[
+ {name:'Online · Ví điện tử',dot:'#d6257f',title:'Đặt lịch đăng kiểm ngay trong ví điện tử',
+  desc:'Người dùng không cài app mới. Họ mở tiện ích Trạm Giao Thông Số trong ví, đăng nhập một chạm và đặt lịch chỉ trong khoảng 1 phút.',
+  ctx:{host:'Ví điện tử',hostShort:'Ví',payName:'Ví',doneTitle:'Đặt lịch thành công',doneHead:'Đặt lịch thành công!',doneSub:'Đã thêm nhắc lịch vào Ví trước 1 ngày',seed:11,
+       doneRows:[['Mã lịch','DK-8F3K2'],['Biển số','51K-123.45'],['Thời gian','09:30 · 25/11'],['Trung tâm','ĐK Q.7']],doneNote:'Đưa mã QR này tại quầy tiếp nhận để vào làn kiểm định.'},
+  steps:[
+   {t:'Mở ứng dụng chủ',d:'Người dân mở ví điện tử quen thuộc và chạm vào tiện ích "Trạm Giao Thông Số".',a:[{go:'wallet'},{wait:500},{tap:'[data-t=hub]'}]},
+   {t:'Đăng nhập một chạm (SSO)',d:'Mini app xin phép dùng họ tên và số điện thoại từ tài khoản ví, không cần đăng ký mới.',a:[{go:'splash'},{wait:900},
+     sheet(`<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">${box('car','linear-gradient(135deg,#1f5eff,#6d5dfc)','#fff',38,20,11)}<div><b style="font-size:13px">Trạm Giao Thông Số</b><div style="font-size:10.5px;color:#7a849b">muốn sử dụng thông tin của bạn</div></div></div>
+       <div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Họ và tên</div><div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Số điện thoại</div>
+       <div style="display:flex;gap:8px;margin-top:12px"><div class="pbtn alt" style="flex:1">Từ chối</div><div class="pbtn" style="flex:1" data-t="agree">Đồng ý</div></div>`),{wait:700},{tap:'[data-t=agree]'}]},
+   {t:'Chọn dịch vụ',d:'Trang chủ Trạm gom đủ nhóm dịch vụ: đăng kiểm, phạt nguội, điểm dịch vụ. Chạm "Đặt lịch đăng kiểm".',a:[{go:'home'},{wait:700},{tap:'[data-t=dk]'}]},
+   {t:'Nhập biển số',d:'Nhập biển số xe; hệ thống gợi ý loại xe và trung tâm gần nhất.',a:[{go:'book'},{wait:400},{type:'[data-t=plate]',text:'51K-123.45',out:'#vPlate'}]},
+   {t:'Chọn ngày & khung giờ',d:'Chỉ hiện khung giờ còn trống, kèm gợi ý giờ ít đông để đỡ phải chờ.',a:[{tap:'[data-t=d2]'},sel('[data-t=d2]'),{wait:300},{tap:'[data-t=h2]'},sel('[data-t=h2]'),{wait:400},{tap:'[data-t=next]'}]},
+   {t:'Xác nhận',d:'Thông tin chủ xe lấy sẵn từ tài khoản ví. Bật nhắc lịch rồi chạm xác nhận.',a:[{go:'confirm'},{wait:1100},{tap:'[data-t=ok]'}]},
+   {t:'Nhận mã lịch hẹn',d:'Có mã QR lịch hẹn, có nhắc lịch qua ví. Tới trung tâm chỉ việc đưa mã.',a:[{go:'done'},{wait:500},toast(`${ic('bell',18,'#ffd166')}<div><b>Ví</b> · Đã lưu lịch đăng kiểm 09:30 25/11. Sẽ nhắc bạn trước 1 ngày.</div>`)]}
+  ]},
+ {name:'Offline · Quét QR tại trạm',dot:'#ff8a00',board:'pn',title:'Quét standee QR để tra cứu phạt nguội',
+  desc:'Đứng ở trung tâm đăng kiểm hay bãi xe, người dân quét ô "Phạt nguội" trên standee. Mã mở thẳng form tra cứu, không qua trang chủ, không cần cài app.',
+  ctx:{host:'trình duyệt',hostShort:'QR tại trạm'},
+  steps:[
+   {t:'Quét ô Phạt nguội trên standee',d:'Mở camera, hướng vào mã QR của ô "Phạt nguội" trên standee đặt tại trạm.',a:[{go:'camera'},{board:'pn'},{wait:1600},{fn:v=>{v.querySelector('#vf').classList.add('ok');v.querySelector('#detect').classList.add('show')}},{wait:600},{tap:'[data-t=open]'}]},
+   {t:'Mở thẳng form tra cứu',d:'Deep link mở đúng màn hình tra cứu và ghi nhận mã đơn vị của standee để thống kê.',a:[{go:'pnForm'},{wait:800}]},
+   {t:'Nhập biển số & số điện thoại',d:'Chọn loại xe, nhập biển số và số điện thoại để nhận kết quả và cảnh báo về sau.',a:[{type:'[data-t=plate]',text:'51G12345',out:'#vPlate'},{type:'[data-t=phone]',text:'0912345678',out:'#vPhone'}]},
+   {t:'Bấm TRA CỨU',d:'Hệ thống đối chiếu dữ liệu. Nếu xe có vi phạm sẽ hiện cảnh báo đỏ.',a:[{tap:'[data-t=go]'},{fn:v=>{v.querySelector('#pnRes').innerHTML='<div style="padding:22px 0"><div class="loader"></div><div style="text-align:center;font-size:10.5px;color:#7a849b;margin-top:8px">Đang tra cứu dữ liệu…</div></div>'}},{wait:1200},
+     {fn:v=>{v.querySelector('#pnRes').innerHTML='<div class="alertbox"><b>Phương tiện của bạn đang có cảnh báo!</b><span data-t="detail">Xem chi tiết tại đây</span></div>'}},{wait:900}]},
+   {t:'Xem chi tiết vi phạm',d:'Đủ thông tin: màu biển, lỗi vi phạm, thời gian, địa điểm, trạng thái xử phạt, đơn vị phát hiện.',a:[{tap:'[data-t=detail]'},{go:'pnDetail'},{wait:1400},{scroll:'#dIn',y:-150},{wait:900}]},
+   {t:'Đăng ký nhận cảnh báo',d:'Một chạm để được báo tự động mỗi khi biển số có vi phạm mới.',a:[{tap:'[data-t=sub]'},
+     sheet(`<b style="font-size:13px">Nhận thông báo phạt nguội</b><div style="font-size:10.5px;color:#7a849b;margin:2px 0 8px">Biển số 51G12345</div>
+       <div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Tin nhắn Zalo / ứng dụng</div><div class="check"><span class="bx"></span>SMS</div>
+       <div class="field" style="margin-top:10px"><label>Số điện thoại</label><div class="v">0912 ••• 678</div></div><div class="pbtn" data-t="reg">Đăng ký</div>`),{wait:800},{tap:'[data-t=reg]'},
+     {fn:v=>v.querySelectorAll('.sheet,.sheet-bg').forEach(e=>e.remove())},toast(`${ic('check',18,'#4ade80',2.6)}<div>Đã bật theo dõi biển số <b>51G12345</b>. Có vi phạm mới sẽ báo ngay cho bạn.</div>`)]}
+  ]},
+ {name:'Online · Ngân hàng số',dot:'#0f8a6e',title:'Đặt bảo dưỡng xe từ app ngân hàng số',
+  desc:'Cùng một Trạm, khi nhúng vào ngân hàng số thì dùng luôn tài khoản và cổng thanh toán của ngân hàng. Đối tác có thêm giao dịch, người dân có thêm tiện ích.',
+  ctx:{host:'Ngân hàng số',hostShort:'Ngân hàng',payName:'Ngân hàng',doneTitle:'Đặt lịch thành công',doneHead:'Gara đã nhận lịch!',doneSub:'Đã thanh toán qua tài khoản ngân hàng',seed:31,
+       doneRows:[['Mã đơn','BD-27Q9X'],['Gara','An Phát'],['Thời gian','Hôm nay 16:30'],['Hạng mục','2 mục']],doneNote:'Đưa mã cho cố vấn dịch vụ khi tới gara. Hoá đơn điện tử đã lưu trong lịch sử giao dịch.'},
+  steps:[
+   {t:'Mở app ngân hàng',d:'Tiện ích "Giao thông số" nằm ngay trên màn hình chính của ngân hàng.',a:[{go:'bank'},{wait:500},{tap:'[data-t=hub]'}]},
+   {t:'Vào Trạm Giao Thông Số',d:'Cùng giao diện Trạm, nhưng đăng nhập và thanh toán đi qua ngân hàng. Chạm "Bảo dưỡng ô tô".',a:[{go:'splash'},{wait:900},{go:'home'},{wait:700},{tap:'[data-t=baoduong]'}]},
+   {t:'Chọn gara gần nhất',d:'Danh sách gara liên kết theo khoảng cách, đánh giá và ưu đãi riêng của nền tảng.',a:[{go:'garages'},{wait:900},{tap:'[data-t=g0]'}]},
+   {t:'Chọn hạng mục & giờ',d:'Tích các hạng mục cần làm, chọn giờ mang xe tới; giá tạm tính hiện ngay.',a:[{go:'pkg'},{wait:400},
+     {tap:'[data-t=c0]'},{fn:v=>{const e=v.querySelector('[data-t=c0]');e.classList.add('on');e.querySelector('.bx').innerHTML=ic('check',12,'#fff',3);v.querySelector('#est').textContent='650.000 đ'}},
+     {tap:'[data-t=c1]'},{fn:v=>{const e=v.querySelector('[data-t=c1]');e.classList.add('on');e.querySelector('.bx').innerHTML=ic('check',12,'#fff',3);v.querySelector('#est').textContent='850.000 đ'}},
+     {tap:'[data-t=s1]'},sel('[data-t=s1]'),{wait:400}]},
+   {t:'Thanh toán bằng ngân hàng',d:'Xác nhận bằng sinh trắc học hoặc OTP của ngân hàng, không cần nhập thẻ.',a:[{tap:'[data-t=ok]'},
+     sheet(`<div style="text-align:center"><b style="font-size:13px">Xác nhận thanh toán</b><div style="font-size:22px;font-weight:800;margin:6px 0">765.000 đ</div><div style="font-size:10.5px;color:#16a34a;margin-bottom:10px">Đã áp dụng ưu đãi 10%</div>
+       <div style="width:56px;height:56px;border-radius:16px;margin:0 auto 10px;display:grid;place-items:center;background:#e3f4ef">${ic('id',30,'#0f8a6e')}</div><div style="font-size:10.5px;color:#7a849b;margin-bottom:10px">Xác thực bằng khuôn mặt</div><div class="pbtn" style="background:#0f8a6e" data-t="pay">Xác nhận</div></div>`),{wait:800},{tap:'[data-t=pay]'}]},
+   {t:'Hoàn tất',d:'Gara nhận lịch, người dân có mã đơn; giao dịch nằm trong lịch sử của ngân hàng.',a:[{go:'done'},{wait:400},toast(`${ic('bank',18,'#7ee0c4')}<div><b>Ngân hàng</b> · -765.000 đ · Thanh toán bảo dưỡng BD-27Q9X</div>`)]}
+  ]},
+ {name:'Online · Công dân số',dot:'#d71920',title:'Xem bản đồ điểm nóng vi phạm từ app Công dân số',
+  desc:'Trong ứng dụng dịch vụ công, Trạm dùng luôn tài khoản định danh điện tử. Người dân xem bản đồ điểm nóng vi phạm do AI tổng hợp để chủ động đi đường an toàn.',
+  ctx:{host:'Công dân số',hostShort:'Công dân số'},
+  steps:[
+   {t:'Mở ứng dụng Công dân số',d:'Tiện ích "Giao thông số" nằm cùng các dịch vụ công khác trên màn hình chính.',a:[{go:'cds'},{wait:500},{tap:'[data-t=hub]'}]},
+   {t:'Xác thực bằng định danh điện tử',d:'Đăng nhập một chạm bằng tài khoản định danh, không cần tạo tài khoản riêng.',a:[{go:'splash'},{wait:900},
+     sheet(`<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">${CDSLOGO}<div><b style="font-size:13px">Chia sẻ thông tin định danh</b><div style="font-size:10.5px;color:#7a849b">cho tiện ích Trạm Giao Thông Số</div></div></div>
+       <div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Họ và tên</div><div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Số định danh cá nhân</div><div class="check on"><span class="bx">${ic('check',12,'#fff',3)}</span>Số điện thoại</div>
+       <div style="display:flex;gap:8px;margin-top:12px"><div class="pbtn alt" style="flex:1">Từ chối</div><div class="pbtn" style="flex:1;background:#d71920" data-t="agree">Đồng ý</div></div>`),{wait:700},{tap:'[data-t=agree]'}]},
+   {t:'Chọn Bản đồ điểm nóng',d:'Trong nhóm Phạt nguội giao thông, chạm "Bản đồ điểm nóng".',a:[{go:'home'},{wait:700},{tap:'[data-t=map]'}]},
+   {t:'Xem điểm nóng trên bản đồ',d:'Mỗi cụm cho biết số vi phạm tại khu vực; cụm viền đỏ là nơi vi phạm tăng gần đây. Chạm một cụm để xem chi tiết.',a:[{go:'map'},{wait:1500},{tap:'[data-t=p110]'}]},
+   {t:'Danh sách vi phạm tại điểm',d:'Hiện địa chỉ, các vi phạm gần đây (biển số đã che bớt) và thời gian; có phân trang.',a:[{fn:v=>v.insertAdjacentHTML('beforeend',MODAL)},{wait:1500},{tap:'[data-t=nx]'},
+     {fn:v=>{v.querySelector('#mt').innerHTML=mrows(1);v.querySelector('#pgno').textContent='Trang 2/12'}},{wait:1300}]},
+   {t:'Lọc theo nhu cầu',d:'Lọc theo loại xe, lỗi vi phạm, khoảng thời gian; bản đồ chỉ còn các điểm liên quan.',a:[{tap:'[data-t=close]'},{fn:v=>v.querySelectorAll('.modal,.mapdim').forEach(e=>e.remove())},{wait:300},{tap:'[data-t=filter]'},
+     sheet(`<b style="font-size:13px">Bộ lọc</b>
+       <div style="font-size:10.5px;color:#7a849b;margin:10px 0 6px">Loại xe</div><div class="ph-chips"><div class="pc sel">Ô tô</div><div class="pc">Xe máy</div></div>
+       <div style="font-size:10.5px;color:#7a849b;margin:4px 0 6px">Lỗi vi phạm</div><div class="ph-chips"><div class="pc sel">Quá tốc độ</div><div class="pc">Vượt đèn đỏ</div><div class="pc">Sai làn</div></div>
+       <div style="font-size:10.5px;color:#7a849b;margin:4px 0 6px">Thời gian</div><div class="ph-chips"><div class="pc">7 ngày</div><div class="pc sel">30 ngày</div><div class="pc">90 ngày</div></div>
+       <div class="pbtn" data-t="apply" style="background:#2a2fe6">Áp dụng</div>`),{wait:900},{tap:'[data-t=apply]'},
+     {fn:v=>{v.querySelectorAll('.sheet,.sheet-bg').forEach(e=>e.remove());v.querySelectorAll('.pin.faint').forEach(e=>e.classList.add('hide'))}},
+     toast(`${ic('fire',18,'#ffb4a8',2)}<div>Đang hiển thị: Ô tô · Quá tốc độ · 30 ngày</div>`)]}
+  ]}
+];
+
+/* ---------- ENGINE ---------- */
+const scr=document.getElementById('scr'),finger=document.getElementById('finger');
+let cur=0,stepIdx=0,runId=0,paused=false,fast=false,view=null;
+const cancel=Symbol('c');
+async function sleep(ms,id){
+  if(fast){ if(id!==runId) throw cancel; return; }
+  let t=0; while(t<ms){ await new Promise(r=>setTimeout(r,50)); if(id!==runId) throw cancel; if(!paused) t+=50; }
+}
+function render(name,animate){
+  const sc=SCN[cur]; const v=document.createElement('div'); v.className='view ph'; v.innerHTML=SCREENS[name](sc.ctx);
+  if(name==='camera'){v.style.background='#0b0f19'}
+  const old=view; view=v;
+  if(animate&&old){ v.classList.add('enter'); scr.appendChild(v); v.offsetWidth; v.classList.remove('enter'); old.classList.add('leave'); setTimeout(()=>old.remove(),480); }
+  else { scr.querySelectorAll('.view').forEach(x=>x.remove()); scr.appendChild(v); }
+}
+function pos(el){const a=scr.getBoundingClientRect(),b=el.getBoundingClientRect();return [b.left-a.left+b.width/2,b.top-a.top+b.height/2]}
+async function tap(q,id){
+  const el=view.querySelector(q); if(!el) return;
+  if(fast) return;
+  const [x,y]=pos(el); finger.classList.add('show'); finger.style.left=x+'px'; finger.style.top=y+'px';
+  await sleep(800,id);
+  finger.classList.add('tap'); el.classList.add('pressed');
+  const r=document.createElement('div'); r.className='ripple'; r.style.left=x+'px'; r.style.top=y+'px'; scr.appendChild(r); setTimeout(()=>r.remove(),650);
+  await sleep(220,id); finger.classList.remove('tap'); el.classList.remove('pressed'); await sleep(120,id);
+}
+async function act(a,id){
+  if(a.go){ render(a.go,!fast); await sleep(500,id); }
+  else if(a.tap){ await tap(a.tap,id); }
+  else if(a.type){ await tap(a.type,id); const f=view.querySelector(a.type), o=view.querySelector(a.out); f.classList.add('focus');
+    if(fast){o.textContent=a.text} else { for(let i=1;i<=a.text.length;i++){ o.innerHTML=a.text.slice(0,i)+'<span class="caret"></span>'; await sleep(110,id);} o.textContent=a.text; }
+    await sleep(300,id); f.classList.remove('focus'); }
+  else if(a.fn){ a.fn(view); await sleep(250,id); }
+  else if(a.wait){ await sleep(a.wait,id); }
+  else if(a.board){ document.querySelectorAll('#standeeDemo .stc').forEach(q=>q.classList.toggle('hot',q.dataset.q===a.board)); }
+  else if(a.scroll){ const e=view.querySelector(a.scroll); if(e) e.style.transform=`translateY(${a.y}px)`; await sleep(700,id); }
+}
+function paintSteps(){
+  const sc=SCN[cur];
+  document.querySelectorAll('#steps li').forEach((li,i)=>{li.classList.toggle('on',i===stepIdx);li.classList.toggle('done',i<stepIdx)});
+  const s=sc.steps[stepIdx]; document.getElementById('caption').innerHTML=`<b>Bước ${stepIdx+1}/${sc.steps.length} · ${s.t}</b>${s.d}`;
+  document.getElementById('prog').style.width=((stepIdx+1)/sc.steps.length*100)+'%';
+}
+async function run(from=0){
+  const id=++runId; const sc=SCN[cur];
+  finger.classList.remove('show','tap'); fast=true; view=null;
+  try{
+    for(let i=0;i<sc.steps.length;i++){
+      if(i===from){ fast=false; }
+      stepIdx=i; if(!fast) paintSteps();
+      for(const a of sc.steps[i].a) await act(a,id);
+      if(!fast) await sleep(1300,id);
+    }
+    await sleep(2600,id); if(id===runId) run(0);
+  }catch(e){ if(e!==cancel) console.error(e); }
+}
+function setScenario(i){
+  cur=i; const sc=SCN[i];
+  document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('on',k===i));
+  document.getElementById('scTitle').textContent=sc.title; document.getElementById('scDesc').textContent=sc.desc;
+  document.getElementById('steps').innerHTML=sc.steps.map((s,k)=>`<li data-k="${k}"><span class="n">${k+1}</span><div><div class="t">${s.t}</div><div class="d">${s.d}</div></div></li>`).join('');
+  document.querySelectorAll('#steps li').forEach(li=>li.onclick=()=>run(+li.dataset.k));
+  document.getElementById('boardWrap').classList.toggle('show',!!sc.board);
+  document.querySelectorAll('#standeeDemo .stc').forEach(q=>q.classList.remove('hot'));
+  run(0);
+}
+document.getElementById('tabs').innerHTML=SCN.map((s,i)=>`<button class="tab" data-i="${i}"><span class="dot" style="background:${s.dot}"></span>${s.name}</button>`).join('');
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>setScenario(+t.dataset.i));
+const bPlay=document.getElementById('bPlay'); const paintPlay=()=>bPlay.innerHTML=ic(paused?'play':'pause',18);
+bPlay.onclick=()=>{paused=!paused;paintPlay()};
+document.getElementById('bPrev').onclick=()=>run(Math.max(0,stepIdx-1));
+document.getElementById('bNext').onclick=()=>run(Math.min(SCN[cur].steps.length-1,stepIdx+1));
+document.getElementById('bRe').onclick=()=>run(0);
+paintPlay(); setScenario(0);
+</script>
+</body>
+</html>
