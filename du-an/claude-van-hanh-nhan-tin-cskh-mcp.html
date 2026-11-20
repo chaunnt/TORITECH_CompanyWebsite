@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- toritech:meta -->
+<meta name="description" content="So sánh vận hành thủ công với AI Agent qua MCP (Model Context Protocol): Claude lọc tệp, soạn nội dung và tạo chiến dịch Zalo OA, SMS, Email trong khi dữ liệu khách hàng vẫn nằm trên CRM."><link rel="canonical" href="https://toritech.vn/du-an/claude-van-hanh-nhan-tin-cskh-mcp.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="AI Agent vận hành hệ thống nhắn tin CSKH qua MCP – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="So sánh vận hành thủ công với AI Agent qua MCP (Model Context Protocol): Claude lọc tệp, soạn nội dung và tạo chiến dịch Zalo OA, SMS, Email trong khi dữ liệu khách hàng vẫn nằm trên CRM."><meta property="og:url" content="https://toritech.vn/du-an/claude-van-hanh-nhan-tin-cskh-mcp.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/claude-van-hanh-nhan-tin-cskh-mcp.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI Agent vận hành hệ thống nhắn tin CSKH qua MCP – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="So sánh vận hành thủ công với AI Agent qua MCP (Model Context Protocol): Claude lọc tệp, soạn nội dung và tạo chiến dịch Zalo OA, SMS, Email trong khi dữ liệu khách hàng vẫn nằm trên CRM."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/claude-van-hanh-nhan-tin-cskh-mcp.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude vận hành hệ thống nhắn tin CSKH qua MCP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f1e; --panel:#111830; --panel2:#151d38; --line:rgba(255,255,255,.09);
+  --text:#e8ecf6; --muted:#97a1bd; --claude:#D97757; --mcp:#8b7cf6; --data:#34d399;
+  --staff:#60a5fa; --bad:#f87171; --warn:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;background:radial-gradient(1200px 600px at 70% -10%,#1d2450 0%,transparent 60%),radial-gradient(900px 500px at 0% 30%,#2a1a1a55 0%,transparent 60%),var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 60px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--claude);background:rgba(217,119,87,.1);border:1px solid rgba(217,119,87,.3);padding:5px 12px;border-radius:99px}
+h1{font-size:clamp(26px,3.6vw,42px);line-height:1.15;font-weight:800;margin:14px 0 10px;letter-spacing:-.01em}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--claude),#f2b38f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);max-width:860px;font-size:16px}
+.lead b{color:var(--text)}
+
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:26px 0 16px}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px}
+.seg button{font:inherit;border:0;background:transparent;color:var(--muted);padding:10px 18px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;transition:.25s}
+.seg button small{display:block;font-weight:500;font-size:11px;opacity:.8}
+.seg button.on[data-m=old]{background:rgba(248,113,113,.15);color:#fecaca;box-shadow:inset 0 0 0 1px rgba(248,113,113,.4)}
+.seg button.on[data-m=new]{background:rgba(217,119,87,.18);color:#ffd9c9;box-shadow:inset 0 0 0 1px rgba(217,119,87,.5)}
+.btn{font:inherit;font-size:13px;font-weight:600;color:var(--text);background:var(--panel);border:1px solid var(--line);padding:10px 14px;border-radius:12px;cursor:pointer}
+.btn:hover{border-color:rgba(255,255,255,.25)}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+@media(max-width:1020px){.main{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:20px}
+.stage{position:relative;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.caption{display:flex;gap:14px;align-items:flex-start;padding:14px 18px;border-top:1px solid var(--line);background:rgba(0,0,0,.18);min-height:84px}
+.caption .num{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:18px;background:var(--panel);border:1px solid var(--line)}
+.caption .t{font-weight:700;font-size:15px}
+.caption .n{color:var(--muted);font-size:13px;margin-top:2px}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;margin-right:6px;vertical-align:1px;letter-spacing:.02em}
+.chip.staff{background:rgba(96,165,250,.16);color:#bfdbfe;border:1px solid rgba(96,165,250,.35)}
+.chip.claude{background:rgba(217,119,87,.18);color:#ffd2bf;border:1px solid rgba(217,119,87,.45)}
+.chip.sys{background:rgba(52,211,153,.14);color:#a7f3d0;border:1px solid rgba(52,211,153,.35)}
+.modetag{position:absolute;top:14px;left:16px;font-size:12px;font-weight:700;padding:6px 12px;border-radius:10px;letter-spacing:.04em}
+body[data-mode=old] .modetag{background:rgba(248,113,113,.15);color:#fecaca;border:1px solid rgba(248,113,113,.35)}
+body[data-mode=new] .modetag{background:rgba(217,119,87,.16);color:#ffd2bf;border:1px solid rgba(217,119,87,.45)}
+
+.side{padding:18px}
+.side h3{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.steps{list-style:none;display:flex;flex-direction:column;gap:8px}
+.steps li{display:flex;gap:12px;padding:11px 12px;border-radius:14px;border:1px solid var(--line);cursor:pointer;transition:.25s;background:rgba(255,255,255,.015)}
+.steps li:hover{border-color:rgba(255,255,255,.2)}
+.steps li .k{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:13px;background:rgba(255,255,255,.06)}
+.steps li .d{font-size:13px}
+.steps li .d div{margin-top:4px}
+.steps li.on{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.06)}
+body[data-mode=new] .steps li.on{border-color:rgba(217,119,87,.7);background:rgba(217,119,87,.09)}
+body[data-mode=old] .steps li.on{border-color:rgba(248,113,113,.6);background:rgba(248,113,113,.07)}
+.legend{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;font-size:12px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none}
+.summary{margin-top:16px;padding:12px 14px;border-radius:14px;font-size:13px}
+body[data-mode=old] .summary{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25)}
+body[data-mode=new] .summary{background:rgba(217,119,87,.09);border:1px solid rgba(217,119,87,.3)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{padding:18px}
+.kpi .v{font-size:32px;font-weight:800;line-height:1.1}
+.kpi .l{color:var(--muted);font-size:13px;margin-top:6px}
+.kpi:nth-child(1) .v{color:var(--claude)}
+.kpi:nth-child(2) .v{color:var(--mcp)}
+.kpi:nth-child(3) .v{color:var(--data)}
+.kpi:nth-child(4) .v{color:var(--staff)}
+
+.token{padding:22px;margin-top:16px}
+.token h2,.sec h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.token p.s,.sec p.s{color:var(--muted);font-size:14px;margin-bottom:18px}
+.bar{margin:12px 0}
+.bar .lab{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.bar .lab b{font-weight:700}
+.bar .track{height:28px;border-radius:9px;background:rgba(255,255,255,.05);overflow:hidden;position:relative}
+.bar .fill{height:100%;border-radius:9px;width:0;transition:width 1.6s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:700;color:#0a0f1e;white-space:nowrap}
+.bar.a .fill{background:repeating-linear-gradient(45deg,#f87171,#f87171 10px,#fb923c 10px,#fb923c 20px)}
+.bar.b .fill{background:linear-gradient(90deg,var(--mcp),#c4b5fd)}
+
+.sec{margin-top:34px}
+.flows{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:1020px){.flows{grid-template-columns:1fr}}
+.flow{padding:20px;display:flex;flex-direction:column;gap:14px}
+.flow .hd{display:flex;gap:12px;align-items:center}
+.flow .ic{width:46px;height:46px;flex:none}
+.flow .hd h3{font-size:16px;line-height:1.3}
+.flow .hd small{display:block;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.box{border-radius:14px;padding:12px 14px;font-size:13.5px}
+.box b.tag{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.box ul{padding-left:18px}
+.box li{margin:3px 0}
+.box.bad{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25)}
+.box.bad b.tag{color:var(--bad)}
+.box.good{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.28)}
+.box.good b.tag{color:var(--data)}
+.arrow{text-align:center;color:var(--claude);font-size:20px;line-height:1;margin:-6px 0}
+.flow .em{font-weight:700;color:#fff}
+
+.principles{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.principles span{padding:10px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:13.5px;font-weight:600}
+.principles span::before{content:"✓ ";color:var(--data)}
+.foot{margin-top:28px;color:var(--muted);font-size:12px}
+
+/* SVG */
+svg text{font-family:"Be Vietnam Pro",system-ui,sans-serif}
+.lbl rect{fill:rgba(9,13,28,.88);stroke:rgba(255,255,255,.14)}
+.lbl text{fill:#f1f4fb;font-size:12.5px;font-weight:700}
+.lbl text.sub{fill:#9aa5c2;font-size:10.5px;font-weight:500}
+.lbl.small text{font-size:10.5px}
+.route{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:3 7;opacity:.22;transition:opacity .4s}
+.route.on{opacity:.95;animation:dash 1s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-20}}
+.actor{transition:opacity .5s,filter .5s}
+.actor.on{filter:drop-shadow(0 0 10px var(--glow,#fff)) drop-shadow(0 0 2px var(--glow,#fff))}
+.oldonly,.newonly{transition:opacity .5s}
+body[data-mode=new] .oldonly{opacity:0;pointer-events:none}
+body[data-mode=old] .newonly{opacity:0;pointer-events:none}
+body[data-mode=old] .newfocus{opacity:.16}
+.float{font-size:12px;font-weight:800;pointer-events:none}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+</style>
+</head>
+<body data-mode="new">
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+#tt-foot .tt-crit{margin:0 0 30px;padding:0 0 26px;border-bottom:1px solid #1e2a44}
+#tt-foot .tt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:12px 0}
+#tt-foot .tt-cols>div{padding:14px 16px;border-radius:12px;border:1px solid #1e2a44;background:#111c33}
+#tt-foot .tt-yes{border-left:4px solid #14b8a6}#tt-foot .tt-no{border-left:4px solid #f97316}
+#tt-foot h3{margin:0 0 8px;font-size:15px;font-weight:700;color:#fff}
+#tt-foot .tt-cols ul{display:block;padding-left:18px;list-style:disc}#tt-foot .tt-cols li{margin:0 0 6px;color:#cbd5e1}
+#tt-foot .tt-sub a{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<div class="wrap">
+  <span class="eyebrow">Giải pháp 1 · Claude Pro vận hành hệ thống nhắn tin CSKH</span>
+  <h1>Claude <em>tự vận hành</em> qua MCP<br>dữ liệu khách hàng vẫn nằm trên CRM</h1>
+  <p class="lead">Đối tác đã có sẵn nền tảng nhắn tin <b>Zalo OA · OTT · SMS · Email</b>. Thay vì nhân viên làm thủ công, Claude kết nối qua <b>MCP</b> để tự làm <b>3 trên 4 bước</b> vận hành. Nhân viên chỉ còn bước 4: đọc báo cáo, đánh giá và duyệt kế hoạch.</p>
+
+  <div class="controls">
+    <div class="seg" id="seg">
+      <button data-m="old">Mô hình cũ<small>Nhân viên thủ công / bán tự động</small></button>
+      <button data-m="new" class="on">Mô hình mới<small>Claude + MCP tự vận hành</small></button>
+    </div>
+    <button class="btn" id="play">❚❚ Tạm dừng</button>
+  </div>
+
+  <div class="main">
+    <div class="card stage">
+      <div class="modetag" id="modetag">MÔ HÌNH MỚI · CLAUDE + MCP</div>
+      <svg id="scene" viewBox="60 40 880 580" aria-label="Sơ đồ 2.5D luồng vận hành"></svg>
+      <div class="caption">
+        <div class="num" id="capNum">1</div>
+        <div>
+          <div class="t" id="capT"></div>
+          <div class="n" id="capN"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="card side">
+      <h3>Quy trình 4 bước</h3>
+      <ol class="steps" id="steps"></ol>
+      <div class="summary" id="summary"></div>
+      <div class="legend">
+        <span><i style="background:#a78bfa;transform:rotate(45deg) scale(.8)"></i>Lệnh MCP (nhỏ)</span>
+        <span><i style="background:#ddd6fe"></i>Kết quả tổng hợp</span>
+        <span><i style="background:#34d399"></i>Dữ liệu KH (nội bộ)</span>
+        <span><i style="background:#fb923c"></i>Dữ liệu KH xuất tay</span>
+        <span><i style="background:#60a5fa"></i>Báo cáo</span>
+        <span><i style="background:#ef4444"></i>Rò rỉ / bị chặn</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="kpis">
+    <div class="card kpi"><div class="v">3/4</div><div class="l">bước vận hành do Claude tự làm qua MCP</div></div>
+    <div class="card kpi"><div class="v">~90%</div><div class="l">token tiết kiệm: chỉ gửi lệnh và nhận kết quả tổng hợp</div></div>
+    <div class="card kpi"><div class="v">0</div><div class="l">bản ghi khách hàng lưu tại Claude. Dữ liệu ở nguồn (CRM)</div></div>
+    <div class="card kpi"><div class="v">Ổn định</div><div class="l">thao tác qua API chuẩn, phân quyền rõ, có log từng lệnh</div></div>
+  </div>
+
+  <div class="card token">
+    <h2>Vì sao MCP tiết kiệm ~90% token và ổn định hơn?</h2>
+    <p class="s">AI không cần “đọc” toàn bộ danh sách khách hàng. Claude ra lệnh, CRM và nền tảng nhắn tin tự xử lý dữ liệu trong hạ tầng của đối tác.</p>
+    <div class="bar a"><div class="lab"><b>Cách thường: dán / tải toàn bộ danh sách KH vào AI</b><span>100% token · dữ liệu rời khỏi hệ thống</span></div><div class="track"><div class="fill" data-w="100">Tên · SĐT · lịch sử · … × toàn bộ khách hàng</div></div></div>
+    <div class="bar b"><div class="lab"><b>Qua MCP: chỉ lệnh + kết quả tổng hợp</b><span>~10% token · dữ liệu ở nguồn</span></div><div class="track"><div class="fill" data-w="10">lệnh</div></div></div>
+    <p class="s" style="margin:14px 0 0;font-size:12.5px">Ví dụ lệnh: <code style="color:#c4b5fd">loc_khach_hang(tieu_chi) → {so_luong, ma_tep}</code> · <code style="color:#c4b5fd">tao_chien_dich(ma_tep, kenh, noi_dung)</code> · <code style="color:#c4b5fd">bao_cao(ma_chien_dich) → {da_gui, da_doc, phan_hoi}</code>. Danh sách chi tiết không bao giờ đi qua Claude.</p>
+  </div>
+
+  <div class="sec">
+    <h2>Ba luồng vấn đề và cách mô hình mới giải quyết</h2>
+    <p class="s">So sánh mô hình cũ (nhân viên thao tác) và mô hình mới (Claude vận hành qua MCP, dữ liệu lưu tại nguồn).</p>
+    <div class="flows">
+      <div class="card flow">
+        <div class="hd">
+          <svg class="ic" viewBox="0 0 46 46"><rect width="46" height="46" rx="12" fill="rgba(96,165,250,.14)"/><circle cx="23" cy="24" r="11" fill="none" stroke="#60a5fa" stroke-width="2.5"/><path d="M23 17v7l5 3" stroke="#60a5fa" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+          <h3><small>Luồng 1 · Hiệu suất</small>Nhân viên chậm, dễ sai, thiếu chuyên môn</h3>
+        </div>
+        <div class="box bad"><b class="tag">Mô hình cũ</b><ul>
+          <li>Lấy & lọc danh sách, soạn tin bằng tay: <span class="em">chậm, dễ sai sót</span></li>
+          <li>Thiếu chuyên môn đánh giá kết quả chiến dịch</li>
+          <li>Không chủ động báo cáo, chờ được hỏi mới làm</li></ul></div>
+        <div class="arrow">▼</div>
+        <div class="box good"><b class="tag">Claude đáp ứng hết</b><ul>
+          <li>Tự lập kế hoạch, lọc tệp, soạn nội dung theo từng kênh, tạo chiến dịch: <span class="em">nhanh và nhất quán</span></li>
+          <li>Phân tích tỉ lệ gửi, đọc, phản hồi; đề xuất kế hoạch kế tiếp</li>
+          <li>Chủ động gửi báo cáo định kỳ. Nhân viên chỉ duyệt và ra quyết định</li></ul></div>
+      </div>
+
+      <div class="card flow">
+        <div class="hd">
+          <svg class="ic" viewBox="0 0 46 46"><rect width="46" height="46" rx="12" fill="rgba(139,124,246,.16)"/><ellipse cx="23" cy="15" rx="10" ry="4" fill="none" stroke="#a78bfa" stroke-width="2.5"/><path d="M13 15v16c0 2.2 4.5 4 10 4s10-1.8 10-4V15M13 23c0 2.2 4.5 4 10 4s10-1.8 10-4" fill="none" stroke="#a78bfa" stroke-width="2.5"/></svg>
+          <h3><small>Luồng 2 · Rò rỉ khi dùng AI</small>Đưa hết dữ liệu cho AI là rò rỉ</h3>
+        </div>
+        <div class="box bad"><b class="tag">Rủi ro</b><ul>
+          <li>Dán / tải toàn bộ danh sách KH vào Claude Pro (hay bất kỳ model AI nào): <span class="em">dữ liệu rời khỏi hệ thống</span></li>
+          <li>Tốn token, chậm, dễ vượt giới hạn ngữ cảnh</li></ul></div>
+        <div class="arrow">▼</div>
+        <div class="box good"><b class="tag">Mô hình lưu trữ dữ liệu tại nguồn</b><ul>
+          <li>Dữ liệu <span class="em">luôn nằm trên CRM</span> và nền tảng nhắn tin của đối tác</li>
+          <li>Claude (hay AI model khác) <span class="em">chỉ thao tác</span>: gửi lệnh qua MCP, nhận kết quả tổng hợp</li>
+          <li>MCP có thể che SĐT/tên trong kết quả trả về. Đổi model AI vẫn giữ nguyên mô hình</li></ul></div>
+      </div>
+
+      <div class="card flow">
+        <div class="hd">
+          <svg class="ic" viewBox="0 0 46 46"><rect width="46" height="46" rx="12" fill="rgba(52,211,153,.14)"/><path d="M23 10l11 4v8c0 7-4.7 12-11 14-6.3-2-11-7-11-14v-8z" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 23l4 4 7-8" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <h3><small>Luồng 3 · Đánh cắp dữ liệu</small>Rủi ro nhân viên mang dữ liệu đi</h3>
+        </div>
+        <div class="box bad"><b class="tag">Mô hình cũ</b><ul>
+          <li>Nhân viên phải <span class="em">xuất Excel</span> danh sách KH về máy để lọc và nhập</li>
+          <li>Dễ mang ra ngoài qua USB, email, Zalo cá nhân. Khó phát hiện</li></ul></div>
+        <div class="arrow">▼</div>
+        <div class="box good"><b class="tag">Claude không đánh cắp, dữ liệu ở nguồn</b><ul>
+          <li>Không ai cần xuất file. Dữ liệu không rời CRM</li>
+          <li>Claude không có động cơ đánh cắp, không lưu dữ liệu, chỉ gọi đúng các công cụ MCP được cấp</li>
+          <li><span class="em">Claude không có quyền truy cập internet hay hệ thống khác khi chưa được cấp quyền</span>. Mọi lệnh có log, thu hồi quyền tức thì</li></ul></div>
+      </div>
+    </div>
+
+    <div class="principles">
+      <span>Dữ liệu ở nguồn (CRM)</span><span>AI chỉ thao tác, không lưu trữ</span><span>Quyền do doanh nghiệp cấp và thu hồi</span><span>Mọi thao tác MCP đều có log</span><span>Nhân viên tập trung ra quyết định</span>
+    </div>
+    <p class="foot">Hình minh hoạ mô hình vận hành. Con số tiết kiệm token là mức ước tính, tuỳ khối lượng dữ liệu và thiết kế công cụ MCP.</p>
+  </div>
+</div>
+
+<script>
+(()=>{
+const NS='http://www.w3.org/2000/svg';
+const S=34,O={x:470,y:120};
+const P=(x,y,z=0)=>[O.x+(x-y)*S*0.866,O.y+(x+y)*S*0.5-z*S];
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const pts=a=>a.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ');
+const shade=(h,f)=>{const n=parseInt(h.slice(1),16);return`rgb(${(n>>16)*f|0},${(n>>8&255)*f|0},${(n&255)*f|0})`;};
+const svg=document.getElementById('scene');
+
+function box(par,x,y,z,w,d,h,col,attrs={}){
+  const g=el('g',attrs,par);
+  const L=[P(x,y+d,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x,y+d,z+h)];
+  const R=[P(x+w,y,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x+w,y,z+h)];
+  const T=[P(x,y,z+h),P(x+w,y,z+h),P(x+w,y+d,z+h),P(x,y+d,z+h)];
+  el('polygon',{points:pts(L),fill:shade(col,.72),stroke:'rgba(255,255,255,.06)'},g);
+  el('polygon',{points:pts(R),fill:shade(col,.52),stroke:'rgba(255,255,255,.06)'},g);
+  el('polygon',{points:pts(T),fill:col,stroke:'rgba(255,255,255,.18)'},g);
+  return g;
+}
+const labels=[];
+function label(par,pos,title,sub,cls=''){
+  const [px,py]=P(...pos);
+  const g=el('g',{class:'lbl '+cls,transform:`translate(${px.toFixed(1)},${py.toFixed(1)})`},par);
+  const r=el('rect',{rx:7},g);
+  const t=el('text',{'text-anchor':'middle',y:sub?-3:4},g);t.textContent=title;
+  if(sub){const s=el('text',{'text-anchor':'middle',y:11,class:'sub'},g);s.textContent=sub;}
+  labels.push([g,r]);return g;
+}
+function fitLabels(){labels.forEach(([g,r])=>{r.setAttribute('width',0);const ts=[...g.querySelectorAll('text')];let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ts.forEach(t=>{const b=t.getBBox();x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height);});r.setAttribute('x',x0-9);r.setAttribute('y',y0-5);r.setAttribute('width',x1-x0+18);r.setAttribute('height',y1-y0+10);});}
+
+/* defs */
+const defs=el('defs',{},svg);
+const fg=el('filter',{id:'soft',x:'-50%',y:'-50%',width:'200%',height:'200%'},defs);
+el('feGaussianBlur',{stdDeviation:'3'},fg);
+
+/* layers */
+const Lfloor=el('g',{},svg),Lroute=el('g',{},svg),Lobj=el('g',{},svg),Lpk=el('g',{},svg),Llbl=el('g',{},svg),Lfx=el('g',{},svg);
+
+/* floor */
+box(Lfloor,0,0,-.35,14.8,12.6,.35,'#1a2240');
+for(let i=1;i<14.8;i++)el('line',{x1:P(i,0)[0],y1:P(i,0)[1],x2:P(i,12.6)[0],y2:P(i,12.6)[1],stroke:'rgba(255,255,255,.035)'},Lfloor);
+for(let j=1;j<12.6;j++)el('line',{x1:P(0,j)[0],y1:P(0,j)[1],x2:P(14.8,j)[0],y2:P(14.8,j)[1],stroke:'rgba(255,255,255,.035)'},Lfloor);
+const zone=(x,y,w,d,fill,stroke,cls='')=>el('polygon',{class:cls,points:pts([P(x,y),P(x+w,y),P(x+w,y+d),P(x,y+d)]),fill,stroke,'stroke-dasharray':'6 5','stroke-width':1.3},Lfloor);
+zone(.4,.4,14,6.4,'rgba(52,211,153,.05)','rgba(52,211,153,.4)');
+zone(3.9,7.9,4,4.2,'rgba(217,119,87,.07)','rgba(217,119,87,.5)','newfocus');
+zone(9.4,8.4,4.9,3.8,'rgba(96,165,250,.06)','rgba(96,165,250,.45)');
+
+/* routes */
+const R={
+ o1:[[3.6,2.6],[3.6,7.5],[10.6,7.5],[10.6,8.9]],
+ o2:[[10.2,8.9],[10.2,8.1],[8.3,8.1],[8.3,2],[8.95,2]],
+ o4:[[13.65,5.95],[13.65,9.4],[12.3,9.4]],
+ leak:[[12.25,10.2],[13.1,10.2],[13.7,11.15]],
+ n1a:[[5.75,8.55],[5.75,7.2],[6,6.05]],
+ n1b:[[4.95,4.5],[3.6,3.0]],
+ n2a:[[7.05,4.55],[8.95,2.7]],
+ n2b:[[3.6,1.6],[8.95,1.6]],
+ n4c:[[6.95,9.9],[9.95,9.9]],
+ blk:[[4.55,9.9],[3.4,9.9]]
+};
+const CH=[['Zalo OA','#2f7bff'],['OTT','#22c3ee'],['SMS','#f5b84a'],['Email','#ef6aa0']];
+CH.forEach((c,i)=>R['c'+i]=[[10.5,3.05],[9.45+i*1.4,4.3],[9.45+i*1.4,4.95]]);
+const routeCls={o1:'oldonly',o2:'oldonly',o4:'oldonly',leak:'oldonly',n1a:'newonly',n1b:'newonly',n2a:'newonly',n2b:'newonly',n4c:'newonly',blk:'newonly'};
+const routeCol={o1:'#fb923c',o2:'#fb923c',o4:'#60a5fa',leak:'#ef4444',n1a:'#a78bfa',n1b:'#a78bfa',n2a:'#a78bfa',n2b:'#34d399',n4c:'#60a5fa',blk:'#ef4444',c0:CH[0][1],c1:CH[1][1],c2:CH[2][1],c3:CH[3][1]};
+const routeEl={},motionEl={};
+for(const id in R){
+  const d='M'+R[id].map(p=>P(p[0],p[1],.02).map(v=>v.toFixed(1)).join(' ')).join(' L');
+  routeEl[id]=el('path',{d,class:'route '+(routeCls[id]||''),stroke:routeCol[id]},Lroute);
+  const dm='M'+R[id].map(p=>P(p[0],p[1],.32).map(v=>v.toFixed(1)).join(' ')).join(' L');
+  motionEl[id]=el('path',{d:dm,fill:'none'},defs);
+}
+
+/* objects */
+const actors={};
+// CRM
+actors.crm=el('g',{class:'actor',style:'--glow:#38bdf8'},Lobj);
+[0,.75,1.5].forEach(z=>{box(actors.crm,1,1,z,2.5,2.5,.62,'#2b7a9b');for(let k=0;k<4;k++){const[a,b]=P(3.5,1.4+k*.5,z+.31);el('circle',{cx:a,cy:b,r:2.2,fill:k%2?'#34d399':'#a7f3d0',class:'pulse',style:`animation-delay:${(k+z*3)*.3}s`},actors.crm);}});
+// Messaging hub
+actors.msg=el('g',{class:'actor',style:'--glow:#34d399'},Lobj);
+box(actors.msg,9,1,0,3,2,1.2,'#1f8a70');
+box(actors.msg,9.6,1.4,1.2,1.8,1.1,.18,'#2fbf98');
+// MCP
+actors.mcp=el('g',{class:'actor newfocus',style:'--glow:#8b7cf6'},Lobj);
+box(actors.mcp,5,4,0,2,2,.5,'#3d3290');
+box(actors.mcp,5.35,4.35,.5,1.3,1.3,.35,'#8b7cf6');
+{const ring=[];for(let a=0;a<Math.PI*2;a+=Math.PI/24)ring.push(P(6+1.25*Math.cos(a),5+1.25*Math.sin(a),1.05));
+ el('polygon',{points:pts(ring),fill:'none',stroke:'#c4b5fd','stroke-width':2,'stroke-dasharray':'8 6',class:'route on',style:'opacity:.9'},actors.mcp);
+ const[a,b]=P(6,5,.86);const t=el('text',{x:a,y:b+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#fff'},actors.mcp);t.textContent='MCP';}
+// channels
+actors.ch=el('g',{class:'actor',style:'--glow:#fbbf24'},Lobj);
+CH.forEach(([n,c],i)=>{const x=9+i*1.4;box(actors.ch,x,5,0,.9,.9,1.0,c);const[a,b]=P(x+.45,5.45,1.0),[a2,b2]=P(x+.45,5.45,1.5);el('line',{x1:a,y1:b,x2:a2,y2:b2,stroke:c,'stroke-width':2},actors.ch);el('circle',{cx:a2,cy:b2,r:3.5,fill:c,class:'pulse',style:`animation-delay:${i*.4}s`},actors.ch);});
+// wall
+const wall=el('g',{class:'newonly'},Lobj);
+el('polygon',{points:pts([P(3.3,7.8,0),P(3.3,12.1,0),P(3.3,12.1,2.3),P(3.3,7.8,2.3)]),fill:'rgba(239,68,68,.12)',stroke:'#ef4444','stroke-dasharray':'5 4','stroke-width':1.5},wall);
+for(let k=1;k<5;k++)el('line',{x1:P(3.3,7.8+k*.86,0)[0],y1:P(3.3,7.8+k*.86,0)[1],x2:P(3.3,7.8+k*.86,2.3)[0],y2:P(3.3,7.8+k*.86,2.3)[1],stroke:'rgba(239,68,68,.25)'},wall);
+{const[a,b]=P(3.3,9.95,1.15);const lk=el('g',{transform:`translate(${a},${b})`},wall);el('rect',{x:-9,y:-3,width:18,height:14,rx:3,fill:'#ef4444'},lk);el('path',{d:'M-5,-3v-4a5,5 0 0 1 10,0v4',fill:'none',stroke:'#ef4444','stroke-width':2.5},lk);}
+// internet cloud
+const cloud=el('g',{},Lobj);
+{const[a,b]=P(1.0,11.5,1.9);[[0,0,22],[-22,6,15],[22,6,16],[-10,-12,15],[12,-10,14]].forEach(([dx,dy,r])=>el('circle',{cx:a+dx,cy:b+dy,r,fill:'#334155'},cloud));
+ const t=el('text',{x:a,y:b+6,'text-anchor':'middle','font-size':18,fill:'#94a3b8'},cloud);t.textContent='🌐';}
+// Claude
+actors.claude=el('g',{class:'actor newfocus',style:'--glow:#D97757'},Lobj);
+box(actors.claude,4.6,8.6,0,2.3,2.3,.45,'#3b2a25');
+box(actors.claude,5.25,9.25,.45,1,1,1.0,'#D97757');
+{const[a,b]=P(5.75,9.75,2.15);const st=[];for(let k=0;k<16;k++){const r=k%2?6:17,an=k*Math.PI/8;st.push([a+r*Math.cos(an),b+r*Math.sin(an)]);}
+ el('circle',{cx:a,cy:b,r:20,fill:'#D97757',opacity:.25,filter:'url(#soft)'},actors.claude);
+ el('polygon',{points:pts(st),fill:'#f4a58a',class:'spin'},actors.claude);}
+// staff
+actors.staff=el('g',{class:'actor',style:'--glow:#60a5fa'},Lobj);
+box(actors.staff,10,9,0,2.2,1.2,.7,'#6b5847');
+box(actors.staff,10.4,9.05,.7,1.4,.14,.8,'#1e293b');
+el('polygon',{points:pts([P(10.5,9.2,.8),P(11.7,9.2,.8),P(11.7,9.2,1.42),P(10.5,9.2,1.42)]),fill:'#0f2a4a'},actors.staff);
+[.25,.45,.35,.55,.3].forEach((h,k)=>{const x=10.62+k*.2;el('polygon',{points:pts([P(x,9.2,.86),P(x+.12,9.2,.86),P(x+.12,9.2,.86+h),P(x,9.2,.86+h)]),fill:'#60a5fa'},actors.staff);});
+box(actors.staff,10.8,10.45,0,.6,.5,.9,'#3b82f6');
+{const[a,b]=P(11.1,10.7,1.18);el('circle',{cx:a,cy:b,r:8,fill:'#fcd5b5'},actors.staff);}
+// excel stack + leak (old)
+const old=el('g',{class:'oldonly'},Lobj);
+[0,.16,.32].forEach(z=>box(old,12.45,8.85,.75+z,.8,.6,.09,'#22c55e'));
+box(old,13.4,11.2,0,.6,.4,.25,'#ef4444');
+
+/* labels */
+label(Llbl,[2.25,2.25,2.95],'CRM · Dữ liệu khách hàng','Hạ tầng đối tác · lưu trữ tại nguồn');
+label(Llbl,[10.5,2,2.25],'Nền tảng nhắn tin của đối tác','Tạo & gửi chiến dịch');
+label(Llbl,[7.3,6.4,0],'MCP Server','Cổng có phân quyền · ghi log','newfocus');
+CH.forEach(([n],i)=>label(Llbl,[9.45+i*1.4,5.45,2.05],n,'','small'));
+label(Llbl,[5.75,9.75,3.15],'Claude','Chỉ thao tác · không lưu dữ liệu','newfocus');
+label(Llbl,[11.1,9.8,2.35],'Nhân viên vận hành','');
+label(Llbl,[12.85,9.15,1.55],'Excel xuất tay','','small oldonly');
+label(Llbl,[13.7,11.4,.95],'USB · Email · Zalo cá nhân','Nguy cơ mang dữ liệu đi','oldonly');
+label(Llbl,[1.0,11.5,3.3],'Internet / hệ thống khác','');
+label(Llbl,[3.3,12.1,.2],'Chưa cấp quyền = không truy cập','','small newonly');
+label(Llbl,[6.2,1.6,.75],'Dữ liệu đi nội bộ CRM → nền tảng gửi','','small newonly');
+
+/* model */
+const STEPS={
+ old:{dur:5200,spawn:800,speed:70,summary:'<b>Mô hình cũ:</b> nhân viên làm 3/4 bước. Dữ liệu bị xuất ra Excel, thao tác chậm, dễ sai, báo cáo bị động.',steps:[
+  {t:'Lập kế hoạch, vào CRM lấy & lọc danh sách KH, soạn tin nhắn',a:['staff','Nhân viên'],act:['crm','staff'],n:'Xuất Excel về máy cá nhân, lọc thủ công, dễ sai sót. Dữ liệu có thể bị mang ra ngoài.',r:[['o1','data'],['leak','leak']]},
+  {t:'Thao tác vào phần mềm nhắn tin, nhập danh sách cần gửi',a:['staff','Nhân viên'],act:['staff','msg'],n:'Nhập liệu tay, sai định dạng, trùng hoặc sót khách hàng.',r:[['o2','data'],['leak','leak']]},
+  {t:'Hệ thống tự động gửi Email · SMS · Zalo OA · OTT',a:['sys','Hệ thống'],act:['msg','ch'],n:'Phần này đã tự động sẵn trên nền tảng của đối tác.',r:[['c0','m0'],['c1','m1'],['c2','m2'],['c3','m3']]},
+  {t:'Đọc báo cáo, theo dõi, đánh giá, lập kế hoạch mới, lặp lại bước 1',a:['staff','Nhân viên'],act:['staff'],n:'Thiếu chuyên môn phân tích, không chủ động báo cáo.',r:[['o4','report']]}
+ ]},
+ new:{dur:3800,spawn:260,speed:170,summary:'<b>Mô hình mới:</b> Claude tự làm bước 1–3 qua MCP và chủ động báo cáo. Nhân viên chỉ làm bước 4: đánh giá & duyệt. Dữ liệu không rời CRM.',steps:[
+  {t:'Claude lập kế hoạch, truy vấn & lọc tệp khách hàng trên CRM qua MCP',a:['claude','Claude · MCP'],act:['claude','mcp','crm'],n:'Claude chỉ gửi lệnh lọc và nhận về số lượng, mã tệp. Không tải toàn bộ danh sách.',r:[['n1a','cmd'],['n1b','cmd'],['n1b','sum',1],['n1a','sum',1]]},
+  {t:'Claude soạn nội dung theo từng kênh và tạo chiến dịch qua MCP',a:['claude','Claude · MCP'],act:['claude','mcp','msg','crm'],n:'Danh sách KH đi thẳng CRM → nền tảng gửi, nằm trong hạ tầng đối tác, không qua Claude.',r:[['n1a','cmd'],['n2a','cmd'],['n2b','data']]},
+  {t:'Hệ thống gửi đa kênh: Zalo OA · OTT · SMS · Email',a:['sys','Hệ thống ← Claude kích hoạt'],act:['msg','ch','mcp'],n:'Claude theo dõi tiến độ gửi qua MCP, tự xử lý lỗi gửi.',r:[['c0','m0'],['c1','m1'],['c2','m2'],['c3','m3'],['n2a','cmd']]},
+  {t:'Claude tổng hợp báo cáo, chủ động gửi. Nhân viên đánh giá & duyệt kế hoạch mới',a:['staff','Nhân viên (bước duy nhất)'],act:['claude','staff'],n:'Nhân viên chỉ còn bước 4: đọc báo cáo, ra quyết định. Claude bắt đầu vòng mới.',r:[['n2a','sum',1],['n1a','sum',1],['n4c','report']]}
+ ]}
+};
+
+let mode='new',step=0,el_t=0,playing=true,last=performance.now();
+const spawnT={};let blkT=0,leakT=0;
+const packets=[];
+const PK={cmd:'#a78bfa',sum:'#ddd6fe',report:'#60a5fa',leak:'#ef4444',m0:CH[0][1],m1:CH[1][1],m2:CH[2][1],m3:CH[3][1]};
+function makePacket(kind){
+  const g=el('g',{},Lpk);
+  if(kind==='cmd')el('rect',{x:-4,y:-4,width:8,height:8,transform:'rotate(45)',fill:PK.cmd,stroke:'#fff','stroke-width':.8},g);
+  else if(kind==='sum')el('rect',{x:-5,y:-3.5,width:10,height:7,rx:2,fill:PK.sum},g);
+  else if(kind==='data'){const c=mode==='old'?'#fb923c':'#34d399';el('rect',{x:-8,y:-6,width:16,height:12,rx:2,fill:c},g);el('path',{d:'M-8,-6 L0,1 L8,-6',fill:'none',stroke:'rgba(0,0,0,.35)','stroke-width':1.3},g);}
+  else if(kind==='report'){el('rect',{x:-7,y:-8,width:14,height:16,rx:2,fill:PK.report},g);[-3,0,3].forEach(y=>el('line',{x1:-4,x2:4,y1:y,y2:y,stroke:'#0b1530','stroke-width':1.3},g));}
+  else if(kind==='leak'){el('rect',{x:-7,y:-5,width:14,height:10,rx:2,fill:'#ef4444'},g);}
+  else if(kind==='block'){el('circle',{r:6,fill:'#D97757',stroke:'#fff','stroke-width':1},g);}
+  else el('circle',{r:4.5,fill:PK[kind]||'#fff',stroke:'rgba(255,255,255,.7)','stroke-width':1},g);
+  return g;
+}
+function spawn(id,kind,rev,speedMul=1){
+  const path=motionEl[id],len=path.getTotalLength();
+  const cfg=STEPS[mode];
+  packets.push({path,len,s:0,rev:!!rev,kind,node:makePacket(kind),speed:cfg.speed*speedMul*(kind==='cmd'||kind==='sum'?1.25:1),err:mode==='old'&&kind==='data'&&Math.random()<.28,done:false});
+}
+function floatText(x,y,txt,col){
+  const t=el('text',{x,y,'text-anchor':'middle',class:'float',fill:col},Lfx);t.textContent=txt;
+  const t0=performance.now();(function f(n){const k=(n-t0)/1100;if(k>=1){t.remove();return;}t.setAttribute('y',y-k*22);t.setAttribute('opacity',1-k);requestAnimationFrame(f);})(t0);
+}
+
+const stepsOl=document.getElementById('steps');
+function renderList(){
+  stepsOl.innerHTML='';
+  STEPS[mode].steps.forEach((s,i)=>{
+    const li=document.createElement('li');
+    li.innerHTML=`<span class="k">${i+1}</span><span class="d">${s.t}<div><span class="chip ${s.a[0]}">${s.a[1]}</span></div></span>`;
+    li.onclick=()=>{setStep(i);};
+    stepsOl.appendChild(li);
+  });
+  document.getElementById('summary').innerHTML=STEPS[mode].summary;
+}
+function setStep(i){
+  step=i;el_t=0;
+  const s=STEPS[mode].steps[i];
+  [...stepsOl.children].forEach((li,k)=>li.classList.toggle('on',k===i));
+  document.getElementById('capNum').textContent=i+1;
+  document.getElementById('capT').innerHTML=`<span class="chip ${s.a[0]}">${s.a[1]}</span>${s.t}`;
+  document.getElementById('capN').textContent=s.n;
+  for(const id in routeEl)routeEl[id].classList.remove('on');
+  s.r.forEach(([id])=>routeEl[id].classList.add('on'));
+  if(mode==='new')routeEl.blk.classList.add('on');
+  for(const k in actors)actors[k].classList.toggle('on',s.act.includes(k));
+  for(const k in spawnT)delete spawnT[k];
+}
+function setMode(m){
+  mode=m;document.body.dataset.mode=m;
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  document.getElementById('modetag').textContent=m==='new'?'MÔ HÌNH MỚI · CLAUDE + MCP':'MÔ HÌNH CŨ · NHÂN VIÊN THỦ CÔNG';
+  packets.forEach(p=>p.node.remove());packets.length=0;
+  renderList();setStep(0);
+}
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+const playBtn=document.getElementById('play');
+playBtn.onclick=()=>{playing=!playing;playBtn.textContent=playing?'❚❚ Tạm dừng':'▶ Chạy tiếp';};
+
+function tick(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(playing){
+    const cfg=STEPS[mode],s=cfg.steps[step];
+    el_t+=dt*1000;
+    if(el_t>cfg.dur)setStep((step+1)%cfg.steps.length);
+    s.r.forEach(([id,kind,rev],k)=>{const key=id+kind+(rev||'');spawnT[key]=(spawnT[key]??(k*120))-dt*1000;
+      const iv=kind==='leak'?1700:(kind==='report'?cfg.spawn*2.2:cfg.spawn);
+      if(spawnT[key]<=0){spawn(id,kind,rev);spawnT[key]=iv*(.8+Math.random()*.4);}});
+    if(mode==='new'){blkT-=dt*1000;if(blkT<=0){spawn('blk','block',0,.45);blkT=2600;}}
+    for(let i=packets.length-1;i>=0;i--){
+      const p=packets[i];p.s+=p.speed*dt;const t=p.s/p.len;
+      const pt=p.path.getPointAtLength(p.rev?Math.max(0,p.len-p.s):Math.min(p.len,p.s));
+      p.node.setAttribute('transform',`translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)})`);
+      if(p.err&&t>.5){p.node.querySelector('rect').setAttribute('fill','#ef4444');floatText(pt.x,pt.y-12,'✕ Sai sót','#fca5a5');p.node.remove();packets.splice(i,1);continue;}
+      if(t>=1){
+        if(p.kind==='block')floatText(pt.x,pt.y-10,'⛔ Bị chặn','#fca5a5');
+        if(p.kind==='leak')floatText(pt.x,pt.y-12,'Rò rỉ!','#fca5a5');
+        p.node.remove();packets.splice(i,1);}
+    }
+  }
+  requestAnimationFrame(tick);
+}
+fitLabels();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitLabels);
+setMode('new');
+requestAnimationFrame(tick);
+
+/* token bars */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%');io.disconnect();}}),{threshold:.3});
+io.observe(document.querySelector('.token'));
+})();
+</script>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><section class="tt-crit" aria-label="Phản biện"><h2>Phản biện: vì sao nên làm?</h2><div class="tt-cols"><div class="tt-yes"><h3>Nên làm vì</h3><ul><li>Chiến dịch CSKH đa kênh là việc lặp lại nhiều bước; AI Agent qua MCP làm nhanh mà dữ liệu khách hàng vẫn nằm trong CRM của doanh nghiệp.</li><li>Mọi thao tác có nhật ký và bước duyệt của nhân viên.</li></ul></div><div class="tt-no"><h3>Nếu không làm</h3><ul><li>Nhân viên tự lọc file, soạn nội dung, tạo chiến dịch từng kênh: chậm, dễ gửi nhầm tệp khách.</li><li>Xuất dữ liệu khách hàng ra file rời để làm thủ công làm tăng rủi ro lộ dữ liệu cá nhân.</li></ul></div></div><p class="tt-sub">Cần đánh giá cho đơn vị của bạn? <a href="../lien-he.html">Liên hệ TORITECH</a>.</p></section><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="van-thu-so-vi-pham-giao-thong.html"><img src="../assets/img/du-an/thumb/van-thu-so-vi-pham-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Văn thư số xử lý vi phạm giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>

@@ -53,13 +53,25 @@ def tools_bar(video=None, video_name=None, share_url=None, title=None, print_btn
 
 
 # ---------------------------------------------------------------- navigation
+# Hạng mục: mọi dự án phải thuộc 1 hạng mục. page = trang hạng mục; solution = trang giải pháp (nếu có)
+CATS = {
+    "vision": {"name": "AI Vision & VMS", "cls": "v", "page": "du-an-ai-vision-vms.html", "solution": "ai-vision-vms.html",
+               "lead": "Giám sát bằng camera AI, quản lý video tập trung (VMS) và dữ liệu đăng kiểm, giao thông đô thị."},
+    "booking": {"name": "Đặt lịch & Điều phối", "cls": "b", "page": "du-an-dat-lich.html", "solution": "dat-lich.html",
+                "lead": "Đặt lịch hẹn quy mô lớn, điều phối dịch vụ, kiểm định, thanh toán và danh bạ cơ sở dịch vụ."},
+    "mcp": {"name": "MCP & AI Agent", "cls": "m", "page": "du-an-mcp-ai-agent.html", "solution": "mcp.html",
+            "lead": "AI Agent kết nối hệ thống qua Model Context Protocol (MCP): dịch vụ công, văn thư, vận hành doanh nghiệp."},
+    "game": {"name": "Game & Giải trí", "cls": "g", "page": "du-an-game-giai-tri.html", "solution": None,
+             "lead": "Game và ứng dụng giải trí chạy trực tiếp trên trình duyệt do TORITECH phát triển."},
+}
+
 NAV = [
     ("Giải pháp", [
         ("ai-vision-vms.html", "AI Camera Vision & VMS", "Thị giác máy tính, giám sát tập trung"),
         ("dat-lich.html", "Nền tảng Đặt lịch & Điều phối", "Chịu tải cao, đa kênh, chống nghẽn"),
         ("mcp.html", "Hệ sinh thái MCP & AI Agent", "Dịch vụ công · Doanh nghiệp · Nhân sự"),
     ]),
-    ("du-an.html", "Dự án & Hồ sơ"),
+    ("Dự án & Hồ sơ", [("du-an.html", "Tất cả dự án & hồ sơ", "Toàn bộ theo hạng mục")] + [(c["page"], c["name"], c["lead"].split(":")[0].split(",")[0]) for c in CATS.values()]),
     ("trust-center.html", "Bảo mật & Tuân thủ"),
     ("tai-lieu.html", "Tài liệu kỹ thuật"),
     ("ve-chung-toi.html", "Về chúng tôi"),
@@ -159,7 +171,8 @@ def org_jsonld():
     }
 
 
-def layout(path, title, desc, body, active=None, jsonld=None, scenes=True, dark_hero=True):
+def layout(path, title, desc, body, active=None, jsonld=None, scenes=True, dark_hero=True, og_image=None):
+    og = og_image or SITE_URL + "assets/img/og.png"
     url = SITE_URL + ("" if path == "index.html" else path)
     ld = [org_jsonld()] + (jsonld or [])
     ld_html = "".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in ld)
@@ -177,9 +190,9 @@ def layout(path, title, desc, body, active=None, jsonld=None, scenes=True, dark_
 <meta name="theme-color" content="#0b1426">
 <meta property="og:type" content="website"><meta property="og:site_name" content="TORITECH">
 <meta property="og:title" content="{escape(full_title)}"><meta property="og:description" content="{escape(desc)}">
-<meta property="og:url" content="{url}"><meta property="og:image" content="{SITE_URL}assets/img/og.png">
+<meta property="og:url" content="{url}"><meta property="og:image" content="{og}">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="vi_VN">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{escape(full_title)}"><meta name="twitter:description" content="{escape(desc)}"><meta name="twitter:image" content="{SITE_URL}assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{escape(full_title)}"><meta name="twitter:description" content="{escape(desc)}"><meta name="twitter:image" content="{og}">
 <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -227,30 +240,37 @@ def cta_band(h="Sẵn sàng đánh giá giải pháp cho đơn vị của bạn?
 <div class="actions"><a class="btn btn-dark" href="lien-he.html?topic=demo">Đặt lịch Demo</a><a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.5)" href="ho-so-nang-luc.html">Hồ sơ năng lực</a></div></div></div></section>'''
 
 
-# ---------------------------------------------------------------- showcase data (các artifact hiện có)
-with open(os.path.join(os.path.dirname(__file__), "showcase.json"), encoding="utf-8") as _f:
-    _SHOW = json.load(_f)
-WORKS = _SHOW["works"]   # bản trình diễn HTML trong showcase/
-DOCS = _SHOW["docs"]     # công văn / đề xuất: chỉ thẻ tóm tắt
-CATS = {"vision": ("AI Vision & VMS", "v"), "booking": ("Đặt lịch & Điều phối", "b"), "mcp": ("MCP & AI Agent", "m"), "game": ("Game & Giải trí", "g")}
+# ---------------------------------------------------------------- dự án (tools/projects.json)
+import du_an  # noqa: E402
+
+with open(os.path.join(os.path.dirname(__file__), "projects.json"), encoding="utf-8") as _f:
+    _PRJ = json.load(_f)
+WORKS = _PRJ["works"]   # trang dự án HTML trong du-an/
+DOCS = _PRJ["docs"]     # công văn / đề xuất: chỉ thẻ tóm tắt
+for _x in WORKS + DOCS:
+    if _x.get("cat") not in CATS:
+        raise SystemExit(f'projects.json: "{_x.get("title")}" thiếu hạng mục hợp lệ (cat ∈ {list(CATS)})')
 
 
-def work_card(w, live=True):
-    name, cls = CATS[w["cat"]]
-    thumb = (f'<iframe src="{w["href"]}" loading="lazy" tabindex="-1" aria-hidden="true" title="Xem trước"></iframe>' if live else "")
+def work_card(w):
+    c = CATS[w["cat"]]
     return f'''<article class="work reveal" data-cat="{w["cat"]}">
-<div class="thumb"><span class="tag {cls}">{name}</span>{thumb}</div>
-<div class="body"><span class="tag d" style="align-self:flex-start">{w["kind"]}</span><h3>{w["title"]}</h3><p>{w["desc"]}</p>
-<div class="meta"><a class="btn btn-dark btn-sm" href="{w["href"]}" target="_blank" rel="noopener">Mở bản trình diễn ↗</a>
+<a class="thumb" href="{w["href"]}"><span class="tag {c["cls"]}">{c["name"]}</span><img src="{du_an.thumb_rel(w)}" alt="Ảnh trang {escape(w["title"])}" loading="lazy" decoding="async" width="640" height="336"></a>
+<div class="body"><span class="tag d" style="align-self:flex-start">{w["kind"]}</span><h3><a href="{w["href"]}">{w["title"]}</a></h3><p>{w["desc"]}</p>
+<div class="meta"><a class="btn btn-dark btn-sm" href="{w["href"]}">Xem dự án →</a>
 <button class="tool" type="button" data-share data-share-url="{w["href"]}" data-share-title="{escape(w["title"])}">{I["share"]}Chia sẻ</button></div></div></article>'''
 
 
 def doc_card(d):
-    name, cls = CATS[d["cat"]]
+    c = CATS[d["cat"]]
     return f'''<article class="work reveal" data-cat="{d["cat"]}">
-<div class="thumb"><span class="tag {cls}">{name}</span><div class="doc-thumb"><div>{I["doc"]}<b>Hồ sơ đề xuất gửi cơ quan quản lý</b></div></div></div>
+<div class="thumb"><span class="tag {c["cls"]}">{c["name"]}</span><div class="doc-thumb"><div>{I["doc"]}<b>Hồ sơ đề xuất gửi cơ quan quản lý</b></div></div></div>
 <div class="body"><span class="tag d" style="align-self:flex-start">Công văn / Đề xuất</span><h3>{d["title"]}</h3><p>{d["desc"]}</p>
 <div class="meta"><a class="btn btn-dark btn-sm" href="lien-he.html?topic=hoso">Yêu cầu bản đầy đủ</a></div></div></article>'''
+
+
+def cat_cards(cat):
+    return "".join(work_card(w) for w in WORKS if w["cat"] == cat), "".join(doc_card(d) for d in DOCS if d["cat"] == cat)
 
 
 INTEGRATIONS = [
@@ -382,8 +402,9 @@ def spec_table(rows):
 
 
 def related(cat):
-    items = [work_card(w) for w in WORKS if w["cat"] == cat] + [doc_card(d) for d in DOCS if d["cat"] == cat]
-    return f'<section style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Dự án liên quan</span><h2>Bản trình diễn &amp; hồ sơ</h2></div><div class="grid g3">{"".join(items)}</div></div></section>'
+    w, d = cat_cards(cat)
+    c = CATS[cat]
+    return f'<section style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Dự án liên quan</span><h2>Dự án &amp; hồ sơ: {c["name"]}</h2></div><div class="grid g3">{w}{d}</div><p style="margin-top:22px"><a class="btn btn-dark" href="{c["page"]}">Xem hạng mục {c["name"]} →</a></p></div></section>'
 
 
 def roles(mgr, eng):
@@ -499,16 +520,34 @@ def p_trust():
 
 
 def p_projects():
-    cards = "".join(work_card(w) for w in WORKS) + "".join(doc_card(d) for d in DOCS)
-    filt = '<div class="filters" role="group" aria-label="Lọc theo hạng mục"><button type="button" aria-pressed="true" data-f="all">Tất cả</button>' + "".join(f'<button type="button" aria-pressed="false" data-f="{k}">{v[0]}</button>' for k, v in CATS.items()) + "</div>"
-    js = '''<script>document.addEventListener('DOMContentLoaded',function(){var bs=document.querySelectorAll('[data-f]');bs.forEach(function(b){b.addEventListener('click',function(){var f=b.getAttribute('data-f');bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});document.querySelectorAll('.work[data-cat]').forEach(function(c){c.style.display=(f==='all'||c.getAttribute('data-cat')===f)?'':'none'})})})});</script>'''
-    table = "".join(f"<tr><td>{CATS[w['cat']][0]}</td><td>{w['title']}</td><td>{w.get('kind', 'Công văn / Đề xuất')}</td></tr>" for w in WORKS + DOCS)
+    secs, table = [], []
+    for k, c in CATS.items():
+        w, d = cat_cards(k)
+        n = sum(1 for x in WORKS + DOCS if x["cat"] == k)
+        secs.append(f'''<section id="{k}"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Hạng mục · {n} mục</span><h2><a href="{c["page"]}">{c["name"]}</a></h2><p class="lead">{c["lead"]}</p></div>
+<div class="grid g3">{w}{d}</div><p style="margin-top:22px"><a class="btn btn-dark" href="{c["page"]}">Mở hạng mục {c["name"]} →</a></p></div></section>''')
+        table += [f'<tr><td><a href="{c["page"]}">{c["name"]}</a></td><td>{x["title"]}</td><td>{x.get("kind", "Công văn / Đề xuất")}</td></tr>' for x in WORKS + DOCS if x["cat"] == k]
+    jump = '<div class="filters" role="navigation" aria-label="Hạng mục">' + "".join(f'<a class="tool" href="{c["page"]}">{c["name"]}</a>' for c in CATS.values()) + "</div>"
     body = page_hero("Dự án &amp; Hồ sơ", "Portfolio", "Dự án, bản trình diễn &amp; hồ sơ đề xuất",
-                     f"Toàn bộ {len(WORKS)} bản trình diễn tương tác và {len(DOCS)} hồ sơ đề xuất, phân theo ba trụ cột giải pháp và mảng Game &amp; Giải trí. Bản trình diễn mở được trực tiếp; hồ sơ gửi cơ quan quản lý được cung cấp theo yêu cầu.", title="Dự án & Hồ sơ – TORITECH") + f'''
-<section><div class="wrap">{filt}<div class="grid g3">{cards}</div>
-<div class="prose reveal" style="max-width:none;margin-top:40px"><h2>Danh mục theo hạng mục</h2><table><thead><tr><th>Hạng mục</th><th>Tên</th><th>Loại</th></tr></thead><tbody>{table}</tbody></table>
-<p class="meta-line">Dữ liệu trong các bản trình diễn là dữ liệu mẫu hoặc dữ liệu công khai của cơ sở kinh doanh (địa chỉ, giờ làm việc, hotline); thông tin cá nhân đã được che hoặc thay bằng dữ liệu giả lập.</p></div></div></section>{js}{cta_band()}'''
-    return layout("du-an.html", "Dự án & Hồ sơ", "Bản trình diễn và hồ sơ đề xuất của TORITECH: kiến trúc dữ liệu đăng kiểm, văn thư số vi phạm giao thông, DVC Connector, đặt lịch kiểm định khí thải, đặt lịch đa kênh, danh bạ đăng kiểm.", body, scenes=False)
+                     f"{len(WORKS)} dự án và {len(DOCS)} hồ sơ đề xuất của TORITECH, chia theo {len(CATS)} hạng mục. Mở từng dự án để xem trực tiếp; hồ sơ gửi cơ quan quản lý được cung cấp theo yêu cầu.", extra=jump, title="Dự án & Hồ sơ – TORITECH") + "".join(secs) + f'''
+<section><div class="wrap"><div class="prose reveal" style="max-width:none"><h2>Danh mục theo hạng mục</h2><table><thead><tr><th>Hạng mục</th><th>Tên</th><th>Loại</th></tr></thead><tbody>{"".join(table)}</tbody></table>
+<p class="meta-line">Dữ liệu trong các dự án trình diễn là dữ liệu mẫu hoặc dữ liệu công khai của cơ sở kinh doanh (địa chỉ, giờ làm việc, hotline); thông tin cá nhân đã được che hoặc thay bằng dữ liệu giả lập.</p></div></div></section>{cta_band()}'''
+    return layout("du-an.html", "Dự án & Hồ sơ", "Dự án và hồ sơ đề xuất của TORITECH theo hạng mục: AI Vision & VMS, Đặt lịch & Điều phối, MCP & AI Agent, Game & Giải trí.", body, scenes=False)
+
+
+def p_category(k):
+    c = CATS[k]
+    w, d = cat_cards(k)
+    first = next((x for x in WORKS if x["cat"] == k), None)
+    sol = f'<a class="btn btn-ghost btn-sm" style="color:#fff;border-color:rgba(255,255,255,.4)" href="{c["solution"]}">Giải pháp {c["name"]} →</a>' if c["solution"] else ""
+    others = '<div class="filters" role="navigation" aria-label="Hạng mục khác"><a class="tool" href="du-an.html">Tất cả</a>' + "".join(f'<a class="tool" href="{o["page"]}"{" aria-current=page" if o is c else ""}>{o["name"]}</a>' for o in CATS.values()) + "</div>"
+    body = page_hero(f'<a href="du-an.html">Dự án</a> / {c["name"]}', "Hạng mục dự án", c["name"], c["lead"], extra=f'<div class="actions" style="margin:14px 0">{sol}</div>{others}', title=f'Dự án {c["name"]} – TORITECH')
+    body += f'<section><div class="wrap"><div class="grid g3">{w}</div></div></section>' if w else ""
+    body += f'<section id="ho-so" style="background:#eef3fa"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Hồ sơ đề xuất</span><h2>Công văn &amp; đề xuất</h2><p class="lead">Bản tóm tắt; bản đầy đủ cung cấp theo yêu cầu.</p></div><div class="grid g3">{d}</div></div></section>' if d else ""
+    items = [{"@type": "ListItem", "position": i + 1, "url": SITE_URL + x["href"], "name": x["title"]} for i, x in enumerate(x for x in WORKS if x["cat"] == k)]
+    ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f'Dự án {c["name"]}', "url": SITE_URL + c["page"], "mainEntity": {"@type": "ItemList", "itemListElement": items}}]
+    return layout(c["page"], f'Dự án {c["name"]}', f'{c["lead"]} Danh sách dự án và hồ sơ đề xuất của TORITECH.', body + cta_band(), active="du-an.html", jsonld=ld, scenes=False,
+                  og_image=SITE_URL + du_an.img_rel(first) if first else None)
 
 
 def p_docs():
@@ -610,24 +649,17 @@ def p_profile():
 
 
 def p_contact():
+    em = CO["email_support"]
     body = page_hero("Liên hệ", "Liên hệ tư vấn", "Đặt lịch Demo &amp; Liên hệ tư vấn",
-                     "Để lại thông tin, kỹ sư giải pháp sẽ liên hệ trong giờ làm việc. Hoặc gọi/Zalo trực tiếp " + CO["hotline"] + ".", title="Liên hệ TORITECH") + f'''
-<section><div class="wrap grid g2" style="align-items:start">
-<form class="card form" id="contact-form" novalidate>
-<div class="row"><label>Họ và tên *<input name="name" required autocomplete="name"></label><label>Đơn vị / Doanh nghiệp<input name="org" autocomplete="organization"></label></div>
-<div class="row"><label>Số điện thoại *<input name="phone" required type="tel" autocomplete="tel" pattern="[0-9+ .]{{9,15}}"></label><label>Email<input name="email" type="email" autocomplete="email"></label></div>
-<label>Nhu cầu *<select name="topic" id="topic" required>
-<option value="demo">Đặt lịch Demo giải pháp</option><option value="vision">AI Camera Vision &amp; VMS</option><option value="booking">Nền tảng đặt lịch</option><option value="mcp">Hệ sinh thái MCP / AI Agent</option>
-<option value="hoso">Hồ sơ năng lực / hồ sơ đề xuất</option><option value="dulieu">Yêu cầu về dữ liệu cá nhân</option><option value="khac">Khác</option></select></label>
-<label>Nội dung<textarea name="msg" rows="4" placeholder="Mô tả ngắn bài toán, quy mô, thời gian mong muốn…"></textarea></label>
-<label class="consent"><input type="checkbox" name="consent" required> <span>Tôi đồng ý để TORITECH xử lý thông tin trên nhằm liên hệ tư vấn, theo <a href="chinh-sach-bao-ve-du-lieu-ca-nhan.html">Chính sách bảo vệ dữ liệu cá nhân</a> và <a href="dieu-khoan-su-dung.html">Điều khoản sử dụng</a>. *</span></label>
-<div class="actions"><button class="btn btn-primary" type="submit" value="zalo">Gửi qua Zalo</button>{'<button class="btn btn-dark" type="submit" value="email">Gửi qua Email</button>' if CO["email_support"] else ''}<a class="btn btn-ghost" href="tel:{CO["hotline_tel"]}">Gọi {CO["hotline"]}</a></div>
-<p class="meta-line" style="margin:0">Website không lưu thông tin bạn nhập. Nội dung được soạn sẵn và gửi qua kênh bạn chọn.</p>
-</form>
-<div class="card"><h3>Thông tin liên hệ</h3><div class="prose" style="padding:0;border:0">{entity_table()}</div></div>
+                     "Gửi email hoặc gọi/Zalo trực tiếp cho kỹ sư giải pháp. Chúng tôi phản hồi trong giờ làm việc.", title="Liên hệ TORITECH") + f'''
+<section><div class="wrap grid g3" style="align-items:stretch">
+<a class="card contact-ch reveal" id="ct-email" href="mailto:{em}?subject=Li%C3%AAn%20h%E1%BB%87%20t%C6%B0%20v%E1%BA%A5n%20TORITECH"><span class="eyebrow">Email</span><h3>{em}</h3><p>Mô tả ngắn bài toán, quy mô, thời gian mong muốn. Có thể đính kèm tài liệu.</p><span class="btn btn-primary btn-sm">Gửi email →</span></a>
+<a class="card contact-ch reveal" href="tel:{CO["hotline_tel"]}"><span class="eyebrow">Điện thoại</span><h3>{CO["hotline"]}</h3><p>Gọi trực tiếp trong giờ làm việc để đặt lịch demo hoặc trao đổi nhanh.</p><span class="btn btn-dark btn-sm">Gọi ngay →</span></a>
+<a class="card contact-ch reveal" href="https://zalo.me/{CO["zalo"]}" rel="noopener" target="_blank"><span class="eyebrow">Zalo</span><h3>{CO["hotline"]}</h3><p>Nhắn Zalo để gửi hình ảnh, tài liệu hoặc hẹn lịch gọi video.</p><span class="btn btn-ghost btn-sm">Nhắn Zalo →</span></a>
 </div></section>
-<script>(function(){{var t=new URLSearchParams(location.search).get('topic');if(t){{var s=document.getElementById('topic');if(s&&s.querySelector('option[value="'+t+'"]'))s.value=t;}}}})();</script>'''
-    return layout("lien-he.html", "Liên hệ tư vấn & Đặt lịch Demo", "Liên hệ TORITECH để đặt lịch demo AI Camera Vision & VMS, nền tảng đặt lịch, hệ sinh thái MCP, hoặc nhận hồ sơ năng lực.", body, scenes=False)
+<section style="padding-top:0"><div class="wrap"><div class="card"><h3>Thông tin pháp nhân</h3><div class="prose" style="padding:0;border:0">{entity_table()}</div></div></div></section>
+<script>(function(){{var T={{demo:"Đặt lịch Demo giải pháp",vision:"Tư vấn AI Camera Vision & VMS",booking:"Tư vấn nền tảng đặt lịch",mcp:"Tư vấn hệ sinh thái MCP / AI Agent",hoso:"Yêu cầu hồ sơ năng lực / hồ sơ đề xuất",dulieu:"Yêu cầu về dữ liệu cá nhân"}};var t=new URLSearchParams(location.search).get("topic");if(t&&T[t]){{var a=document.getElementById("ct-email");a.href="mailto:{em}?subject="+encodeURIComponent(T[t]+" – TORITECH");}}}})();</script>'''
+    return layout("lien-he.html", "Liên hệ tư vấn & Đặt lịch Demo", f"Liên hệ TORITECH qua email {em} hoặc hotline/Zalo {CO['hotline']} để đặt lịch demo AI Camera Vision & VMS, nền tảng đặt lịch, hệ sinh thái MCP, hoặc nhận hồ sơ năng lực.", body, scenes=False)
 
 
 def p_legal(path, title, desc, sections, intro):
@@ -655,36 +687,8 @@ def write(path, content):
     return path
 
 
-SHOW_META_START, SHOW_META_END = "<!-- toritech:meta -->", "<!-- /toritech:meta -->"
-
-
-def inject_showcase_meta():
-    """Chèn thẻ SEO/OG vào <head> các trang showcase (không đổi nội dung artifact). Ảnh: assets/img/showcase/<ten>.png (tools/og_shots.js)."""
-    import re
-    root = os.path.join(os.path.dirname(__file__), "..")
-    for w in WORKS:
-        fp = os.path.join(root, w["href"])
-        if not os.path.exists(fp):
-            continue
-        html = open(fp, encoding="utf-8").read()
-        html = re.sub(re.escape(SHOW_META_START) + ".*?" + re.escape(SHOW_META_END) + "\n?", "", html, flags=re.S)
-        stem = os.path.splitext(os.path.basename(w["href"]))[0]
-        img_rel = f"assets/img/showcase/{stem}.png"
-        img = SITE_URL + (img_rel if os.path.exists(os.path.join(root, img_rel)) else "assets/img/og.png")
-        url, t, d = SITE_URL + w["href"], escape(w["title"] + " – TORITECH"), escape(w["desc"])
-        meta = (f'{SHOW_META_START}\n<meta name="description" content="{d}"><link rel="canonical" href="{url}">\n'
-                f'<meta property="og:type" content="website"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">\n'
-                f'<meta property="og:title" content="{t}"><meta property="og:description" content="{d}"><meta property="og:url" content="{url}">\n'
-                f'<meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">\n'
-                f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{t}"><meta name="twitter:description" content="{d}"><meta name="twitter:image" content="{img}">\n'
-                f'{SHOW_META_END}\n')
-        m = re.search(r"<meta[^>]*charset[^>]*>\n?", html, flags=re.I) or re.search(r"<head[^>]*>\n?", html, flags=re.I)
-        html = html[:m.end()] + ("" if html[m.end() - 1] == "\n" else "\n") + meta + html[m.end():]
-        with open(fp, "w", encoding="utf-8") as f:
-            f.write(html)
-
-
 def main():
+    du_an.ensure_images(WORKS)
     pages = {
         "index.html": p_index(), "ai-vision-vms.html": p_vision(), "dat-lich.html": p_booking(), "mcp.html": p_mcp(),
         "trust-center.html": p_trust(), "du-an.html": p_projects(), "tai-lieu.html": p_docs(), "ve-chung-toi.html": p_about(),
@@ -692,8 +696,12 @@ def main():
     }
     for path, title, desc, intro, sections in legal.pages(CO):
         pages[path] = p_legal(path, title, desc, sections, intro)
+    for k in CATS:
+        pages[CATS[k]["page"]] = p_category(k)
     for p, c in pages.items():
         write(p, c)
+    du_an.inject_chrome(WORKS, DOCS, CATS, CO, SITE_URL, LOGO)
+    du_an.write_redirects(WORKS, SITE_URL)
 
     # sitemap / robots / llms.txt
     urls = [p for p in pages if p != "404.html"] + [w["href"] for w in WORKS]
@@ -722,7 +730,6 @@ Liên hệ: hotline/Zalo {CO["hotline"]} · Trụ sở: {CO["address"]}
 """ + "".join(f"  - [{w['title']}]({SITE_URL}{w['href']}): {w['desc']}\n" for w in WORKS)
     write("llms.txt", llms)
     write(".nojekyll", "")
-    inject_showcase_meta()
     print("Built", len(pages), "pages")
 
 

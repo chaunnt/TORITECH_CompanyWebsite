@@ -14,7 +14,7 @@ COMPANY = {
     "hotline_tel": "+84343902960",
     "zalo": "0343902960",
     # Điền email chính thức khi có tên miền riêng; để trống thì site hiển thị "Đang cập nhật"
-    "email_support": "",
+    "email_support": "chau.nguyen@toritech.vn",
     "email_security": "",
     "email_dpo": "",
     "industries": "Lập trình máy vi tính (6201), Tư vấn máy vi tính và quản trị hệ thống (6202), Hoạt động dịch vụ công nghệ thông tin khác (6209), Bán buôn máy vi tính và phần mềm (4651), Thiết kế chuyên dụng (7410)",

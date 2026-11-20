@@ -250,3 +250,9 @@ details p{margin:10px 0 0;color:var(--muted)}
 .dark a.btn-primary:hover,.site-nav a.btn-primary:hover{background:#67e8f9;color:#06202a}
 .dark a.btn-dark,a.btn-dark{color:#fff}
 .band a.btn-dark{background:#0b1426}
+.work .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.work h3 a{color:inherit;text-decoration:none}.work h3 a:hover{color:var(--accent,#0e7490)}
+a.contact-ch{display:flex;flex-direction:column;gap:6px;color:inherit;text-decoration:none}
+a.contact-ch h3{margin:2px 0;word-break:break-word}a.contact-ch p{color:var(--muted);margin:0 0 8px;flex:1}
+a.contact-ch .btn{align-self:flex-start}a.contact-ch:hover{border-color:#14b8a6}
+.filters a.tool{text-decoration:none}.filters a.tool[aria-current]{background:#14b8a6;color:#04201c;border-color:#14b8a6}

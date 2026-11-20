@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- toritech:meta -->
+<meta name="description" content="Cổng trường kết hợp trụ ETC và camera AI nhận dạng biển số: tự động tra cứu đăng ký xe, ghi nhận lịch sử ra vào và cảnh báo phương tiện vi phạm. Dữ liệu minh hoạ."><link rel="canonical" href="https://toritech.vn/du-an/giam-sat-bai-xe-hoc-duong.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="Giám sát bãi giữ xe học đường – AI Vision &amp; VMS | TORITECH"><meta property="og:description" content="Cổng trường kết hợp trụ ETC và camera AI nhận dạng biển số: tự động tra cứu đăng ký xe, ghi nhận lịch sử ra vào và cảnh báo phương tiện vi phạm. Dữ liệu minh hoạ."><meta property="og:url" content="https://toritech.vn/du-an/giam-sat-bai-xe-hoc-duong.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/giam-sat-bai-xe-hoc-duong.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Giám sát bãi giữ xe học đường – AI Vision &amp; VMS | TORITECH"><meta name="twitter:description" content="Cổng trường kết hợp trụ ETC và camera AI nhận dạng biển số: tự động tra cứu đăng ký xe, ghi nhận lịch sử ra vào và cảnh báo phương tiện vi phạm. Dữ liệu minh hoạ."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/giam-sat-bai-xe-hoc-duong.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mô hình giám sát bãi xe học đường</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--panel:#121b2f;--panel2:#18233b;--line:#25324f;--text:#e7edf7;--muted:#93a3c0;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--acc:#38bdf8;--rec:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2a4d 0,transparent 60%),var(--bg);color:var(--text);font-family:"Be Vietnam Pro",system-ui,sans-serif;font-size:14px;line-height:1.45}
+.wrap{max-width:1240px;margin:0 auto;padding:18px 14px 40px}
+header h1{margin:0;font-size:clamp(19px,2.6vw,28px);font-weight:800;letter-spacing:-.01em}
+header p{margin:4px 0 14px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--acc);text-transform:uppercase;margin-bottom:6px}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px -20px #000a}
+.capbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel2);min-height:46px}
+.capdot{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 0 #38bdf880;animation:pulse 1.6s infinite;flex:none}
+@keyframes pulse{70%{box-shadow:0 0 0 10px #38bdf800}100%{box-shadow:0 0 0 0 #38bdf800}}
+#cap{font-weight:700;font-size:15px}
+canvas{display:block;width:100%}
+.controls{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:var(--panel2)}
+.btn{appearance:none;border:1px solid var(--line);background:#0e1628;color:var(--text);font:600 13px "Be Vietnam Pro",sans-serif;padding:8px 12px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.btn:hover{border-color:#3b4d75}
+.btn .d{width:9px;height:9px;border-radius:50%}
+.btn.on{background:#1d2c4c;border-color:var(--acc)}
+.spacer{flex:1}
+.grid{display:grid;grid-template-columns:1fr 1.15fr 1.25fr;gap:12px;margin-top:12px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.card h3{margin:0 0 10px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+ol.steps li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;border:1px solid transparent;color:var(--muted);transition:.3s}
+ol.steps li .n{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;background:#0e1628;border:1px solid var(--line)}
+ol.steps li.active{background:#16233f;border-color:var(--acc);color:var(--text)}
+ol.steps li.active .n{background:var(--acc);color:#04121f;border-color:var(--acc)}
+ol.steps li.done{color:var(--text)}
+ol.steps li.done .n{background:#14532d;border-color:var(--ok);color:#bbf7d0}
+ol.steps li.skip{opacity:.45;text-decoration:line-through}
+ol.steps li.bad.active{border-color:var(--bad)} ol.steps li.bad.active .n{background:var(--bad);border-color:var(--bad);color:#fff}
+ol.steps li.warnc.active{border-color:var(--warn)} ol.steps li.warnc.active .n{background:var(--warn);border-color:var(--warn)}
+.lk{display:flex;flex-direction:column;gap:0}
+.lk .row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.lk .row span:first-child{color:var(--muted)}
+.lk .row span:last-child{text-align:right;font-weight:600}
+.lk .ok{color:#4ade80}.lk .bad{color:#f87171}.lk .warn{color:#fbbf24}
+.plate{display:inline-block;white-space:nowrap;background:#f8fafc;color:#0f172a;border:2px solid #0f172a;border-radius:6px;padding:2px 8px;font-weight:800;letter-spacing:.04em}
+.verdict{margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:700}
+.verdict.ok{background:#052e1a;border:1px solid #166534;color:#86efac}
+.verdict.bad{background:#3b0a0a;border:1px solid #991b1b;color:#fecaca}
+.verdict.etc{background:#062a3a;border:1px solid #0369a1;color:#bae6fd}
+.verdict.warn{background:#3a2604;border:1px solid #92400e;color:#fde68a}
+.placeholder{color:var(--muted);font-style:italic;padding:8px 0}
+.notifs{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto}
+.nf{display:flex;gap:10px;padding:10px;border-radius:12px;background:#0e1628;border:1px solid var(--line);border-left:4px solid var(--bad);animation:slide .4s ease}
+.nf.warn{border-left-color:var(--warn)}.nf.etc{border-left-color:#0ea5e9}.nf.rec{border-left-color:var(--rec);background:#2a0d10}
+.nf .ic{font-size:22px;line-height:1}
+.nf b{display:block;font-size:13px}
+.nf small{color:var(--muted);display:block;margin-top:2px;font-size:11.5px}
+.nf p{margin:4px 0 0;font-size:13px}
+@keyframes slide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+.st{background:#0e1628;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.st b{display:block;font-size:20px}.st span{color:var(--muted);font-size:12px}
+table{width:100%;min-width:600px;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+.pill{display:inline-block;white-space:nowrap;padding:2px 8px;border-radius:99px;font-size:11.5px;font-weight:700}
+.pill.ok{background:#14532d;color:#bbf7d0}.pill.bad{background:#7f1d1d;color:#fecaca}.pill.etc{background:#0c4a6e;color:#bae6fd}.pill.warn{background:#78350f;color:#fde68a}.pill.rec{background:#450a0a;color:#fca5a5;border:1px solid #dc2626}
+tr.new{animation:slide .5s ease}
+.foot{color:var(--muted);font-size:12px;margin-top:14px}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+#tt-foot .tt-crit{margin:0 0 30px;padding:0 0 26px;border-bottom:1px solid #1e2a44}
+#tt-foot .tt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:12px 0}
+#tt-foot .tt-cols>div{padding:14px 16px;border-radius:12px;border:1px solid #1e2a44;background:#111c33}
+#tt-foot .tt-yes{border-left:4px solid #14b8a6}#tt-foot .tt-no{border-left:4px solid #f97316}
+#tt-foot h3{margin:0 0 8px;font-size:15px;font-weight:700;color:#fff}
+#tt-foot .tt-cols ul{display:block;padding-left:18px;list-style:disc}#tt-foot .tt-cols li{margin:0 0 6px;color:#cbd5e1}
+#tt-foot .tt-sub a{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-ai-vision-vms.html">AI Vision &amp; VMS</a> / Giám sát bãi giữ xe học đường</nav><a class="tt-btn" href="../du-an-ai-vision-vms.html">← Về hạng mục AI Vision &amp; VMS</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<div class="wrap">
+<header>
+  <div class="tag">Mô hình 2.5D · Trụ ETC + Camera AI + VNeTraffic</div>
+  <h1>Giám sát bãi giữ xe học đường</h1>
+  <p>Xe chạy qua trụ ETC tại cổng không cần dừng: quét thẻ ETC + nhận dạng biển số, tự động tra cứu dữ liệu đăng ký xe và gửi cảnh báo khi phát hiện vi phạm.</p>
+</header>
+
+<div class="stage">
+  <div class="capbar"><div class="capdot" id="capdot"></div><div id="cap">Đang khởi tạo…</div></div>
+  <canvas id="cv"></canvas>
+  <div class="controls" id="ctrls">
+    <button class="btn" data-k="ok"><span class="d" style="background:var(--ok)"></span>Luồng cơ bản</button>
+    <button class="btn" data-k="v1"><span class="d" style="background:var(--bad)"></span>VP1 · Mô tô phân khối lớn</button>
+    <button class="btn" data-k="v2"><span class="d" style="background:var(--rec)"></span>VP2 · Tái phạm → phạt nguội</button>
+    <button class="btn" data-k="v3"><span class="d" style="background:var(--warn)"></span>VP3 · Ô tô hết hạn ĐK/BH</button>
+    <button class="btn" data-k="v4"><span class="d" style="background:#0ea5e9"></span>Chưa có thẻ ETC</button>
+    <div class="spacer"></div>
+    <button class="btn" id="replay">⟲ Chạy lại</button>
+    <button class="btn" id="auto">▶ Tự động</button>
+    <button class="btn" id="spd">Tốc độ 1×</button>
+  </div>
+</div>
+
+<div class="grid">
+  <section class="card"><h3>Các bước xử lý</h3><ol class="steps" id="steps"></ol></section>
+  <section class="card"><h3>Kết quả tra cứu VNeTraffic / Cục CSGT</h3><div id="lookup" class="lk"></div></section>
+  <section class="card"><h3>Thông báo đã gửi</h3><div id="notifs" class="notifs"></div></section>
+</div>
+
+<section class="card" style="margin-top:12px">
+  <h3>Lịch sử ra vào bãi xe · hôm nay</h3>
+  <div class="stats">
+    <div class="st"><b id="sTotal">0</b><span>Lượt xe vào</span></div>
+    <div class="st"><b id="sOk" style="color:#4ade80">0</b><span>Hợp lệ</span></div>
+    <div class="st"><b id="sWarn" style="color:#fbbf24">0</b><span>Cảnh báo / nhắc nhở</span></div>
+    <div class="st"><b id="sRec" style="color:#f87171">0</b><span>Biên bản phạt nguội</span></div>
+  </div>
+  <div class="scroll"><table><thead><tr><th>Giờ</th><th>Biển số</th><th>Phương tiện</th><th>Người điều khiển</th><th>Kết quả</th></tr></thead><tbody id="hist"></tbody></table></div>
+</section>
+<div class="foot">Mô phỏng minh hoạ. Tên người, biển số, mốc thời gian và số liệu đều là dữ liệu giả định.</div>
+</div>
+
+<script>
+/* ================= DỮ LIỆU KỊCH BẢN ================= */
+const SC={
+ ok:{key:'ok',v:'ebike',color:'#14b8a6',helmet:'#facc15',plate:['59-MĐ1','012.34'],plateText:'59-MĐ1 012.34',clock:'06:41',
+  vehicleName:'Xe máy điện',driver:'HS Nguyễn Minh An · 11A3',verdict:'ok',badge:'Hợp lệ',
+  tag:'3416 1F0A 0001 2234',p1:[[2.3,7.6],[2.3,9.6],[8.3,9.6]],pB:[[8.3,9.6],[11,9.6]],p2:[[11,9.6],[12.2,9.6],[12.2,7.6]],
+  rows:[['Chủ xe','Nguyễn Văn Hùng (phụ huynh)',''],['Loại phương tiện','Xe máy điện (xe gắn máy)',''],['Công suất','1,2 kW · ≤ 4 kW','ok'],['HS đăng ký gửi xe','Nguyễn Minh An · 11A3 · 16 tuổi',''],['Đối chiếu quy định','Được phép điều khiển','ok']],
+  vtext:'✓ Xe phù hợp – không cảnh báo, chỉ ghi nhận lịch sử.',
+  step5:'Không vi phạm → không gửi cảnh báo',recipients:[]},
+ v1:{key:'v1',v:'moto',color:'#dc2626',helmet:'#111827',plate:['59-X1','456.78'],plateText:'59-X1 456.78',clock:'06:47',
+  vehicleName:'Mô tô 150 cm³',driver:'HS Trần Quốc Bảo · 11A2',verdict:'bad',badge:'Vi phạm · 150 cm³',
+  tag:'3416 1F0A 0045 6781',p1:[[2.3,7.6],[2.3,9.6],[8.3,9.6]],pB:[[8.3,9.6],[11,9.6]],p2:[[11,9.6],[13.4,9.6],[13.4,7.6]],
+  rows:[['Chủ xe','Trần Thị Lan (phụ huynh)',''],['Loại phương tiện','Mô tô hai bánh',''],['Dung tích xi-lanh','150 cm³ · vượt 50 cm³','bad'],['HS đăng ký gửi xe','Trần Quốc Bảo · 11A2 · 16 tuổi',''],['GPLX hạng A1','Không có','bad'],['Lịch sử vi phạm','Chưa có → lần 1','warn']],
+  vtext:'✕ Vi phạm: học sinh chưa đủ điều kiện điều khiển mô tô trên 50 cm³.',
+  step5:'Gửi cảnh báo: VNeTraffic → chủ xe · Hiệu trưởng · App trường → phụ huynh & học sinh',
+  recipients:['owner','school','parent','student'],
+  msg:{owner:['VNeTraffic → Chủ xe','Xe 59-X1 456.78 (mô tô 150 cm³) đứng tên bà Trần Thị Lan do học sinh 16 tuổi điều khiển vào trường lúc 06:47. Đề nghị chủ xe nhắc nhở. Lần 1.','Nhắc nhở lần 1'],
+   school:['Hệ thống trường → Hiệu trưởng','Cảnh báo: HS Trần Quốc Bảo (11A2) đi mô tô 150 cm³ không đúng quy định. Lần vi phạm thứ 1/3.','Cảnh báo HS 11A2'],
+   parent:['App trường → Phụ huynh','Con Trần Quốc Bảo đến trường bằng mô tô trên 50 cm³, chưa đủ điều kiện điều khiển. Phụ huynh vui lòng nhắc nhở.','Đã báo phụ huynh'],
+   student:['App trường → Học sinh','Em đang điều khiển xe không phù hợp độ tuổi. Đây là lần nhắc nhở 1/3 – tái phạm sẽ bị lập biên bản phạt nguội.','Nhắc nhở 1/3']}},
+ v2:{key:'v2',v:'moto',color:'#dc2626',helmet:'#111827',plate:['59-X1','456.78'],plateText:'59-X1 456.78',clock:'06:52',
+  vehicleName:'Mô tô 150 cm³',driver:'HS Trần Quốc Bảo · 11A2',verdict:'rec',badge:'Tái phạm lần 3',
+  tag:'3416 1F0A 0045 6781',p1:[[2.3,7.6],[2.3,9.6],[8.3,9.6]],pB:[[8.3,9.6],[11,9.6]],p2:[[11,9.6],[13.4,9.6],[13.4,7.6]],
+  rows:[['Chủ xe','Trần Thị Lan (phụ huynh)',''],['Dung tích xi-lanh','150 cm³ · vượt 50 cm³','bad'],['HS đăng ký gửi xe','Trần Quốc Bảo · 11A2 · 16 tuổi',''],['Đã nhắc nhở','03/11 · 10/11','warn'],['Lần này','Lần 3 / ngưỡng 3 lần','bad'],['Xử lý','Lập biên bản phạt nguội','bad']],
+  vtext:'⚠ Tái phạm vượt ngưỡng: tự động lập biên bản phạt nguội, chuyển CSGT xử lý.',
+  step5:'Tái phạm lần 3 → lập biên bản phạt nguội gửi CSGT, đồng thời báo chủ xe, nhà trường, PH & HS',
+  recipients:['csgt','owner','school','parent','student'],
+  msg:{csgt:['Biên bản phạt nguội → Cục CSGT','Biên bản số PN-2026/001245: xe 59-X1 456.78 giao xe cho người chưa đủ điều kiện điều khiển, kèm ảnh camera 3 lần (03/11, 10/11, 17/11).','PN-2026/001245'],
+   owner:['VNeTraffic → Chủ xe','Xe 59-X1 456.78 vi phạm lần 3 sau 2 lần nhắc nhở. Hồ sơ đã chuyển CSGT xử lý phạt nguội. Tra cứu chi tiết trên VNeTraffic.','Thông báo phạt nguội'],
+   school:['Hệ thống trường → Hiệu trưởng','HS Trần Quốc Bảo (11A2) tái phạm lần 3. Đã lập biên bản phạt nguội PN-2026/001245.','Tái phạm 11A2'],
+   parent:['App trường → Phụ huynh','Con Trần Quốc Bảo tái phạm lần 3. Biên bản phạt nguội đã được lập gửi cơ quan CSGT.','Báo PH: phạt nguội'],
+   student:['App trường → Học sinh','Em đã vi phạm 3 lần. Biên bản phạt nguội đã được lập. Vui lòng sử dụng phương tiện phù hợp.','Lần 3 – biên bản']}},
+ v3:{key:'v3',v:'car',color:'#1d4ed8',plate:['51K-888.88'],plateText:'51K-888.88',clock:'07:05',
+  vehicleName:'Ô tô con 5 chỗ',driver:'PH Lê Văn Phúc',verdict:'warn',badge:'Hết hạn ĐK + BH',
+  tag:'3416 2B7C 0888 8812',p1:[[-0.6,9.6],[7.9,9.6]],pB:[[7.9,9.6],[11.2,9.6]],p2:[[11.2,9.6],[14.0,9.6],[14.0,11.2]],
+  rows:[['Chủ xe','Lê Văn Phúc (phụ huynh lớp 10A5)',''],['Loại phương tiện','Ô tô con 5 chỗ',''],['Hạn đăng kiểm','Hết hạn 02/09/2026','bad'],['Bảo hiểm TNDS','Hết hạn 15/10/2026','bad'],['Đối tượng','Phụ huynh / cán bộ – không giới hạn độ tuổi','']],
+  vtext:'! Xe hết hạn đăng kiểm và bảo hiểm – gửi nhắc nhở gia hạn.',
+  step5:'Nhắc nhở hết hạn đăng kiểm / bảo hiểm: chủ xe (VNeTraffic) · nhà trường · App trường',
+  recipients:['owner','school','parent'],
+  msg:{owner:['VNeTraffic → Chủ xe','Ô tô 51K-888.88 đã hết hạn đăng kiểm (02/09/2026) và bảo hiểm TNDS (15/10/2026). Vui lòng đăng kiểm và gia hạn bảo hiểm trước khi lưu thông.','Nhắc ĐK + BH'],
+   school:['Hệ thống trường → Ban giám hiệu','Xe 51K-888.88 (PH Lê Văn Phúc) vào trường lúc 07:05, hết hạn đăng kiểm và bảo hiểm. Đã gửi nhắc nhở chủ xe.','Ghi nhận xe hết hạn'],
+   parent:['App trường → Phụ huynh','Kính gửi PH Lê Văn Phúc: xe 51K-888.88 đã hết hạn đăng kiểm và bảo hiểm. Nhà trường đề nghị gia hạn để đảm bảo an toàn.','Nhắc PH gia hạn']}}
+,
+ v4:{key:'v4',v:'bike',color:'#7c3aed',helmet:'#f97316',plate:['59-AA','218.09'],plateText:'59-AA 218.09',clock:'07:12',tag:null,
+  vehicleName:'Xe gắn máy 49 cm³',driver:'HS Lê Ngọc Mai · 10A3',verdict:'etc',badge:'Hợp lệ · chưa có thẻ ETC',
+  p1:[[2.3,7.6],[2.3,9.6],[8.3,9.6]],pB:[[8.3,9.6],[11,9.6]],p2:[[11,9.6],[11.3,9.6],[11.3,8.9]],
+  rows:[['Thẻ ETC','Chưa đăng ký','warn'],['Nhận dạng','Camera ANPR thay thế ETC','ok'],['Chủ xe','Lê Văn Tâm (phụ huynh)',''],['Loại phương tiện','Xe gắn máy 49 cm³','ok'],['HS đăng ký gửi xe','Lê Ngọc Mai · 10A3 · 15 tuổi',''],['Đối chiếu quy định','Được phép điều khiển','ok']],
+  vtext:'✓ Xe hợp lệ – đã xử lý bằng camera thay ETC. Gửi nhắc đăng ký thẻ ETC.',
+  step5:'Chưa có thẻ ETC → camera xử lý thay, gửi nhắc đăng ký ETC: chủ xe · phụ huynh · học sinh',
+  recipients:['owner','parent','student'],
+  msg:{owner:['VNeTraffic → Chủ xe','Xe 59-AA 218.09 chưa gắn thẻ ETC nên được nhận dạng bằng camera tại cổng trường. Vui lòng đăng ký và dán thẻ ETC để qua cổng nhanh hơn.','Nhắc đăng ký ETC'],
+   parent:['App trường → Phụ huynh','Xe con Lê Ngọc Mai đang dùng chưa có thẻ ETC. Phụ huynh vui lòng đăng ký thẻ ETC cho xe để vào bãi giữ xe không cần dừng.','Nhắc PH đăng ký ETC'],
+   student:['App trường → Học sinh','Xe của em chưa có thẻ ETC, hôm nay camera đã nhận dạng thay. Nhắc phụ huynh đăng ký thẻ ETC để vào cổng nhanh hơn nhé.','Nhắc HS: thẻ ETC']}}
+};
+const ORDER=['ok','v1','v2','v3','v4'];
+const VCOL={ok:'#22c55e',bad:'#ef4444',rec:'#dc2626',warn:'#f59e0b',etc:'#0ea5e9'};
+
+/* ================= LAYOUT / CANVAS ================= */
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+let L={};
+function layout(){
+ const cw=cv.parentElement.clientWidth, narrow=cw<720;
+ L.W=narrow?900:1200; L.H=narrow?900:735; L.ox=narrow?420:600; L.oy=narrow?350:228; L.K=narrow?1.55:1;
+ L.nodes=narrow?{csgt:[150,78],cloud:[450,80],owner:[750,78],parent:[540,226],student:[770,226]}
+               :{csgt:[140,96],cloud:[420,96],owner:[690,96],parent:[880,96],student:[1070,96]};
+ const dpr=window.devicePixelRatio||1, s=cw/L.W;
+ cv.style.height=(L.H*s)+'px'; cv.width=Math.round(cw*dpr); cv.height=Math.round(L.H*s*dpr);
+ ctx.setTransform(dpr*s,0,0,dpr*s,0,0);
+}
+const iso=(x,y,z=0)=>[L.ox+(x-y)*32,L.oy+(x+y)*16-z];
+const F=(px,w=600)=>`${w} ${px*L.K}px "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji"`;
+function shade(hex,f){const n=parseInt(hex.slice(1),16);const c=[n>>16,n>>8&255,n&255].map(v=>Math.max(0,Math.min(255,Math.round(f<0?v*(1+f):v+(255-v)*f))));return `rgb(${c})`;}
+function poly(pts,fill,stroke,lw=1){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke();}}
+function box(x,y,z,w,d,h,col,o={}){
+ const t=o.top||col,l=o.left||shade(col,-.16),r=o.right||shade(col,-.3);
+ poly([iso(x,y+d,z),iso(x+w,y+d,z),iso(x+w,y+d,z+h),iso(x,y+d,z+h)],l,o.stroke);
+ poly([iso(x+w,y,z),iso(x+w,y+d,z),iso(x+w,y+d,z+h),iso(x+w,y,z+h)],r,o.stroke);
+ poly([iso(x,y,z+h),iso(x+w,y,z+h),iso(x+w,y+d,z+h),iso(x,y+d,z+h)],t,o.stroke);
+}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function pill(text,x,y,bg,fg='#fff',px=11,center=true){
+ ctx.font=F(px,700);const w=ctx.measureText(text).width+16*L.K,h=px*L.K+10*L.K;
+ const X=center?x-w/2:x;rr(X,y-h/2,w,h,h/2);ctx.fillStyle=bg;ctx.fill();
+ ctx.fillStyle=fg;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,X+w/2,y+1);return w;
+}
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+/* ================= TĨNH: CẢNH ================= */
+function tileType(x,y){
+ if((y===9||y===10)&&x<=9) return 'road';
+ if(x===2&&y===8) return 'drive';
+ if(x>=10&&y>=5) return 'lot';
+ if(x>=9&&y<5) return 'yard';
+ return 'grass';
+}
+function drawGround(){
+ // slab sides
+ poly([iso(0,12),iso(16,12),iso(16,12,-18),iso(0,12,-18)],'#6b4f32');
+ poly([iso(16,0),iso(16,12),iso(16,12,-18),iso(16,0,-18)],'#523b25');
+ const cols={grass:['#7cc061','#75b85a'],road:['#5a6372','#5a6372'],drive:['#9aa1ab','#9aa1ab'],lot:['#c7cdd6','#c3c9d2'],yard:['#e6dfd1','#e1d9ca']};
+ for(let x=0;x<16;x++)for(let y=0;y<12;y++){const t=tileType(x,y);poly([iso(x,y),iso(x+1,y),iso(x+1,y+1),iso(x,y+1)],cols[t][(x+y)%2],'rgba(0,0,0,.05)');}
+ ctx.lineCap='round';
+ // road centre dashes
+ ctx.strokeStyle='#f8fafc';ctx.lineWidth=2.5;
+ for(let i=0;i<10;i++){const a=iso(i+.15,10),b=iso(i+.6,10);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();}
+ // road edge
+ ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.5;
+ [[9.05],[10.95]].forEach(([yy])=>{ctx.beginPath();ctx.moveTo(...iso(0,yy));ctx.lineTo(...iso(10,yy));ctx.stroke();});
+ // lot lane
+ ctx.strokeStyle='#ffffff';ctx.lineWidth=2;
+ [8.75,10.45].forEach(yy=>{ctx.beginPath();ctx.moveTo(...iso(10.1,yy));ctx.lineTo(...iso(16,yy));ctx.stroke();});
+ [11,12.2,13.4,14.6,15.8].forEach(xx=>{ctx.beginPath();ctx.moveTo(...iso(xx,10.6));ctx.lineTo(...iso(xx,11.95));ctx.stroke();});
+ // stop line
+ poly([iso(9.5,9.05),iso(10.5,9.05),iso(10.5,10.95),iso(9.5,10.95)],'rgba(37,99,235,.38)','rgba(147,197,253,.9)',1.5);
+ // arrows in lane
+ ctx.fillStyle='rgba(255,255,255,.8)';
+ [11.2,14.8].forEach(xx=>poly([iso(xx,9.45),iso(xx+.45,9.6),iso(xx,9.75)],'rgba(255,255,255,.85)'));
+}
+function tree(x,y,s=1){
+ return {d:x+y,f:()=>{box(x-.06,y-.06,0,.12,.12,18*s,'#7c4a22');
+  const [cx,cy]=iso(x,y,30*s);
+  ctx.fillStyle='#2f7d32';ctx.beginPath();ctx.arc(cx,cy,17*s,0,7);ctx.fill();
+  ctx.fillStyle='#3f9a3f';ctx.beginPath();ctx.arc(cx-3,cy-9*s,13*s,0,7);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.18)';ctx.beginPath();ctx.arc(cx-7,cy-13*s,5*s,0,7);ctx.fill();}};
+}
+function house(){
+ return {d:8.3,f:()=>{
+  const x=.9,y=5.3,w=2.2,d=1.9,h=46;
+  box(x,y,0,w,d,h,'#f7dcae');
+  // door & window on front-left face (y=y+d)
+  poly([iso(1.75,y+d,0),iso(2.2,y+d,0),iso(2.2,y+d,30),iso(1.75,y+d,30)],'#8b5a2b');
+  poly([iso(1.05,y+d,18),iso(1.5,y+d,18),iso(1.5,y+d,34),iso(1.05,y+d,34)],'#9fd3f5','#fff');
+  poly([iso(x+w,5.7,18),iso(x+w,6.3,18),iso(x+w,6.3,34),iso(x+w,5.7,34)],'#9fd3f5','#fff');
+  const ap=iso(x+w/2,y+d/2,h+36);
+  poly([iso(x-.1,y+d+.1,h),iso(x+w+.1,y+d+.1,h),ap],'#c2553a');
+  poly([iso(x+w+.1,y-.1,h),iso(x+w+.1,y+d+.1,h),ap],'#9c3f29');
+ }};
+}
+function school(){
+ return {d:15,f:()=>{
+  const x=9.3,y=.6,w=6.3,d=3.8,h=112;
+  box(x,y,0,w,d,h,'#f4efe4',{top:'#d9d2c3'});
+  // parapet line
+  poly([iso(x,y+d,h-6),iso(x+w,y+d,h-6),iso(x+w,y+d,h),iso(x,y+d,h)],'#e2733b');
+  poly([iso(x+w,y,h-6),iso(x+w,y+d,h-6),iso(x+w,y+d,h),iso(x+w,y,h)],'#c35d2c');
+  // windows front-left face
+  for(let f=0;f<3;f++)for(let i=0;i<9;i++){
+   const wx=x+.3+i*.66, z=12+f*30, hl=(f===1&&i===2);
+   const glow=hl&&NS.school.flash>0;
+   poly([iso(wx,y+d,z),iso(wx+.38,y+d,z),iso(wx+.38,y+d,z+17),iso(wx,y+d,z+17)],glow?`rgba(239,68,68,${.55+.45*Math.sin(T*14)})`:(hl?'#fde68a':'#8cc6ea'),'#fff');
+  }
+  // windows front-right face
+  for(let f=0;f<3;f++)for(let i=0;i<5;i++){const wy=y+.35+i*.68,z=12+f*30;
+   poly([iso(x+w,wy,z),iso(x+w,wy+.38,z),iso(x+w,wy+.38,z+17),iso(x+w,wy,z+17)],'#79b6dc','#fff');}
+  // entrance
+  poly([iso(13.2,y+d,0),iso(14.1,y+d,0),iso(14.1,y+d,10),iso(13.2,y+d,10)],'#334155');
+  // sign text on face
+  const p=iso(x+.6,y+d,h-9);ctx.save();ctx.translate(p[0],p[1]);ctx.transform(.894,.447,0,1,0,0);
+  ctx.font=F(10,800);ctx.fillStyle='#fff';ctx.textBaseline='bottom';ctx.textAlign='left';ctx.fillText('TRƯỜNG THPT AN BÌNH',0,0);ctx.restore();
+ }};
+}
+function flag(){
+ return {d:16,f:()=>{
+  const b=iso(9,4.9,0),t=iso(9,4.9,96);
+  ctx.strokeStyle='#cbd5e1';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(...b);ctx.lineTo(...t);ctx.stroke();
+  const wv=Math.sin(T*3)*2;ctx.fillStyle='#da251d';ctx.beginPath();ctx.moveTo(t[0],t[1]+2);ctx.quadraticCurveTo(t[0]+16,t[1]+wv,t[0]+32,t[1]+4);ctx.lineTo(t[0]+32,t[1]+24);ctx.quadraticCurveTo(t[0]+16,t[1]+20+wv,t[0],t[1]+22);ctx.closePath();ctx.fill();
+  star(t[0]+16,t[1]+13,5,'#ffde00');
+ }};
+}
+function star(cx,cy,r,c){ctx.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr2=i%2?r*.42:r;ctx.lineTo(cx+Math.cos(a)*rr2,cy+Math.sin(a)*rr2);}ctx.closePath();ctx.fillStyle=c;ctx.fill();}
+function shelterPillars(){
+ return [[10.95,5.55],[15.7,5.55],[10.95,8.45],[15.7,8.45]].map(([x,y])=>({d:x+y-.2,f:()=>box(x-.05,y-.05,0,.1,.1,54,'#64748b')}));
+}
+function shelterRoof(){
+ ctx.globalAlpha=.62;box(10.85,5.45,54,4.95,3.1,4,'#2563eb',{top:'#3b82f6'});ctx.globalAlpha=1;
+}
+const DECO_BIKES=[];
+(function(){const pal=['#0ea5e9','#f97316','#a855f7','#e11d48','#10b981','#64748b','#eab308','#ec4899'];let k=0;
+ [11.3,11.85,12.4,12.95,13.5,14.05,14.6,15.15].forEach(x=>DECO_BIKES.push([x,6.3,pal[k++%8]]));
+ [11.3,11.75,12.75,14.05,14.5,14.95,15.4].forEach(x=>DECO_BIKES.push([x,7.6,pal[k++%8]]));})();
+const DECO_CARS=[[11.6,11.2,'#e5e7eb'],[12.8,11.2,'#991b1b'],[15.2,11.2,'#475569']];
+function etcGantry(){
+ return {d:21.2,f:()=>{
+  box(9.94,11.15,0,.2,.2,80,'#1e40af',{top:'#3b82f6'});
+  box(9.97,9.0,80,.14,2.35,8,'#1d4ed8',{top:'#60a5fa'});
+  // ETC reader panel
+  box(9.86,9.45,62,.18,1.0,16,'#0f172a',{top:'#1e293b'});
+  const tp=iso(9.95,10.45,63);ctx.save();ctx.translate(tp[0],tp[1]);ctx.transform(.894,-.447,0,1,0,0);
+  ctx.font=F(9,800);ctx.fillStyle='#38bdf8';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.fillText('ETC',4,0);ctx.restore();
+  // ANPR camera on gantry
+  box(9.55,10.5,66,.4,.15,10,'#1e293b',{top:'#334155'});
+  const [lx,ly]=iso(9.55,10.57,71);ctx.fillStyle='#0f172a';ctx.beginPath();ctx.arc(lx,ly,4.5,0,7);ctx.fill();ctx.fillStyle='#38bdf8';ctx.beginPath();ctx.arc(lx,ly,2,0,7);ctx.fill();
+  // status light
+  const lp=iso(10.04,11.25,88),col=state.lightCol||'#22c55e';ctx.save();ctx.shadowColor=col;ctx.shadowBlur=12;ctx.fillStyle=col;ctx.beginPath();ctx.arc(lp[0],lp[1],5,0,7);ctx.fill();ctx.restore();
+ }};
+}
+function kiosk(){
+ return {d:21.5,f:()=>{
+  box(9.2,11.35,0,.6,.52,46,'#334155',{top:'#475569'});
+  const sc=state.kioskColor||'#38bdf8';
+  poly([iso(9.28,11.87,22),iso(9.72,11.87,22),iso(9.72,11.87,38),iso(9.28,11.87,38)],sc,'#0f172a');
+  const [cx,cy]=iso(9.5,11.6,52);ctx.fillStyle=sc;ctx.globalAlpha=.5+.5*Math.abs(Math.sin(T*4));ctx.beginPath();ctx.arc(cx,cy,5,0,7);ctx.fill();ctx.globalAlpha=1;
+ }};
+}
+
+/* ================= XE ================= */
+function vbox(cx,cy,dir,u0,v0,z,lu,lv,h,col,o){dir==='x'?box(cx+u0,cy+v0,z,lu,lv,h,col,o):box(cx+v0,cy+u0,z,lv,lu,h,col,o);}
+function vpt(cx,cy,dir,u,v,z){return dir==='x'?iso(cx+u,cy+v,z):iso(cx+v,cy+u,z);}
+function wheel(p,r){ctx.fillStyle='#111827';ctx.beginPath();ctx.ellipse(p[0],p[1],r*.8,r,0,0,7);ctx.fill();ctx.fillStyle='#9ca3af';ctx.beginPath();ctx.arc(p[0],p[1],r*.32,0,7);ctx.fill();}
+function drawBike(cx,cy,dir,col,big,rider,helmet){
+ const L2=big?.44:.34, r=big?8:6.5;
+ wheel(vpt(cx,cy,dir,-L2,0,r),r);
+ vbox(cx,cy,dir,-L2+.05,-.09,r,2*L2-.1,.18,big?13:9,col);
+ if(big){vbox(cx,cy,dir,-L2,.1,r-2,.42,.05,4,'#d1d5db');vbox(cx,cy,dir,.0,-.11,r+11,.22,.22,6,shade(col,-.3));}
+ vbox(cx,cy,dir,-L2+.08,-.08,r+(big?13:9),.32,.16,3,'#111827');
+ vbox(cx,cy,dir,L2-.1,-.04,r,.06,.08,big?24:20,'#374151');
+ wheel(vpt(cx,cy,dir,L2,0,r),r);
+ const hb=vpt(cx,cy,dir,L2-.07,0,r+(big?25:21));
+ if(rider){
+  const zb=r+(big?16:12);
+  vbox(cx,cy,dir,-.14,-.1,zb,.2,.2,10,'#1e3a8a');
+  vbox(cx,cy,dir,-.15,-.11,zb+10,.2,.22,17,'#f8fafc',{top:'#e2e8f0'});
+  const sh=vpt(cx,cy,dir,-.02,0,zb+24);ctx.strokeStyle='#f1d3b3';ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(...sh);ctx.lineTo(...hb);ctx.stroke();
+  const hd=vpt(cx,cy,dir,-.05,0,zb+35);ctx.fillStyle='#f1c9a0';ctx.beginPath();ctx.arc(hd[0],hd[1],6.5,0,7);ctx.fill();
+  ctx.fillStyle=helmet;ctx.beginPath();ctx.arc(hd[0],hd[1]-1,7.4,Math.PI*1.02,Math.PI*1.98);ctx.fill();
+  // backpack
+  vbox(cx,cy,dir,-.27,-.08,zb+12,.1,.16,13,'#0369a1');
+ }
+}
+function drawCar(cx,cy,dir,col){
+ const g='#bfe3f7';
+ [[-.55,-.42],[.55,-.42]].forEach(([u,v])=>wheel(vpt(cx,cy,dir,u,v,7),7));
+ vbox(cx,cy,dir,-.85,-.42,4,1.7,.84,17,col);
+ vbox(cx,cy,dir,-.5,-.36,21,.95,.72,14,col,{left:g,right:g,top:shade(col,.15)});
+ [[-.55,.42],[.55,.42]].forEach(([u,v])=>wheel(vpt(cx,cy,dir,u,v,7),7));
+ const hl=vpt(cx,cy,dir,.86,.25,13),hl2=vpt(cx,cy,dir,.86,-.25,13);ctx.fillStyle='#fef9c3';[hl,hl2].forEach(p=>{ctx.beginPath();ctx.arc(p[0],p[1],2.6,0,7);ctx.fill();});
+}
+function vehicleDrawable(v,cx,cy,dir,s){
+ return {d:cx+cy,f:()=>{if(v==='car')drawCar(cx,cy,dir,s.color);else drawBike(cx,cy,dir,s.color,v==='moto',true,s.helmet);}};
+}
+
+/* ================= NODES ================= */
+const NODEINFO={csgt:['🚓','CSGT · Phạt nguội','Cục CSGT'],owner:['📲','Chủ xe','qua VNeTraffic'],parent:['👪','Phụ huynh','App nhà trường'],student:['🎒','Học sinh','App nhà trường']};
+const NS={};['csgt','cloud','owner','parent','student','school'].forEach(k=>NS[k]={flash:0,badge:0,bubble:'',bt:0,col:'#ef4444'});
+const P={
+ kiosk:()=>iso(9.5,11.6,50), cam:()=>iso(9.55,10.57,71), rfid:()=>iso(9.95,9.95,62), school:()=>iso(10.97,4.4,57),
+ cloud:()=>L.nodes.cloud, csgt:()=>L.nodes.csgt, owner:()=>L.nodes.owner, parent:()=>L.nodes.parent, student:()=>L.nodes.student
+};
+function curve(a,b){const mx=(a[0]+b[0])/2,my=Math.min(a[1],b[1])-60;return [mx,my];}
+function qpt(a,c,b,t){const u=1-t;return [u*u*a[0]+2*u*t*c[0]+t*t*b[0],u*u*a[1]+2*u*t*c[1]+t*t*b[1]];}
+function drawLinks(){
+ const links=[['kiosk','cloud'],['cloud','owner'],['cloud','csgt'],['kiosk','school'],['school','parent'],['school','student']];
+ ctx.setLineDash([4,6]);ctx.lineWidth=1.4;ctx.strokeStyle='rgba(30,58,138,.35)';
+ links.forEach(([x,y])=>{const a=P[x](),b=P[y](),c=curve(a,b);ctx.beginPath();ctx.moveTo(...a);ctx.quadraticCurveTo(...c,...b);ctx.stroke();});
+ ctx.setLineDash([]);
+}
+function drawCloud(){
+ const [cx,cy]=L.nodes.cloud,K=L.K,n=NS.cloud;
+ const blobs=[[-48,10,26],[-16,-8,34],[24,-4,30],[52,12,24],[0,16,28],[-30,18,22],[30,18,22]];
+ ctx.save();ctx.shadowColor='rgba(15,23,42,.25)';ctx.shadowBlur=14;ctx.shadowOffsetY=6;
+ ctx.fillStyle=n.flash>0?'#dbeafe':'#f8fbff';
+ ctx.beginPath();blobs.forEach(([x,y,r])=>{ctx.moveTo(cx+x*K+r*K,cy+y*K);ctx.arc(cx+x*K,cy+y*K,r*K,0,7);});ctx.fill();ctx.restore();
+ ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.font=F(15,800);ctx.fillStyle='#1d4ed8';ctx.fillText('VNeTraffic',cx,cy+2*K);
+ ctx.font=F(10,600);ctx.fillStyle='#475569';ctx.fillText('Cục CSGT · CSDL đăng ký xe',cx,cy+19*K);
+ if(state.cloudBusy){ctx.strokeStyle='#2563eb';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy-22*K,9*K,T*7,T*7+4.2);ctx.stroke();
+  pill('Đang tra cứu…',cx,cy+48*K,'#1d4ed8','#fff',10);}
+ bubble('cloud',cx,cy+50*K);
+}
+function drawNode(k){
+ const [cx,cy]=L.nodes[k],K=L.K,n=NS[k],[ic,t1,t2]=NODEINFO[k];
+ const w=160*K,h=58*K,x=cx-w/2,y=cy-h/2;
+ if(n.flash>0){ctx.strokeStyle=n.col;ctx.globalAlpha=n.flash;ctx.lineWidth=3;rr(x-6*(1-n.flash)*K-3,y-6*(1-n.flash)*K-3,w+12*(1-n.flash)*K+6,h+12*(1-n.flash)*K+6,16*K);ctx.stroke();ctx.globalAlpha=1;}
+ ctx.save();ctx.shadowColor='rgba(15,23,42,.22)';ctx.shadowBlur=12;ctx.shadowOffsetY=5;rr(x,y,w,h,12*K);ctx.fillStyle='#fff';ctx.fill();ctx.restore();
+ rr(x,y,w,h,12*K);ctx.strokeStyle=n.badge?n.col:'#cbd5e1';ctx.lineWidth=n.badge?2:1;ctx.stroke();
+ ctx.font=F(22);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ic,x+24*K,cy+1);
+ ctx.textAlign='left';ctx.fillStyle='#0f172a';ctx.font=F(12.5,800);ctx.fillText(t1,x+44*K,cy-8*K);
+ ctx.fillStyle='#64748b';ctx.font=F(10.5,500);ctx.fillText(t2,x+44*K,cy+10*K);
+ if(n.badge){const bx=x+w-4*K,by=y+4*K;ctx.fillStyle=n.col;ctx.beginPath();ctx.arc(bx,by,10*K,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font=F(11,800);ctx.textAlign='center';ctx.fillText(n.badge,bx,by+1);}
+ bubble(k,cx,cy+h/2+16*K);
+}
+function bubble(k,x,y){const n=NS[k];if(n.bt>0&&n.bubble){ctx.globalAlpha=clamp(n.bt*2);pill(n.bubble,x,y,n.col,'#fff',10.5);ctx.globalAlpha=1;}}
+
+/* ================= TRẠNG THÁI & ENGINE ================= */
+let cur=SC.ok,T=0,PHS=[],EV=[],packets=[],curPhase='',speed=1,auto=true,doneAt=0,paused=false;
+const state={};
+function pathAt(pts,t){
+ const seg=[];let tot=0;for(let i=0;i<pts.length-1;i++){const l=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);seg.push(l);tot+=l;}
+ let d=t*tot;for(let i=0;i<seg.length;i++){if(d<=seg[i]||i===seg.length-1){const a=pts[i],b=pts[i+1],f=seg[i]?clamp(d/seg[i]):0;
+  return {x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f,dir:Math.abs(b[0]-a[0])>=Math.abs(b[1]-a[1])?'x':'y'};}d-=seg[i];}
+}
+function phase(){return PHS.find(p=>T>=p.s&&T<p.e)||PHS[PHS.length-1];}
+function veh(){
+ const p=phase(),lt=T-p.s,D=p.e-p.s;
+ if(p.id==='travel'){const t=clamp(lt/D);return pathAt(cur.p1,t<.2?t*t*2.5:.1+(t-.2)*1.125);}
+ if(p.id==='scan')return pathAt(cur.pB,clamp(lt/D));            // giảm tốc nhẹ qua trụ ETC, không dừng
+ if(p.id==='lookup'||p.id==='result'){const ps=PHS.find(q=>q.id==='lookup'),pe=PHS.find(q=>q.id==='result');
+  const t=clamp((T-ps.s)/(pe.e-ps.s));return pathAt(cur.p2,1-Math.pow(1-t,2));}
+ return pathAt(cur.p2,1);
+}
+function at(t,fn){EV.push({t,fn,f:0});}
+function send(from,to,dur,col,label,cb){packets.push({a:P[from],b:P[to],t0:T,dur,col,label,cb});}
+
+function start(key){
+ cur=SC[key];T=0;EV=[];packets=[];curPhase='';Object.keys(state).forEach(k=>delete state[k]);
+ Object.values(NS).forEach(n=>{n.flash=0;n.badge=0;n.bubble='';n.bt=0;});
+ PHS=[];let t=0;const add=(id,d)=>{PHS.push({id,s:t,e:t+d});t+=d;};
+ add('travel',4.4);add('scan',2.6);add('lookup',3.0);add('result',1.8);add('log',1.2);
+ if(cur.recipients.length)add('notify',.4+(cur.recipients.length-1)*.8+1.8+.8);
+ add('done',1e9);
+ document.querySelectorAll('#ctrls [data-k]').forEach(b=>b.classList.toggle('on',b.dataset.k===key));
+ renderSteps(-1);
+ document.getElementById('lookup').innerHTML='<div class="placeholder">Chờ camera nhận dạng biển số…</div>';
+ document.getElementById('notifs').innerHTML='<div class="placeholder">'+(cur.recipients.length?'Chưa có thông báo trong lượt này.':'Luồng cơ bản: không gửi thông báo nào.')+'</div>';
+}
+function enterPhase(id){
+ const s=cur,car=s.v==='car';
+ if(id==='travel'){renderSteps(0);cap(car?'Bước 1 · Phụ huynh / cán bộ lái ô tô đến trường':'Bước 1 · Học sinh đi xe từ nhà đến trường');state.kioskColor='#38bdf8';state.lightCol='#22c55e';}
+ if(id==='scan'){renderSteps(1);state.lightCol='#38bdf8';if(!s.tag){at(T+.45,()=>{state.lightCol='#f59e0b';cap('Bước 2 · Không phát hiện thẻ ETC → camera ANPR đọc biển số '+s.plateText+' thay thế');});}cap('Bước 2 · Xe chạy qua trụ ETC: quét thẻ ETC + đọc biển số '+s.plateText+' – không cần dừng');}
+ if(id==='lookup'){renderSteps(2);cap('Bước 3 · Tự động tra cứu đăng ký xe từ VNeTraffic / Cục CSGT');
+  send('kiosk','cloud',1.0,'#2563eb','🔎 '+s.plateText,()=>{NS.cloud.flash=1;state.cloudBusy=1;
+   at(T+.85,()=>{state.cloudBusy=0;send('cloud','kiosk',1.0,VCOL[s.verdict],'📄 Dữ liệu xe',()=>renderLookup(s));});});}
+ if(id==='result'){renderSteps(3);state.verdict=1;state.kioskColor=VCOL[s.verdict];state.lightCol=VCOL[s.verdict];
+  cap(s.verdict==='ok'?'Bước 4 · Xe đúng loại được phép – không cảnh báo':s.verdict==='etc'?'Bước 4 · Xe hợp lệ, nhưng chưa đăng ký thẻ ETC':s.verdict==='warn'?'Phát hiện: ô tô hết hạn đăng kiểm & bảo hiểm':s.verdict==='rec'?'Phát hiện: tái phạm lần 3 – vượt ngưỡng nhắc nhở':'Phát hiện: học sinh đi mô tô phân khối lớn');}
+ if(id==='log'){addHistory(s);state.saved=1;cap(s.verdict==='etc'?'Bước 4 · Ghi nhận lịch sử (nhận dạng bằng camera) – đánh dấu chưa có thẻ ETC':s.verdict==='ok'?'Bước 4 · Không làm gì, chỉ ghi nhận lịch sử vào hệ thống':'Đã ghi nhận vi phạm vào hệ thống');}
+ if(id==='notify'){renderSteps(4);
+  cap(s.key==='v4'?'Gửi nhắc đăng ký thẻ ETC tới chủ xe, phụ huynh & học sinh':s.key==='v2'?'Luồng VP2 · Lập biên bản phạt nguội & thông báo các bên':s.key==='v3'?'Luồng VP3 · Gửi nhắc nhở hết hạn đăng kiểm / bảo hiểm':'Luồng VP1 · Gửi cảnh báo tới chủ xe, Hiệu trưởng, phụ huynh & học sinh');
+  s.recipients.forEach((r,i)=>at(T+.4+i*.8,()=>deliver(r,s)));}
+ if(id==='done'){renderSteps(9);doneAt=T;
+  cap(s.verdict==='ok'?'✓ Hoàn tất · xe hợp lệ đã được ghi nhận':'✓ Hoàn tất · đã gửi '+s.recipients.length+' thông báo');}
+}
+function deliver(r,s){
+ const col=s.key==='v4'?'#0ea5e9':s.key==='v3'?'#f59e0b':(r==='csgt'?'#b91c1c':'#ef4444');
+ const m=s.msg[r];
+ const arrive=(k)=>()=>{const n=NS[k];n.flash=1;n.badge++;n.col=col;n.bubble=m[2];n.bt=2.6;addNotif(r,m,s);};
+ const icon=r==='csgt'?'📑 Biên bản':'⚠';
+ if(r==='owner'||r==='csgt'){send('kiosk','cloud',.7,col,icon,()=>{NS.cloud.flash=1;send('cloud',r,.75,col,'',arrive(r));});}
+ else if(r==='school'){send('kiosk','school',1.1,col,icon,arrive('school'));}
+ else {send('school',r,1.2,col,'📱',arrive(r));}
+}
+function update(dt){
+ T+=dt;
+ const p=phase();if(p.id!==curPhase){curPhase=p.id;enterPhase(p.id);}
+ EV.forEach(e=>{if(!e.f&&T>=e.t){e.f=1;e.fn();}});
+ packets.forEach(k=>{if(!k.done&&T>=k.t0+k.dur){k.done=1;k.cb&&k.cb();}});
+ packets=packets.filter(k=>!k.done);
+ Object.values(NS).forEach(n=>{n.flash=Math.max(0,n.flash-dt*.9);n.bt=Math.max(0,n.bt-dt);});
+ // barrier
+ if(p.id==='done'&&auto&&T-doneAt>3.2){start(ORDER[(ORDER.indexOf(cur.key)+1)%ORDER.length]);}
+}
+
+/* ================= VẼ ================= */
+function draw(){
+ const g=ctx.createLinearGradient(0,0,0,L.H);g.addColorStop(0,'#cfe9ff');g.addColorStop(.45,'#eef7ff');g.addColorStop(1,'#dfeefa');
+ ctx.fillStyle=g;ctx.fillRect(0,0,L.W,L.H);
+ drawGround();
+ const items=[house(),school(),flag(),etcGantry(),kiosk(),...shelterPillars(),
+  ...[[.6,2.2],[2.6,1.2],[4.6,2.8],[6.2,1],[5.3,6.6],[7.3,3.6],[.5,11.4],[3.6,11.5],[6.6,11.4],[7.8,6.6],[4.3,5.2],[8.4,1.6]].map(([x,y])=>tree(x,y))];
+ DECO_BIKES.forEach(([x,y,c])=>items.push({d:x+y,f:()=>drawBike(x,y,'y',c,false,false)}));
+ DECO_CARS.forEach(([x,y,c])=>items.push({d:x+y,f:()=>drawCar(x,y,'y',c)}));
+ const v=veh();items.push(vehicleDrawable(cur.v,v.x,v.y,v.dir,cur));
+ items.sort((a,b)=>a.d-b.d).forEach(i=>i.f());
+ shelterRoof();
+ worldLabels();
+ drawScan(v);
+ drawLinks();
+ drawPackets();
+ drawCloud();['csgt','owner','parent','student'].forEach(drawNode);
+ // school bubble
+ const sp=P.school();if(NS.school.flash>0||NS.school.bt>0){pill('🏫 Phòng Hiệu trưởng',sp[0],sp[1]-26,'#0f172a','#fff',10.5);}
+ bubble('school',sp[0],sp[1]-52*L.K);
+}
+function worldLabels(){
+ const lb=(t,p,bg='rgba(15,23,42,.78)')=>pill(t,p[0],p[1],bg,'#fff',10);
+ lb('🏠 Nhà học sinh',iso(2,5.3,100));
+ lb('🅿 Nhà xe học sinh',iso(13.3,7,80));
+ lb('🚗 Cổng bãi xe · làn ETC không dừng',iso(10,12.4,-12));
+ lb('📡 Trụ ETC · RFID + Camera ANPR',iso(10,9.6,112),'rgba(29,78,216,.95)');
+ lb('AI Box',iso(9.5,11.6,66),'rgba(51,65,85,.92)');
+ if(state.saved){const p=iso(9.5,11.6,88);const okv=cur.verdict==='ok'||cur.verdict==='etc';pill(okv?'💾 Đã lưu lịch sử':'💾 Đã lưu vi phạm',p[0],p[1],okv?'#15803d':'#b91c1c','#fff',10);}
+}
+function drawScan(v){
+ const p=phase(),id=p.id,lt=T-p.s;
+ const c=vpt(v.x,v.y,v.dir,0,0,cur.v==='car'?18:24);
+ const bw=cur.v==='car'?118:70,bh=cur.v==='car'?66:72;
+ const showBox=['scan','lookup','result'].includes(id);
+ if(id==='scan'){
+  const cam=P.cam();const a=.25+.15*Math.sin(T*12);
+  const gr=ctx.createLinearGradient(cam[0],cam[1],c[0],c[1]);gr.addColorStop(0,`rgba(56,189,248,${a+.25})`);gr.addColorStop(1,`rgba(56,189,248,${a*.5})`);
+  poly([cam,[c[0]-bw/2,c[1]-bh/3],[c[0]+bw/2,c[1]+bh/3]],gr);
+  // scan line
+  const rf=P.rfid();ctx.lineWidth=2.5;
+  for(let i=0;i<3;i++){const ph=((T*1.6)+i/3)%1;ctx.strokeStyle=`rgba(37,99,235,${(1-ph)*.9})`;ctx.beginPath();ctx.ellipse(rf[0],rf[1]+8+ph*22,10+ph*44,4+ph*16,0,0,Math.PI);ctx.stroke();}
+  const tg=vpt(v.x,v.y,v.dir,cur.v==='car'?.3:.3,0,cur.v==='car'?30:28);
+  if(lt>.4&&!cur.tag){pill('✕ Không có thẻ ETC → dùng camera',tg[0],tg[1]-16*L.K,'#d97706','#fff',9.5);}
+  if(lt>.4&&cur.tag){ctx.save();ctx.shadowColor='#22d3ee';ctx.shadowBlur=14;ctx.fillStyle='#22d3ee';ctx.fillRect(tg[0]-5,tg[1]-4,10,7);ctx.restore();pill('Thẻ ETC ✓',tg[0],tg[1]-16*L.K,'#0891b2','#fff',9.5);}
+  const sy=c[1]-bh/2+((T*1.4)%1)*bh;ctx.strokeStyle='rgba(56,189,248,.9)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(c[0]-bw/2,sy);ctx.lineTo(c[0]+bw/2,sy);ctx.stroke();
+ }
+ if(showBox){
+  const col=state.verdict?VCOL[cur.verdict]:'#38bdf8';ctx.strokeStyle=col;ctx.lineWidth=2.5;
+  const x0=c[0]-bw/2,y0=c[1]-bh/2,x1=c[0]+bw/2,y1=c[1]+bh/2,k=12;
+  [[x0,y0,1,1],[x1,y0,-1,1],[x0,y1,1,-1],[x1,y1,-1,-1]].forEach(([x,y,sx,sy])=>{ctx.beginPath();ctx.moveTo(x+sx*k,y);ctx.lineTo(x,y);ctx.lineTo(x,y+sy*k);ctx.stroke();});
+ }
+ // plate popup
+ if(['scan','lookup','result','log'].includes(id)){
+  const K=L.K,cam=P.cam(),bx=cam[0]-250*K,by=cam[1]-190*K,w=190*K,h=(cur.plate.length>1?132:112)*K;
+  ctx.save();ctx.shadowColor='rgba(0,0,0,.25)';ctx.shadowBlur=12;rr(bx,by,w,h,10*K);ctx.fillStyle='#0f172a';ctx.fill();ctx.restore();
+  ctx.strokeStyle='rgba(56,189,248,.6)';ctx.lineWidth=1.2;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(bx+w,by+h/2);ctx.lineTo(cam[0]-6,cam[1]);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#38bdf8';ctx.font=F(10,800);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText('ETC · RFID + ANPR',bx+10*K,by+14*K);
+  ctx.font=F(10,700);const got=(id!=='scan'||lt>.4);ctx.fillStyle=!got?'#64748b':cur.tag?'#a5f3fc':'#fbbf24';ctx.fillText(!got?'🏷 Đang quét thẻ ETC…':cur.tag?'🏷 Thẻ ETC '+cur.tag:'⚠ Không có thẻ ETC → dùng camera',bx+10*K,by+32*K);
+  const total=cur.plate.join('').length,n=id==='scan'?Math.floor(total*clamp((lt-.5)/1.4)):total;
+  let used=0;const lines=cur.plate.map(s=>{const t=s.slice(0,Math.max(0,n-used));used+=s.length;return t;});
+  const pw=w-20*K,ph=(cur.plate.length>1?56:34)*K,px=bx+10*K,py=by+44*K;
+  rr(px,py,pw,ph,5*K);ctx.fillStyle='#f8fafc';ctx.fill();ctx.strokeStyle='#0f172a';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#0f172a';ctx.textAlign='center';ctx.font=F(cur.plate.length>1?19:20,800);
+  lines.forEach((t,i)=>ctx.fillText(t+(i===lines.length-1&&n<total&&Math.sin(T*16)>0?'▌':''),px+pw/2,py+(cur.plate.length>1?(i?40:16):17)*K));
+  ctx.textAlign='left';ctx.font=F(10,600);
+  if(n>=total){ctx.fillStyle='#4ade80';ctx.fillText('✓ Độ tin cậy 98,7% · '+cur.clock,bx+10*K,by+h-12*K);}
+  else{ctx.fillStyle='#94a3b8';ctx.fillText('Đang xử lý ảnh…',bx+10*K,by+h-12*K);}
+ }
+ // verdict badge above vehicle
+ if(state.verdict&&id!=='travel'){
+  const col=VCOL[cur.verdict],y=c[1]-bh/2-22,pul=1+.08*Math.sin(T*6);
+  ctx.fillStyle=col;ctx.beginPath();ctx.arc(c[0],y,13*pul,0,7);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font=F(13,800);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(cur.verdict==='ok'||cur.verdict==='etc'?'✓':'!',c[0],y+1);
+  pill(cur.badge,c[0],y-26*L.K,col,'#fff',10.5);
+ }
+}
+function drawPackets(){
+ packets.forEach(k=>{
+  const a=k.a(),b=k.b(),c=curve(a,b),t=clamp((T-k.t0)/k.dur);
+  ctx.strokeStyle=k.col;ctx.globalAlpha=.55;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(...a);
+  for(let i=1;i<=24;i++){const q=qpt(a,c,b,t*i/24);ctx.lineTo(...q);}ctx.stroke();ctx.globalAlpha=1;
+  const p=qpt(a,c,b,t);
+  ctx.save();ctx.shadowColor=k.col;ctx.shadowBlur=16;ctx.fillStyle=k.col;ctx.beginPath();ctx.arc(p[0],p[1],7,0,7);ctx.fill();ctx.restore();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p[0],p[1],3,0,7);ctx.fill();
+  if(k.label)pill(k.label,p[0],p[1]-18*L.K,k.col,'#fff',10);
+ });
+}
+
+/* ================= PANELS ================= */
+const capEl=document.getElementById('cap');
+function cap(t){capEl.textContent=t;}
+function renderSteps(active){
+ const s=cur;
+ const items=[
+  s.v==='car'?'Phụ huynh / cán bộ lái ô tô đến trường':'Học sinh mang xe đi từ nhà đến trường',
+  s.tag?'Xe chạy qua trụ ETC tại cổng: quét thẻ ETC + camera đọc biển số (không dừng xe)':'Không phát hiện thẻ ETC → camera ANPR đọc biển số thay thế (xe vẫn không dừng)',
+  'Tự động tra cứu đăng ký xe từ VNeTraffic / Cục CSGT',
+  s.verdict==='ok'?'Xe phù hợp → không làm gì, chỉ ghi nhận lịch sử':s.verdict==='etc'?'Xe phù hợp → ghi nhận lịch sử, đánh dấu chưa có thẻ ETC':(s.v==='car'?'Đối chiếu hạn đăng kiểm & bảo hiểm → phát hiện hết hạn':'Đối chiếu loại xe được phép → phát hiện vi phạm'),
+  s.step5];
+ const cls=s.verdict==='warn'||s.verdict==='etc'?'warnc':'bad';
+ document.getElementById('steps').innerHTML=items.map((t,i)=>{
+  let c='';if(i===4&&s.verdict==='ok')c='skip';else if(i<active)c='done';else if(i===active)c='active';
+  if(i>=3&&s.verdict!=='ok'&&c)c+=' '+cls;
+  return `<li class="${c}"><span class="n">${i+1}</span><span>${t}</span></li>`;}).join('');
+}
+function renderLookup(s){
+ const v={etc:['etc','HỢP LỆ'],ok:['ok','PHÙ HỢP'],bad:['bad','VI PHẠM'],rec:['bad','TÁI PHẠM'],warn:['warn','CẦN NHẮC NHỞ']}[s.verdict];
+ document.getElementById('lookup').innerHTML=
+  `<div class="row"><span>Biển số</span><span class="plate">${s.plateText}</span></div>`+(s.tag?`<div class="row"><span>Thẻ ETC</span><span class="ok">✓ ${s.tag} · khớp biển số</span></div>`:'')+
+  s.rows.map(([a,b,c])=>`<div class="row"><span>${a}</span><span class="${c}">${c==='ok'?'✓ ':c==='bad'?'✕ ':c==='warn'?'! ':''}${b}</span></div>`).join('')+
+  `<div class="verdict ${v[0]}">${s.vtext}</div>`;
+}
+const ICONS={owner:'📲',school:'🏫',parent:'👪',student:'🎒',csgt:'📑'};
+function addNotif(r,m,s){
+ const box=document.getElementById('notifs');if(box.querySelector('.placeholder'))box.innerHTML='';
+ const d=document.createElement('div');d.className='nf '+(r==='csgt'?'rec':s.key==='v3'?'warn':s.key==='v4'?'etc':'');
+ d.innerHTML=`<div class="ic">${ICONS[r]}</div><div><b>${m[0]}</b><small>${s.clock} · ${s.plateText}</small><p>${m[1]}</p></div>`;
+ box.prepend(d);
+ if(r==='csgt'){stats.rec++;renderStats();}
+}
+const stats={total:317,ok:314,warn:3,rec:0};
+function renderStats(){sTotal.textContent=stats.total;sOk.textContent=stats.ok;sWarn.textContent=stats.warn;sRec.textContent=stats.rec;}
+function addHistory(s){
+ stats.total++;if(s.verdict==='ok'||s.verdict==='etc')stats.ok++;else stats.warn++;renderStats();
+ const pills={ok:'<span class="pill ok">Hợp lệ · ghi nhận</span>',bad:'<span class="pill bad">Vi phạm · cảnh báo lần 1</span>',rec:'<span class="pill rec">Tái phạm · phạt nguội</span>',warn:'<span class="pill warn">Hết hạn ĐK/BH · nhắc nhở</span>',etc:'<span class="pill etc">Hợp lệ · nhắc đăng ký ETC</span>'};
+ const tr=document.createElement('tr');tr.className='new';
+ tr.innerHTML=`<td>${s.clock}</td><td><span class="plate" style="font-size:12px">${s.plateText}</span></td><td>${s.vehicleName}</td><td>${s.driver}</td><td>${pills[s.verdict]}</td>`;
+ hist.prepend(tr);
+}
+[['06:32','59-MĐ1 778.20','Xe đạp điện','HS Phạm Gia Huy · 10A4'],['06:35','59-AA 102.45','Xe gắn máy 49 cm³','HS Võ Ngọc Hân · 12A1'],['06:38','51G-245.17','Ô tô con','GV Đặng Thu Hà']]
+ .forEach(([t,p,v,d])=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${t}</td><td><span class="plate" style="font-size:12px">${p}</span></td><td>${v}</td><td>${d}</td><td><span class="pill ok">Hợp lệ · ghi nhận</span></td>`;hist.prepend(tr);});
+renderStats();
+
+/* ================= CONTROLS ================= */
+document.querySelectorAll('#ctrls [data-k]').forEach(b=>b.onclick=()=>{auto=false;syncAuto();start(b.dataset.k);});
+document.getElementById('replay').onclick=()=>start(cur.key);
+const autoB=document.getElementById('auto');
+function syncAuto(){autoB.classList.toggle('on',auto);autoB.textContent=auto?'⏸ Đang tự động':'▶ Tự động';}
+autoB.onclick=()=>{auto=!auto;syncAuto();if(auto&&curPhase==='done')doneAt=T-10;};
+const spdB=document.getElementById('spd');spdB.onclick=()=>{speed=speed===1?2:speed===2?.5:1;spdB.textContent='Tốc độ '+speed+'×';};
+window.addEventListener('resize',layout);
+document.fonts&&document.fonts.ready.then(()=>{});
+layout();syncAuto();start('ok');
+let last=0;function frame(ts){const dt=last?Math.min(.05,(ts-last)/1000):0;last=ts;update(dt*speed);draw();requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+</script>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><section class="tt-crit" aria-label="Phản biện"><h2>Phản biện: vì sao nên làm?</h2><div class="tt-cols"><div class="tt-yes"><h3>Nên làm vì</h3><ul><li>Bãi xe trường học có lượng xe ra vào lớn vào giờ cao điểm; nhận dạng biển số tự động giảm thời gian kiểm soát và tăng an ninh.</li><li>Lịch sử ra vào giúp xử lý nhanh khi mất xe hoặc có phương tiện lạ.</li></ul></div><div class="tt-no"><h3>Nếu không làm</h3><ul><li>Ghi vé, kiểm tra thủ công gây ùn ứ ở cổng trường, khó truy vết khi có sự cố.</li><li>Phương tiện không đủ điều kiện vẫn ra vào mà không được phát hiện.</li></ul></div></div><p class="tt-sub">Cần đánh giá cho đơn vị của bạn? <a href="../lien-he.html">Liên hệ TORITECH</a>.</p></section><h2>Cùng hạng mục: AI Vision &amp; VMS</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="kien-truc-du-lieu-dang-kiem.html"><img src="../assets/img/du-an/thumb/kien-truc-du-lieu-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kiến trúc dữ liệu đăng kiểm cho Đô thị thông minh</b><small>Mô hình tương tác</small></span></a></li><li><a href="ket-noi-du-lieu-tin-tuc-giao-thong.html"><img src="../assets/img/du-an/thumb/ket-noi-du-lieu-tin-tuc-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Kết nối dữ liệu sản xuất tin tức giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="giam-sat-giao-thong-phat-thai.html"><img src="../assets/img/du-an/thumb/giam-sat-giao-thong-phat-thai.webp" alt="" loading="lazy" width="112" height="59"><span><b>Giám sát giao thông &amp; phát thải đô thị</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="../du-an-ai-vision-vms.html#ho-so"><span><b>Công văn đề xuất thí điểm hệ thống giám sát cơ sở đăng kiểm qua camera</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-ai-vision-vms.html">Xem toàn bộ hạng mục AI Vision &amp; VMS →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>

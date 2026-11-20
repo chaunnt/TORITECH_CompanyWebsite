@@ -15,7 +15,7 @@ def tbl(head, rows):
 
 
 def pages(CO):
-    contact = f'hotline/Zalo <a href="tel:{CO["hotline_tel"]}">{CO["hotline"]}</a>' + (f', email <a href="mailto:{CO["email_dpo"]}">{CO["email_dpo"]}</a>' if CO["email_dpo"] else "") + ' hoặc <a href="lien-he.html?topic=dulieu">biểu mẫu liên hệ</a>'
+    contact = f'hotline/Zalo <a href="tel:{CO["hotline_tel"]}">{CO["hotline"]}</a>' + (f', email <a href="mailto:{CO["email_dpo"]}">{CO["email_dpo"]}</a>' if CO["email_dpo"] else "") + ' hoặc <a href="lien-he.html?topic=dulieu">trang liên hệ</a>'
     name = CO["legal_name"]
     out = []
 

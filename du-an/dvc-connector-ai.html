@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<!-- toritech:meta -->
+<meta name="description" content="Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot."><link rel="canonical" href="https://toritech.vn/du-an/dvc-connector-ai.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="DVC Connector – Tự động hoá dịch vụ công bằng AI – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot."><meta property="og:url" content="https://toritech.vn/du-an/dvc-connector-ai.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/dvc-connector-ai.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="DVC Connector – Tự động hoá dịch vụ công bằng AI – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="Connector MCP tra cứu, tải C12 BHXH theo lịch, lưu Google Drive, gửi Gmail/Outlook, ghi Excel – chạy trên Claude, ChatGPT, Gemini, Copilot."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/dvc-connector-ai.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DVC Connector – Tự động hoá dịch vụ công bằng AI | Toritech</title>
+<meta name="description" content="Kết nối Claude với các dịch vụ công trực tuyến: BHXH, thuế, hóa đơn điện tử... Nhắc việc, tự động hoá, an toàn, đúng luật.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f2233; --ink-2:#3a4d5e; --muted:#6b7c8c;
+  --bg:#f6f8f7; --card:#ffffff; --line:#e2e8e6;
+  --brand:#0b6e5f; --brand-2:#0e8f7b; --brand-soft:#e3f3ef;
+  --accent:#e8a33d; --accent-soft:#fdf3e2;
+  --danger:#b4432f;
+  --radius:14px; --shadow:0 1px 2px rgba(15,34,51,.05),0 8px 24px rgba(15,34,51,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:16px}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:var(--ink)}
+.logo:hover{text-decoration:none}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-size:15px}
+.logo small{display:block;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.02em;margin-top:-3px}
+.menu{display:flex;gap:4px;list-style:none}
+.menu a{display:block;padding:8px 12px;border-radius:8px;color:var(--ink-2);font-weight:500;font-size:14.5px}
+.menu a:hover{background:var(--brand-soft);color:var(--brand);text-decoration:none}
+.menu a.active{background:var(--brand-soft);color:var(--brand)}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;width:40px;height:40px;cursor:pointer;font-size:18px;color:var(--ink)}
+@media(max-width:860px){
+  .burger{display:block}
+  .menu{display:none;position:absolute;top:64px;left:0;right:0;background:#fff;flex-direction:column;padding:10px 16px 16px;border-bottom:1px solid var(--line)}
+  .menu.open{display:flex}
+}
+
+/* views */
+.view{display:none;animation:fade .25s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{padding:72px 0 56px;background:
+  radial-gradient(900px 400px at 85% -10%,rgba(14,143,123,.14),transparent 60%),
+  radial-gradient(600px 300px at 0% 100%,rgba(232,163,61,.12),transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-soft);color:var(--brand);font-weight:600;font-size:13px;padding:6px 12px;border-radius:999px}
+h1{font-size:clamp(32px,4.6vw,50px);line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:18px 0 16px}
+h1 em{font-style:normal;color:var(--brand)}
+.lead{font-size:18px;color:var(--ink-2);max-width:560px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:.15s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-2)}
+.btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn-sm{padding:8px 14px;font-size:14px}
+.chat{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px;font-size:14px}
+.chat-top{display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:14px;color:var(--muted);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--brand-2)}
+.msg{padding:10px 14px;border-radius:12px;margin-bottom:10px;max-width:92%}
+.msg.u{background:var(--ink);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.msg.a{background:var(--bg);border-bottom-left-radius:4px}
+.tool{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-soft);padding:4px 10px;border-radius:999px;margin-bottom:8px}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero{padding:44px 0 36px}}
+
+/* sections */
+section.block{padding:64px 0}
+.sec-head{max-width:680px;margin-bottom:36px}
+h2{font-size:clamp(26px,3vw,34px);font-weight:800;letter-spacing:-.015em;line-height:1.25;margin-bottom:10px}
+h3{font-size:19px;font-weight:700;margin-bottom:8px;line-height:1.35}
+h4{font-size:16px;font-weight:700;margin:18px 0 6px}
+.sub{color:var(--ink-2);font-size:17px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:860px){.grid3,.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.ico{width:44px;height:44px;border-radius:11px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-size:20px;margin-bottom:14px}
+.card p{color:var(--ink-2);font-size:15px}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.steps .card{position:relative;padding-top:52px}
+.steps .card::before{counter-increment:s;content:counter(s);position:absolute;top:18px;left:24px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+.band{background:var(--ink);color:#fff;border-radius:20px;padding:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.band p{color:#c7d3dc}
+
+/* page header */
+.phead{padding:48px 0 28px;border-bottom:1px solid var(--line);background:#fff}
+.crumb{font-size:13.5px;color:var(--muted);margin-bottom:10px}
+.crumb a{color:var(--muted)}
+
+/* services */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 22px;align-items:center}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--ink-2)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.billing{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
+.switch{position:relative;width:44px;height:24px;background:var(--line);border-radius:999px;cursor:pointer;border:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--brand)}
+.switch.on::after{left:23px}
+.save{background:var(--accent-soft);color:#9a6416;font-weight:600;font-size:12px;padding:3px 8px;border-radius:6px}
+.svc{display:flex;flex-direction:column}
+.svc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.badge{font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px;white-space:nowrap}
+.badge.live{background:var(--brand-soft);color:var(--brand)}
+.badge.soon{background:#eef1f4;color:var(--muted)}
+.price{margin:16px 0 4px;font-size:30px;font-weight:800;letter-spacing:-.02em}
+.price span{font-size:15px;font-weight:500;color:var(--muted)}
+.price-note{font-size:13px;color:var(--muted);min-height:20px}
+.feat{list-style:none;margin:14px 0 20px;flex:1}
+.feat li{font-size:14.5px;color:var(--ink-2);padding:5px 0 5px 24px;position:relative}
+.feat li::before{content:"✓";position:absolute;left:0;color:var(--brand);font-weight:700}
+.svc .actions{display:flex;gap:8px}
+.svc .actions .btn{flex:1;justify-content:center}
+.table-wrap{overflow-x:auto;margin-top:36px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);font-size:15px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#f0f4f3;font-weight:600;font-size:14px;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* detail */
+.detail{display:grid;grid-template-columns:1fr 320px;gap:36px;padding:40px 0 72px}
+@media(max-width:920px){.detail{grid-template-columns:1fr}}
+.side{position:sticky;top:84px;align-self:start}
+.side .price{margin-top:4px}
+.toc{list-style:none;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.toc a{display:block;padding:5px 0;color:var(--ink-2);font-size:14.5px}
+.doc h2{margin-top:44px;padding-top:8px;font-size:26px}
+.doc h2:first-child{margin-top:0}
+.doc p,.doc li{color:var(--ink-2)}
+.doc p{margin:10px 0}
+.doc ul,.doc ol{margin:10px 0 10px 22px}
+.doc li{margin:5px 0}
+.howto{list-style:none;margin:18px 0 0!important;counter-reset:h}
+.howto>li{counter-increment:h;position:relative;padding:0 0 22px 52px;margin:0!important;border-left:2px solid var(--line);margin-left:15px!important}
+.howto>li:last-child{border-left-color:transparent}
+.howto>li::before{content:counter(h);position:absolute;left:-16px;top:-2px;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+.howto strong{color:var(--ink);display:block;margin-bottom:2px}
+code,.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;background:#eef3f1;padding:2px 6px;border-radius:5px;color:var(--ink)}
+.codebox{position:relative;background:var(--ink);color:#e6f1ee;border-radius:10px;padding:14px 16px;margin:10px 0;font-family:ui-monospace,Menlo,monospace;font-size:13.5px;overflow-x:auto;white-space:pre}
+.copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+.note{border-radius:10px;padding:14px 16px;margin:16px 0;font-size:15px}
+.note.info{background:var(--brand-soft);border-left:4px solid var(--brand)}
+.note.warn{background:var(--accent-soft);border-left:4px solid var(--accent)}
+.note.todo{background:#fbeeeb;border-left:4px solid var(--danger)}
+.note b{color:var(--ink)}
+.note.disc{font-size:14.5px;line-height:1.6}
+.prompt{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;font-size:15px}
+.prompt button{flex-shrink:0}
+.tools-tbl td:first-child{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:nowrap}
+
+/* legal */
+.legal{max-width:820px;padding:40px 0 80px}
+.legal h2{font-size:22px;margin-top:36px}
+.legal h2:first-of-type{margin-top:0}
+.legal p,.legal li{color:var(--ink-2);font-size:15.5px}
+.legal p{margin:8px 0}
+.legal ol,.legal ul{margin:8px 0 8px 22px}
+.legal li{margin:4px 0}
+.basis{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:20px 0 32px}
+.basis h3{font-size:15px;margin-bottom:6px}
+.basis li{font-size:14.5px}
+.updated{font-size:13.5px;color:var(--muted);margin-top:8px}
+.ph{background:#fbeeeb;color:var(--danger);font-weight:600;padding:1px 6px;border-radius:4px;font-size:.92em}
+
+/* about */
+.kv{display:grid;grid-template-columns:200px 1fr;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff}
+.kv div{padding:12px 16px;border-bottom:1px solid var(--line);font-size:15px}
+.kv div:nth-child(odd){background:#f0f4f3;font-weight:600;color:var(--ink-2)}
+.kv div:nth-last-child(-n+2){border-bottom:none}
+@media(max-width:600px){.kv{grid-template-columns:1fr}.kv div:nth-child(odd){border-bottom:none;padding-bottom:2px}}
+
+/* new home blocks */
+.hero-stats{display:flex;gap:28px;margin-top:30px;flex-wrap:wrap}
+.hero-stats b{display:block;font-size:26px;font-weight:800;color:var(--brand);line-height:1.1}
+.hero-stats span{font-size:13px;color:var(--muted)}
+.chat .tool{margin-right:4px}
+section.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.compare{display:grid;grid-template-columns:1fr 50px 1fr;gap:16px;align-items:stretch}
+.compare .arrow{display:grid;place-items:center;font-size:28px;color:var(--brand);font-weight:700}
+@media(max-width:860px){.compare{grid-template-columns:1fr}.compare .arrow{transform:rotate(90deg)}}
+.tag{display:inline-block;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:6px;margin-bottom:12px}
+.before .tag{background:#fbeeeb;color:var(--danger)}
+.after .tag{background:var(--brand-soft);color:var(--brand)}
+.flow{margin:0 0 14px 20px}
+.flow li{font-size:15px;color:var(--ink-2);padding:3px 0}
+.before .flow li{color:var(--muted)}
+.cost{font-weight:700;font-size:14.5px;padding-top:12px;border-top:1px dashed var(--line);color:var(--danger)}
+.cost.good{color:var(--brand)}
+.plats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:860px){.plats{grid-template-columns:1fr 1fr}}
+.plat{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:22px 18px;text-align:center}
+.plat .lg{margin:0 auto 12px}
+.plat b{display:block;font-size:16px}
+.plat small{display:block;color:var(--muted);font-size:13px}
+.plat .how{font-size:12.5px;color:var(--ink-2);margin-top:8px;background:#fff;border-radius:8px;padding:6px 8px}
+.lg{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:17px;color:#fff;overflow:hidden;flex-shrink:0}
+.lg img{width:100%;height:100%;object-fit:contain;background:#fff}
+.lg.sm{width:38px;height:38px;border-radius:10px;font-size:14px}
+.fine{font-size:13px;color:var(--muted);margin-top:16px}
+.sched{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media(max-width:860px){.sched{grid-template-columns:1fr}}
+.timeline{padding:8px 24px}
+.tl{position:relative;padding:16px 0 16px 22px;border-left:2px solid var(--brand-soft)}
+.tl::before{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand-soft)}
+.tl .when{display:block;font-size:12.5px;font-weight:600;color:var(--accent);margin-bottom:2px}
+.tl p{font-size:14px;color:var(--ink-2)}
+.grp{font-size:15px;color:var(--muted);font-weight:600;margin:6px 0 12px;text-transform:uppercase;letter-spacing:.04em}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:860px){.apps{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.apps,.plats{grid-template-columns:1fr}}
+.app{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px}
+.app b{display:block;font-size:15px}
+.app span{font-size:13px;color:var(--ink-2);line-height:1.45}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.ptab{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px 6px 6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;color:var(--ink-2)}
+.ptab .lg{width:26px;height:26px;border-radius:7px;font-size:11px}
+.ptab.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.ppane{display:none}.ppane.on{display:block}
+
+/* footer */
+footer{background:var(--ink);color:#b7c5cf;padding:48px 0 28px;font-size:14.5px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+@media(max-width:760px){.fgrid{grid-template-columns:1fr 1fr}}
+footer h5{color:#fff;font-size:14px;margin-bottom:10px}
+footer a{color:#b7c5cf;display:block;padding:3px 0}
+footer a:hover{color:#fff}
+.fbottom{border-top:1px solid rgba(255,255,255,.1);margin-top:32px;padding-top:18px;font-size:13px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;transition:.25s;z-index:50;opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+#tt-foot .tt-crit{margin:0 0 30px;padding:0 0 26px;border-bottom:1px solid #1e2a44}
+#tt-foot .tt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:12px 0}
+#tt-foot .tt-cols>div{padding:14px 16px;border-radius:12px;border:1px solid #1e2a44;background:#111c33}
+#tt-foot .tt-yes{border-left:4px solid #14b8a6}#tt-foot .tt-no{border-left:4px solid #f97316}
+#tt-foot h3{margin:0 0 8px;font-size:15px;font-weight:700;color:#fff}
+#tt-foot .tt-cols ul{display:block;padding-left:18px;list-style:disc}#tt-foot .tt-cols li{margin:0 0 6px;color:#cbd5e1}
+#tt-foot .tt-sub a{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / DVC Connector – Tự động hoá dịch vụ công bằng AI</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#home"><span class="logo-mark">DV</span><span>DVC Connector<small>by Toritech</small></span></a>
+    <button class="burger" aria-label="Mở menu" onclick="document.querySelector('.menu').classList.toggle('open')">☰</button>
+    <ul class="menu">
+      <li><a href="#home" data-nav="home">Trang chủ</a></li>
+      <li><a href="#services" data-nav="services">Dịch vụ &amp; Bảng giá</a></li>
+      <li><a href="#about" data-nav="about">Về chúng tôi</a></li>
+      <li><a href="#payment" data-nav="payment">Thanh toán</a></li>
+      <li><a href="#privacy" data-nav="privacy">Bảo mật dữ liệu</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= HOME ================= -->
+<div class="view" id="v-home">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">● Tự động hoá dịch vụ công bằng AI</span>
+        <h1>Tự động hoá <em>100%</em> thao tác dịch vụ công lặp đi lặp lại</h1>
+        <p class="lead">Không còn cảnh nhân viên ngồi đăng nhập từng cổng, bấm từng kỳ, tải từng file. Trợ lý làm thay: nhắc C12 BHXH mới, tự tải file, lưu vào Google Drive, gửi Gmail/Outlook, ghi vào Excel. Tự chạy theo lịch, trên Claude, ChatGPT, Gemini hay Copilot.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#services">Xem dịch vụ &amp; giá →</a>
+          <a class="btn btn-ghost" href="#service-bhxh">Hướng dẫn cài đặt</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>100%</b><span>thao tác lặp lại được tự động</span></div>
+          <div><b>0</b><span>lần đăng nhập thủ công mỗi kỳ</span></div>
+          <div><b>24/7</b><span>chạy theo lịch, không cần người trực</span></div>
+        </div>
+      </div>
+      <div class="chat" aria-label="Ví dụ tác vụ tự động">
+        <div class="chat-top"><span class="dot"></span> Tác vụ theo lịch · 08:00 ngày 05 hàng tháng</div>
+        <div class="msg u">Mỗi ngày 5 hàng tháng: tải C12 của 12 đơn vị, lưu vào Google Drive, cập nhật file Excel theo dõi và gửi Gmail cho kế toán trưởng.</div>
+        <div class="msg a">
+          <div class="tool">⚙ tracuuDanhSachC12 × 12</div> <div class="tool">⚙ downloadC12File × 12</div>
+          <div class="tool">☁ Google Drive</div> <div class="tool">▦ Excel</div> <div class="tool">✉ Gmail</div>
+          <div>Đã xong kỳ <b>10/2026</b>: 12/12 file C12 lưu tại <i>Drive › BHXH › 2026-10</i>, bảng theo dõi đã cập nhật, email tổng hợp đã gửi. 1 đơn vị có số phải đóng tăng 18% so với kỳ trước, đã đánh dấu.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTOMATION -->
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Tự động hoá 100%: nhân viên không còn phải làm việc lặp lại</h2>
+        <p class="sub">Mỗi kỳ, kế toán phải lặp lại cùng một chuỗi thao tác cho từng mã đơn vị. Connector làm toàn bộ chuỗi đó.</p>
+      </div>
+      <div class="compare">
+        <div class="card before">
+          <span class="tag">Trước: thủ công</span>
+          <ol class="flow">
+            <li>Mở cổng BHXH, đăng nhập từng mã đơn vị</li>
+            <li>Chọn kỳ, tra cứu, tải từng file C12</li>
+            <li>Đổi tên file, tạo thư mục, tải lên Drive/OneDrive</li>
+            <li>Gõ số liệu vào Excel theo dõi</li>
+            <li>Soạn email báo cáo, đính kèm, gửi</li>
+            <li>Lặp lại cho đơn vị tiếp theo… và tháng sau</li>
+          </ol>
+          <div class="cost">≈ 10–15 phút / đơn vị / kỳ</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="card after">
+          <span class="tag">Sau: DVC Connector</span>
+          <ol class="flow">
+            <li>Đặt lịch một lần bằng một câu lệnh</li>
+            <li>Trợ lý tự đăng nhập, nhắc C12 mới, tải file cho mọi đơn vị</li>
+            <li>Tự lưu file vào đúng thư mục Google Drive / OneDrive</li>
+            <li>Tự cập nhật Excel / Google Sheets</li>
+            <li>Tự gửi Gmail / Outlook, đánh dấu chỗ bất thường</li>
+          </ol>
+          <div class="cost good">0 phút thao tác. Nhân viên chỉ đọc báo cáo.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Một connector, chạy trên mọi nền tảng AI lớn</h2>
+        <p class="sub">DVC Connector theo chuẩn mở <b>Model Context Protocol (MCP)</b>. Mua một lần là dùng được trên các trợ lý AI có hỗ trợ MCP, không bị khoá vào một hãng.</p>
+      </div>
+      <div class="plats" id="plats"></div>
+      <p class="fine">Và các ứng dụng khác có hỗ trợ MCP như Cursor, VS Code. Một số tính năng tùy thuộc gói và quyền quản trị của từng nền tảng. Tên và nhãn hiệu thuộc về chủ sở hữu tương ứng.</p>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="block">
+    <div class="wrap sched">
+      <div>
+        <h2>Hoạt động độc lập theo lịch định sẵn</h2>
+        <p class="sub">Đặt lịch một lần, sau đó tác vụ tự chạy đúng giờ dù không ai mở máy. Kết quả được lưu và gửi đến đúng người.</p>
+        <ul class="feat" style="margin-top:18px">
+          <li>Chu kỳ linh hoạt: hằng ngày, hằng tuần, ngày cố định trong tháng, cuối quý</li>
+          <li>Chạy cho nhiều mã đơn vị trong một lượt</li>
+          <li>Tự phát hiện bất thường: số phải đóng tăng/giảm, kỳ chưa có C12</li>
+          <li>Nhật ký mỗi lần chạy, báo lỗi qua email nếu cổng nhà nước bảo trì</li>
+        </ul>
+      </div>
+      <div class="card timeline">
+        <div class="tl"><span class="when">Hằng ngày · 07:30</span><b>Nhắc C12 mới</b><p>Báo ngay nếu cơ quan BHXH vừa phát hành thông báo kỳ mới.</p></div>
+        <div class="tl"><span class="when">Ngày 05 hàng tháng · 08:00</span><b>Tải &amp; lưu trữ C12</b><p>Tải PDF mọi đơn vị, lưu Google Drive, cập nhật Excel.</p></div>
+        <div class="tl"><span class="when">Thứ Hai hàng tuần · 09:00</span><b>Báo cáo tổng hợp</b><p>Gửi Gmail/Outlook cho kế toán trưởng kèm bảng so sánh.</p></div>
+        <div class="tl"><span class="when">Cuối quý</span><b>Đối chiếu số liệu</b><p>Lập báo cáo quý trên Google Docs / Word.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPS -->
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Kết nối sẵn với ứng dụng văn phòng bạn đang dùng</h2>
+        <p class="sub">Claude, ChatGPT và Gemini đều có sẵn kho connector/app chính thức. DVC Connector chạy chung với chúng trong cùng một tác vụ: lấy dữ liệu dịch vụ công, rồi lưu, ghi, gửi đi ngay.</p>
+      </div>
+      <h3 class="grp">Google Workspace</h3>
+      <div class="apps" id="appsG"></div>
+      <h3 class="grp">Microsoft 365</h3>
+      <div class="apps" id="appsM"></div>
+      <div class="note info" style="margin-top:24px"><b>Ví dụ:</b> “Tải C12 tháng này, lưu vào thư mục <i>BHXH</i> trên Google Drive, điền số phải đóng vào sheet <i>Theo dõi 2026</i> trong Excel và gửi Outlook cho chị Lan.” Một câu lệnh, ba ứng dụng, không cần mở ứng dụng nào.</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="grid3">
+        <div class="card"><div class="ico">💬</div><h3>Ra lệnh bằng tiếng Việt</h3><p>Không cần nhớ menu hay mã thủ tục. Mô tả việc cần làm, trợ lý AI chọn công cụ phù hợp.</p></div>
+        <div class="card"><div class="ico">🔐</div><h3>Bảo mật theo luật mới</h3><p>Xây dựng theo Luật Bảo vệ dữ liệu cá nhân 2025 và Nghị định 356/2025/NĐ-CP. Mật khẩu được mã hóa, không dùng cho mục đích khác.</p></div>
+        <div class="card"><div class="ico">🧾</div><h3>Có nhật ký, có kiểm soát</h3><p>Mỗi lần chạy đều được ghi lại. Có thể đặt chế độ hỏi xác nhận trước các thao tác quan trọng.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Bắt đầu trong 4 bước</h2></div>
+      <div class="steps">
+        <div class="card"><h3>Chọn gói</h3><p>Chọn dịch vụ công bạn cần trong bảng giá.</p></div>
+        <div class="card"><h3>Thanh toán</h3><p>Chuyển khoản hoặc ví điện tử, nhận API key qua email.</p></div>
+        <div class="card"><h3>Thêm vào trợ lý AI</h3><p>Dán địa chỉ connector vào Claude, ChatGPT, Gemini hoặc Copilot.</p></div>
+        <div class="card"><h3>Đặt lịch &amp; để máy làm</h3><p>Ra lệnh một lần, tác vụ tự chạy theo chu kỳ.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="band">
+        <div><h2 style="color:#fff">Chỉ từ 50.000đ/tháng</h2><p>Hủy bất cứ lúc nào. Hoàn tiền nếu dịch vụ lỗi kéo dài theo chính sách thanh toán.</p></div>
+        <a class="btn btn-primary" href="#services">Xem bảng giá</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= SERVICES ================= -->
+<div class="view" id="v-services">
+  <div class="phead"><div class="wrap">
+    <div class="crumb"><a href="#home">Trang chủ</a> / Dịch vụ &amp; Bảng giá</div>
+    <h2>Danh sách dịch vụ công</h2>
+    <p class="sub">Mỗi dịch vụ là một connector riêng. Đăng ký dịch vụ nào trả phí dịch vụ đó. Giá đã bao gồm VAT.</p>
+  </div></div>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="chip on" data-filter="all">Tất cả</button>
+      <button class="chip" data-filter="live">Đang hoạt động</button>
+      <button class="chip" data-filter="soon">Sắp ra mắt</button>
+      <div class="billing">Theo tháng <button class="switch" id="billSwitch" aria-label="Chuyển sang thanh toán theo năm"></button> Theo năm <span class="save">Tặng 2 tháng</span></div>
+    </div>
+    <div class="grid3" id="svcGrid"></div>
+
+    <div class="table-wrap">
+      <h3 style="margin-bottom:12px">Bảng giá tổng hợp</h3>
+      <table>
+        <thead><tr><th>Dịch vụ</th><th>Trạng thái</th><th style="text-align:right">Giá / tháng</th><th style="text-align:right">Giá / năm</th></tr></thead>
+        <tbody id="priceRows"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:24px"><div class="note todo disc"><b>⚠ Lưu ý quan trọng về tài khoản &amp; dữ liệu</b><br>Để tự động hoá, hệ thống cần <b>lưu (mã hóa)</b> và <b>sử dụng</b> thông tin tài khoản dịch vụ công bạn cung cấp. Toritech <b>chỉ là trung gian kết nối</b>: không chịu trách nhiệm về dữ liệu do nguồn thông tin trả về, cũng không xác minh quyền sở hữu tài khoản. Bạn <b>tự bảo mật thông tin</b> và <b>chịu trách nhiệm xác nhận</b> mình có quyền sở hữu hoặc sử dụng các thông tin đã cung cấp. <a href="#privacy">Đọc đầy đủ</a></div></div>
+    <div class="note info" style="margin:16px 0 72px"><b>Lưu ý:</b> Connector không thay thế cổng dịch vụ công chính thức và không thu phí, lệ phí thay cơ quan nhà nước. Phí trên là phí sử dụng phần mềm kết nối của Toritech.</div>
+  </div>
+</div>
+
+<!-- ================= SERVICE DETAIL ================= -->
+<div class="view" id="v-detail">
+  <div class="phead"><div class="wrap">
+    <div class="crumb"><a href="#home">Trang chủ</a> / <a href="#services">Dịch vụ</a> / <span id="dCrumb"></span></div>
+    <h2 id="dTitle"></h2>
+    <p class="sub" id="dSub"></p>
+  </div></div>
+  <div class="wrap detail">
+    <article class="doc" id="dBody"></article>
+    <aside class="side">
+      <div class="card">
+        <span class="badge" id="dBadge"></span>
+        <div class="price" id="dPrice"></div>
+        <div class="price-note" id="dPriceY"></div>
+        <a class="btn btn-primary" style="width:100%;justify-content:center;margin-top:14px" href="#payment">Đăng ký &amp; thanh toán</a>
+        <ul class="toc" id="dToc"></ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ================= ABOUT ================= -->
+<div class="view" id="v-about">
+  <div class="phead"><div class="wrap">
+    <div class="crumb"><a href="#home">Trang chủ</a> / Về chúng tôi</div>
+    <h2>Về Toritech</h2>
+    <p class="sub">Đội ngũ xây dựng các connector giúp doanh nghiệp làm việc với dịch vụ công nhanh hơn qua trợ lý AI.</p>
+  </div></div>
+  <div class="wrap legal">
+    <h2>Sứ mệnh</h2>
+    <p>Công ty TNHH Toritech được thành lập ngày 31/10/2022 tại Thành phố Hồ Chí Minh, hoạt động chính trong lĩnh vực lập trình máy vi tính và dịch vụ công nghệ thông tin. Toritech tin rằng thủ tục hành chính nên đơn giản như một câu hỏi. Chúng tôi phát triển các connector theo chuẩn Model Context Protocol (MCP), cho phép trợ lý AI như Claude kết nối an toàn với các cổng dịch vụ công trực tuyến để tra cứu, tổng hợp và tải chứng từ thay cho người dùng, khi được người dùng cho phép.</p>
+
+    <h2>Chúng tôi làm gì</h2>
+    <ul>
+      <li>Phát triển và vận hành máy chủ MCP cho các dịch vụ công: BHXH, thuế, hóa đơn điện tử, đăng ký kinh doanh…</li>
+      <li>Tích hợp theo yêu cầu cho doanh nghiệp, đại lý thuế, đại lý BHXH và văn phòng kế toán.</li>
+      <li>Tư vấn quy trình tuân thủ bảo vệ dữ liệu cá nhân khi ứng dụng AI vào nghiệp vụ.</li>
+    </ul>
+
+    <h2>Giá trị cốt lõi</h2>
+    <div class="grid3" style="margin-top:12px">
+      <div class="card"><h3>Minh bạch</h3><p>Giá công khai, công cụ công khai, không phí ẩn.</p></div>
+      <div class="card"><h3>An toàn</h3><p>Chỉ xử lý dữ liệu khi có sự đồng ý, đúng mục đích đã nêu.</p></div>
+      <div class="card"><h3>Thực dụng</h3><p>Ưu tiên tính năng tiết kiệm thời gian thật cho kế toán, nhân sự.</p></div>
+    </div>
+
+    <h2>Thông tin doanh nghiệp</h2>
+    <div class="kv" style="margin-top:12px">
+      <div>Tên doanh nghiệp</div><div>CÔNG TY TNHH TORITECH</div>
+      <div>Tên quốc tế / viết tắt</div><div>TORITECH</div>
+      <div>Mã số doanh nghiệp / MST</div><div>0317545179 — cấp ngày 31/10/2022</div>
+      <div>Người đại diện theo pháp luật</div><div>Ông/Bà Nguyễn Ngọc Thạch Châu</div>
+      <div>Địa chỉ trụ sở</div><div>139/21/2A Thạnh Lộc 27, Khu phố 3C, Phường An Phú Đông, Thành phố Hồ Chí Minh, Việt Nam</div>
+      <div>Ngành nghề chính</div><div>6201 – Lập trình máy vi tính; ngoài ra: tư vấn và quản trị hệ thống máy vi tính (6202), dịch vụ công nghệ thông tin (6209), bán buôn máy vi tính và phần mềm (4651), thiết kế chuyên dụng (7410)</div>
+      <div>Điện thoại / Hotline</div><div>0343 902 960</div>
+      <div>Email hỗ trợ</div><div><span class="ph">[email@…]</span></div>
+      <div>Email bảo vệ dữ liệu</div><div><span class="ph">[dpo@…]</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PAYMENT POLICY ================= -->
+<div class="view" id="v-payment">
+  <div class="phead"><div class="wrap">
+    <div class="crumb"><a href="#home">Trang chủ</a> / Chính sách thanh toán</div>
+    <h2>Chính sách thanh toán, hủy gói &amp; hoàn tiền</h2>
+    <p class="updated">Hiệu lực từ: 01/11/2026 · Phiên bản 1.0</p>
+  </div></div>
+  <div class="wrap legal">
+    <div class="basis">
+      <h3>Căn cứ pháp lý</h3>
+      <ul>
+        <li>Luật Thương mại điện tử số 122/2025/QH15 (hiệu lực từ 01/7/2026) và Nghị định số 248/2026/NĐ-CP hướng dẫn thi hành;</li>
+        <li>Luật Bảo vệ quyền lợi người tiêu dùng số 19/2023/QH15 và văn bản hướng dẫn;</li>
+        <li>Luật Giao dịch điện tử số 20/2023/QH15; Bộ luật Dân sự 2015; Luật Thương mại 2005;</li>
+        <li>Pháp luật về thuế giá trị gia tăng và hóa đơn điện tử.</li>
+      </ul>
+    </div>
+
+    <h2>1. Phạm vi áp dụng</h2>
+    <p>Chính sách áp dụng cho mọi giao dịch mua gói sử dụng connector dịch vụ công (gọi chung là "Dịch vụ") do Toritech cung cấp qua website này. Dịch vụ là sản phẩm phần mềm cung cấp theo hình thức thuê bao (SaaS), không phải hàng hóa vật lý nên không phát sinh giao hàng.</p>
+
+    <h2>2. Thông tin giá</h2>
+    <ul>
+      <li>Giá niêm yết bằng Đồng Việt Nam (VNĐ), <b>đã bao gồm thuế GTGT</b>, không phát sinh phí ẩn.</li>
+      <li>Giá trên website tại thời điểm xác nhận đơn là giá áp dụng cho chu kỳ đó. Thay đổi giá sẽ được thông báo trước ít nhất 30 ngày và chỉ áp dụng từ chu kỳ gia hạn tiếp theo.</li>
+      <li>Phí sử dụng Dịch vụ không bao gồm phí, lệ phí nộp cho cơ quan nhà nước (nếu có) và không bao gồm chi phí gói Claude của bạn.</li>
+    </ul>
+
+    <h2>3. Quy trình đặt mua &amp; giao kết hợp đồng</h2>
+    <ol>
+      <li>Chọn dịch vụ và chu kỳ (tháng/năm) trên trang Dịch vụ.</li>
+      <li>Cung cấp thông tin người mua: họ tên/tên doanh nghiệp, email, số điện thoại, MST (nếu cần xuất hóa đơn).</li>
+      <li>Xem lại toàn bộ thông tin đơn hàng (dịch vụ, giá, thời hạn, điều khoản) trước khi xác nhận. Bạn có quyền sửa hoặc hủy đơn trước khi thanh toán.</li>
+      <li>Thanh toán. Hợp đồng điện tử được giao kết khi Toritech gửi email xác nhận thanh toán thành công.</li>
+      <li>Nhận API key và hướng dẫn kích hoạt qua email trong vòng 24 giờ làm việc (thường là ngay lập tức).</li>
+    </ol>
+
+    <h2>4. Phương thức thanh toán</h2>
+    <ul>
+      <li><b>Chuyển khoản ngân hàng / mã QR (VietQR):</b> Ngân hàng <span class="ph">[Tên ngân hàng]</span>, chủ tài khoản <b>CÔNG TY TNHH TORITECH</b>, số tài khoản <span class="ph">[STK]</span>. Nội dung: mã đơn hàng.</li>
+      <li><b>Ví điện tử / cổng thanh toán:</b> <span class="ph">[MoMo, VNPay… nếu có]</span>.</li>
+      <li>Toritech <b>không lưu trữ</b> thông tin thẻ thanh toán. Mọi giao dịch thẻ được xử lý bởi tổ chức trung gian thanh toán được Ngân hàng Nhà nước cấp phép.</li>
+      <li>Chỉ thanh toán vào tài khoản đứng tên công ty như trên. Toritech không yêu cầu chuyển tiền vào tài khoản cá nhân.</li>
+    </ul>
+
+    <h2>5. Hóa đơn</h2>
+    <p>Hóa đơn điện tử được xuất cho mọi giao dịch theo quy định và gửi về email đã đăng ký. Doanh nghiệp cần cung cấp đúng MST, tên, địa chỉ trước khi thanh toán.</p>
+
+    <h2>6. Gia hạn &amp; hủy gói</h2>
+    <ul>
+      <li>Gói tự động gia hạn chỉ khi bạn đã chọn và đồng ý rõ ràng chế độ gia hạn tự động. Email nhắc gia hạn được gửi trước ngày hết hạn ít nhất 7 ngày.</li>
+      <li>Bạn có thể hủy gia hạn bất cứ lúc nào qua email hỗ trợ hoặc trang quản lý tài khoản; Dịch vụ tiếp tục đến hết chu kỳ đã thanh toán.</li>
+    </ul>
+
+    <h2>7. Đổi gói &amp; hoàn tiền</h2>
+    <p>Vì Dịch vụ là sản phẩm số được kích hoạt ngay sau khi thanh toán, chính sách đổi trả được áp dụng như sau:</p>
+    <ul>
+      <li><b>Hoàn 100%</b> nếu bạn yêu cầu trong vòng <b>7 ngày</b> kể từ ngày thanh toán lần đầu và chưa thực hiện quá 10 lượt gọi công cụ.</li>
+      <li><b>Hoàn 100%</b> nếu Toritech không kích hoạt được Dịch vụ trong 3 ngày làm việc kể từ khi nhận thanh toán.</li>
+      <li><b>Hoàn theo tỷ lệ thời gian còn lại</b> nếu Dịch vụ gián đoạn do lỗi của Toritech quá 72 giờ liên tục, hoặc Toritech ngừng cung cấp Dịch vụ trước hạn.</li>
+      <li><b>Đổi gói:</b> nâng cấp lên gói/chu kỳ cao hơn được trừ giá trị còn lại của gói cũ; hạ gói áp dụng từ chu kỳ kế tiếp.</li>
+      <li><b>Không hoàn tiền</b> khi gián đoạn do cổng dịch vụ công của cơ quan nhà nước bảo trì/thay đổi, do sự cố của nền tảng Claude, do tài khoản dịch vụ công của bạn sai/bị khóa, hoặc khi bạn vi phạm điều khoản sử dụng. Thời gian gián đoạn do cổng nhà nước quá 72 giờ sẽ được cộng bù thời hạn sử dụng.</li>
+      <li>Tiền hoàn trả qua đúng phương thức đã thanh toán trong vòng <b>15 ngày làm việc</b> kể từ khi yêu cầu được chấp thuận.</li>
+    </ul>
+
+    <h2>8. Trách nhiệm của các bên</h2>
+    <p><b>Toritech:</b> cung cấp đúng thông tin dịch vụ đã công bố; bảo mật thông tin giao dịch; hỗ trợ kỹ thuật trong giờ hành chính; giải quyết khiếu nại theo mục 9.</p>
+    <p><b>Khách hàng:</b> cung cấp thông tin chính xác; tự bảo quản API key; chỉ dùng Dịch vụ cho tài khoản dịch vụ công mà mình có quyền hợp pháp; tự kiểm tra lại kết quả trước khi dùng cho mục đích kê khai, nộp tiền; tự bảo mật thông tin đăng nhập và chịu trách nhiệm xác nhận mình có quyền sở hữu hoặc sử dụng các thông tin đã cung cấp.</p>
+    <p><b>Giới hạn trách nhiệm:</b> Toritech chỉ là trung gian kết nối kỹ thuật, không chịu trách nhiệm về dữ liệu do nguồn thông tin trả về và quyền sở hữu tài khoản của người dùng. Chi tiết tại <a href="#privacy">mục 7 Chính sách bảo vệ dữ liệu cá nhân</a>.</p>
+
+    <h2>9. Khiếu nại &amp; giải quyết tranh chấp</h2>
+    <ol>
+      <li>Gửi khiếu nại qua email <span class="ph">[email]</span> hoặc hotline 0343 902 960, kèm mã đơn hàng và mô tả vấn đề.</li>
+      <li>Toritech xác nhận tiếp nhận trong 24 giờ làm việc và phản hồi kết quả trong tối đa 7 ngày làm việc.</li>
+      <li>Nếu không đồng ý với kết quả, bạn có quyền thương lượng, hòa giải, đề nghị cơ quan quản lý nhà nước về bảo vệ quyền lợi người tiêu dùng hỗ trợ, hoặc khởi kiện tại Tòa án có thẩm quyền theo pháp luật Việt Nam.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ================= PRIVACY ================= -->
+<div class="view" id="v-privacy">
+  <div class="phead"><div class="wrap">
+    <div class="crumb"><a href="#home">Trang chủ</a> / Chính sách bảo mật dữ liệu</div>
+    <h2>Chính sách bảo vệ dữ liệu cá nhân</h2>
+    <p class="updated">Hiệu lực từ: 01/11/2026 · Phiên bản 1.0</p>
+  </div></div>
+  <div class="wrap legal">
+    <div class="basis">
+      <h3>Căn cứ pháp lý</h3>
+      <ul>
+        <li>Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 (hiệu lực từ 01/01/2026);</li>
+        <li>Nghị định số 356/2025/NĐ-CP quy định chi tiết Luật Bảo vệ dữ liệu cá nhân (thay thế Nghị định 13/2023/NĐ-CP);</li>
+        <li>Luật Dữ liệu số 60/2024/QH15; pháp luật về an ninh mạng, an toàn thông tin mạng;</li>
+        <li>Luật Thương mại điện tử số 122/2025/QH15; Luật Bảo vệ quyền lợi người tiêu dùng số 19/2023/QH15.</li>
+      </ul>
+    </div>
+
+    <h2>1. Bên kiểm soát và xử lý dữ liệu</h2>
+    <p><b>CÔNG TY TNHH TORITECH</b> (MST 0317545179, trụ sở 139/21/2A Thạnh Lộc 27, Khu phố 3C, Phường An Phú Đông, TP. Hồ Chí Minh; "Toritech", "chúng tôi") là bên kiểm soát và xử lý dữ liệu cá nhân thu thập qua website và các connector. Đầu mối bảo vệ dữ liệu cá nhân: <span class="ph">[Họ tên]</span> — email <span class="ph">[dpo@…]</span>.</p>
+
+    <h2>2. Dữ liệu chúng tôi xử lý</h2>
+    <p><b>Dữ liệu cá nhân cơ bản:</b></p>
+    <ul>
+      <li>Thông tin tài khoản: họ tên, email, số điện thoại, tên doanh nghiệp, mã số thuế.</li>
+      <li>Thông tin giao dịch: gói đã mua, lịch sử thanh toán, hóa đơn.</li>
+      <li>Dữ liệu kỹ thuật: API key, nhật ký gọi công cụ (thời gian, tên công cụ, mã lỗi), địa chỉ IP.</li>
+    </ul>
+    <p><b>Dữ liệu từ cổng dịch vụ công (xử lý theo yêu cầu của bạn):</b></p>
+    <ul>
+      <li>Tên đăng nhập và mật khẩu tài khoản dịch vụ công (ví dụ tài khoản VINBHXH của đơn vị).</li>
+      <li>Dữ liệu tra cứu trả về: thông báo C12, số phải đóng, danh sách lao động tham gia BHXH… Dữ liệu này có thể chứa thông tin về người lao động, trong đó một số trường có thể là <b>dữ liệu cá nhân nhạy cảm</b> theo luật (ví dụ thông tin bảo hiểm, tài chính).</li>
+    </ul>
+    <p>Chúng tôi <b>không</b> thu thập dữ liệu thẻ thanh toán, dữ liệu sinh trắc học, và không cố ý thu thập dữ liệu của trẻ em.</p>
+
+    <h2>3. Mục đích xử lý</h2>
+    <ol>
+      <li>Cung cấp Dịch vụ: đăng nhập cổng dịch vụ công thay mặt bạn, nhắc việc, tải chứng từ khi bạn yêu cầu hoặc theo lịch bạn đã đặt qua trợ lý AI.</li>
+      <li>Quản lý tài khoản, thanh toán, xuất hóa đơn, hỗ trợ khách hàng.</li>
+      <li>Bảo đảm an ninh hệ thống, phát hiện truy cập trái phép, khắc phục lỗi.</li>
+      <li>Gửi thông báo về gia hạn, thay đổi chính sách. Tin tiếp thị chỉ gửi khi bạn đồng ý riêng và có thể từ chối bất cứ lúc nào.</li>
+    </ol>
+    <p>Chúng tôi không dùng dữ liệu từ cổng dịch vụ công cho quảng cáo, không bán, không mua bán dữ liệu cá nhân dưới bất kỳ hình thức nào, và không dùng để huấn luyện mô hình AI.</p>
+
+    <h2>4. Sự đồng ý</h2>
+    <ul>
+      <li>Việc xử lý chỉ được thực hiện khi bạn đã đồng ý rõ ràng, tự nguyện, bằng hành động khẳng định (đánh dấu chọn, xác nhận). Im lặng hoặc không phản hồi không được coi là đồng ý.</li>
+      <li>Đồng ý được lấy riêng cho từng mục đích. Bạn có thể đồng ý một phần.</li>
+      <li><b>Khi bạn cung cấp tài khoản dịch vụ công của doanh nghiệp</b>, bạn cam kết mình được doanh nghiệp ủy quyền hợp pháp, và doanh nghiệp đã thông báo/đủ căn cứ pháp lý đối với dữ liệu của người lao động theo quy định.</li>
+    </ul>
+
+    <h2>5. Luồng dữ liệu khi dùng cùng trợ lý AI</h2>
+    <p>Khi bạn yêu cầu trợ lý AI (Claude, ChatGPT, Gemini, Microsoft Copilot…) dùng Dịch vụ, kết quả trả về được đưa vào cuộc trò chuyện hoặc tác vụ trên nền tảng của nhà cung cấp đó (Anthropic, OpenAI, Google, Microsoft), và được xử lý theo điều khoản, chính sách quyền riêng tư của họ, có thể trên máy chủ đặt ngoài lãnh thổ Việt Nam. Khi bạn kết hợp với Google Drive, Gmail, Microsoft 365…, dữ liệu được lưu tại các dịch vụ đó theo tài khoản của chính bạn. Bằng việc bật Dịch vụ, bạn hiểu và đồng ý với các luồng chuyển dữ liệu này. Toritech thực hiện và lưu hồ sơ đánh giá tác động chuyển dữ liệu cá nhân ra nước ngoài theo quy định.</p>
+    <div class="note warn">Chỉ cho phép trợ lý AI truy cập những dữ liệu thật sự cần. Tránh dán mật khẩu trực tiếp vào khung chat nếu có phương thức đăng nhập SSO.</div>
+
+    <h2>6. Lưu trữ &amp; biện pháp bảo vệ</h2>
+    <ul>
+      <li>Mật khẩu tài khoản dịch vụ công được mã hóa khi lưu trữ và khi truyền (TLS); chỉ được giải mã tại thời điểm đăng nhập thay mặt bạn.</li>
+      <li>Dữ liệu tra cứu không được lưu lâu dài; tệp tải về được cấp qua đường dẫn có thời hạn.</li>
+      <li>Phân quyền truy cập nội bộ theo nguyên tắc tối thiểu; ghi nhật ký truy cập; nhân sự ký cam kết bảo mật.</li>
+      <li>Thời hạn lưu trữ: dữ liệu tài khoản lưu trong thời gian sử dụng Dịch vụ; chứng từ giao dịch lưu theo thời hạn của pháp luật kế toán, thuế; dữ liệu khác được xóa hoặc ẩn danh khi hết mục đích.</li>
+    </ul>
+
+    <h2 id="mien-tru">7. Lưu trữ tài khoản để tự động hoá &amp; giới hạn trách nhiệm</h2>
+    <p><b>Vì sao cần lưu thông tin tài khoản.</b> Để Dịch vụ tự chạy theo lịch mà không cần người thao tác, hệ thống phải lưu (dạng mã hóa) thông tin đăng nhập hoặc phiên đăng nhập cổng dịch vụ công mà bạn cung cấp, và dùng chúng để đăng nhập thay bạn đúng phạm vi bạn đã yêu cầu. Nếu không đồng ý việc lưu trữ này, bạn vẫn có thể dùng Dịch vụ ở chế độ thủ công (cung cấp thông tin mỗi lần dùng), nhưng tính năng tự động theo lịch sẽ không hoạt động.</p>
+    <p><b>Toritech chỉ là trung gian kết nối kỹ thuật.</b> Dịch vụ chuyển yêu cầu của bạn đến hệ thống của cơ quan, tổ chức cung cấp dịch vụ công và trả lại kết quả nguyên trạng. Do đó:</p>
+    <ul>
+      <li>Toritech <b>không phải chủ sở hữu, không tạo lập và không chịu trách nhiệm</b> về tính chính xác, đầy đủ, kịp thời của dữ liệu do nguồn thông tin (cổng BHXH, cơ quan thuế, cổng dịch vụ công…) trả về. Dữ liệu chính thức là dữ liệu trên hệ thống của cơ quan có thẩm quyền.</li>
+      <li>Toritech <b>không xác minh và không chịu trách nhiệm về quyền sở hữu, quyền sử dụng</b> tài khoản, mã số thuế, mã đơn vị hay bất kỳ thông tin nào bạn cung cấp.</li>
+      <li>Toritech không chịu trách nhiệm về thiệt hại phát sinh từ việc bạn dùng kết quả mà không đối chiếu với nguồn chính thức, từ gián đoạn hoặc thay đổi của hệ thống nguồn, hoặc từ việc thông tin đăng nhập bị lộ do phía người dùng.</li>
+    </ul>
+    <p><b>Trách nhiệm của người dùng.</b> Khi cung cấp thông tin cho Dịch vụ, bạn cam kết và chịu trách nhiệm rằng:</p>
+    <ol>
+      <li>Bạn là chủ sở hữu, hoặc được chủ sở hữu (doanh nghiệp, đơn vị) <b>ủy quyền hợp pháp</b> để sử dụng tài khoản và thông tin đã cung cấp, cho đúng mục đích bạn yêu cầu;</li>
+      <li>Bạn có đủ căn cứ pháp lý đối với dữ liệu cá nhân của bên thứ ba (ví dụ người lao động) phát sinh khi sử dụng;</li>
+      <li>Bạn <b>tự bảo mật</b> API key, mật khẩu, thiết bị và tài khoản trợ lý AI của mình; không chia sẻ cho người không có thẩm quyền; thông báo ngay cho Toritech khi nghi ngờ bị lộ để thu hồi key và xóa thông tin đã lưu;</li>
+      <li>Bạn tự đối chiếu kết quả với nguồn chính thức trước khi dùng cho kê khai, nộp tiền hay quyết định quan trọng;</li>
+      <li>Bạn chịu trách nhiệm trước pháp luật và bồi thường cho Toritech nếu việc cung cấp, sử dụng thông tin không đúng quyền gây thiệt hại cho Toritech hoặc bên thứ ba.</li>
+    </ol>
+    <p>Bạn có thể yêu cầu xóa toàn bộ thông tin tài khoản đã lưu bất cứ lúc nào qua email bảo vệ dữ liệu. Các giới hạn trách nhiệm trên không loại trừ trách nhiệm của Toritech đối với lỗi do chính Toritech gây ra (ví dụ vi phạm nghĩa vụ bảo mật đã cam kết) hoặc các trường hợp pháp luật không cho phép miễn trừ.</p>
+
+    <h2>8. Chia sẻ dữ liệu</h2>
+    <p>Dữ liệu chỉ được chia sẻ với: (a) cổng dịch vụ công mà bạn yêu cầu kết nối; (b) nhà cung cấp hạ tầng máy chủ, thanh toán, hóa đơn điện tử theo hợp đồng có điều khoản bảo vệ dữ liệu; (c) cơ quan nhà nước có thẩm quyền khi pháp luật yêu cầu.</p>
+
+    <h2>9. Quyền của bạn (chủ thể dữ liệu)</h2>
+    <p>Theo Luật Bảo vệ dữ liệu cá nhân 2025, bạn có quyền:</p>
+    <ul>
+      <li>Được biết về hoạt động xử lý dữ liệu của mình;</li>
+      <li>Đồng ý hoặc không đồng ý; rút lại sự đồng ý;</li>
+      <li>Xem, chỉnh sửa, yêu cầu cung cấp dữ liệu cá nhân;</li>
+      <li>Yêu cầu xóa dữ liệu, hạn chế xử lý, phản đối xử lý;</li>
+      <li>Khiếu nại, tố cáo, khởi kiện và yêu cầu bồi thường thiệt hại theo quy định.</li>
+    </ul>
+    <p>Gửi yêu cầu tới <span class="ph">[dpo@…]</span>. Chúng tôi xác minh danh tính và xử lý trong thời hạn quy định tại Nghị định 356/2025/NĐ-CP. Việc rút lại đồng ý không ảnh hưởng đến tính hợp pháp của việc xử lý trước đó và có thể khiến Dịch vụ không tiếp tục được cung cấp.</p>
+
+    <h2>10. Sự cố dữ liệu</h2>
+    <p>Khi phát hiện vi phạm quy định bảo vệ dữ liệu cá nhân, Toritech thông báo cho cơ quan chuyên trách bảo vệ dữ liệu cá nhân (Bộ Công an) trong thời hạn 72 giờ theo quy định, và thông báo cho người dùng bị ảnh hưởng kèm biện pháp khắc phục.</p>
+
+    <h2>11. Cookie</h2>
+    <p>Website chỉ dùng cookie/bộ nhớ trình duyệt cần thiết cho hoạt động (ghi nhớ lựa chọn). Không dùng cookie quảng cáo bên thứ ba.</p>
+
+    <h2>12. Thay đổi chính sách</h2>
+    <p>Mọi thay đổi được đăng tại trang này và thông báo qua email trước khi áp dụng. Nếu thay đổi mục đích xử lý, chúng tôi sẽ xin lại sự đồng ý của bạn.</p>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="logo" href="#home" style="color:#fff;margin-bottom:10px"><span class="logo-mark">DV</span><span>DVC Connector</span></a>
+        <p>Tự động hoá dịch vụ công trên Claude, ChatGPT, Gemini và Microsoft Copilot.</p>
+        <p style="margin-top:10px;font-size:13px">Đây không phải trang thông tin chính thức của cơ quan nhà nước. Toritech không đại diện cho BHXH Việt Nam hay cơ quan thuế. Toritech chỉ là trung gian kết nối, không chịu trách nhiệm về dữ liệu do nguồn trả về hay quyền sở hữu tài khoản; người dùng tự bảo mật và chịu trách nhiệm về thông tin đã cung cấp.</p>
+      </div>
+      <div><h5>Dịch vụ</h5><a href="#services">Bảng giá</a><a href="#service-bhxh">Trợ lý BHXH</a><a href="#service-thue">Trợ lý Thuế</a></div>
+      <div><h5>Chính sách</h5><a href="#payment">Thanh toán &amp; hoàn tiền</a><a href="#privacy">Bảo vệ dữ liệu cá nhân</a></div>
+      <div><h5>Công ty</h5><a href="#about">Về Toritech</a><span style="display:block;padding:3px 0">Hotline: 0343 902 960</span><span style="display:block;padding:3px 0;font-size:13px">139/21/2A Thạnh Lộc 27, KP 3C, P. An Phú Đông, TP.HCM</span></div>
+    </div>
+    <div class="fbottom"><span>© 2026 CÔNG TY TNHH TORITECH · MST 0317545179 · Người đại diện: Nguyễn Ngọc Thạch Châu</span><span>Claude, ChatGPT, Gemini, Copilot, Google Workspace, Microsoft 365 là nhãn hiệu của chủ sở hữu tương ứng.</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Đã sao chép</div>
+
+<script>
+const SERVICES = [
+  { id:"bhxh", name:"Trợ lý BHXH doanh nghiệp (VINBHXH)", short:"Nhắc thông báo C12 mới, tự tải file PDF, tự đăng nhập tài khoản đơn vị.", status:"live", price:50000,
+    feats:["Nhắc C12 mới & tự tải file PDF","Chạy theo lịch định sẵn","Lưu Google Drive / OneDrive, ghi Excel, gửi Gmail / Outlook","Dùng trên Claude, ChatGPT, Gemini, Copilot","Không giới hạn MST trong gói"] },
+  { id:"thue", name:"Trợ lý Thuế điện tử (eTax)", short:"Nhắc nghĩa vụ thuế, hạn nộp tờ khai, thông báo nộp thuế.", status:"soon", price:50000,
+    feats:["Nhắc nghĩa vụ thuế","Nhắc trạng thái tờ khai","Tự tải thông báo thuế"] },
+  { id:"hoadon", name:"Trợ lý Hóa đơn điện tử", short:"Nhắc hóa đơn đầu vào/đầu ra mới, đối chiếu tình trạng hóa đơn.", status:"soon", price:40000,
+    feats:["Nhắc hóa đơn mới theo kỳ","Nhắc hóa đơn sai/bị hủy","Tự xuất bảng kê"] },
+  { id:"dkkd", name:"Trợ lý Đăng ký kinh doanh", short:"Nhắc thay đổi thông tin doanh nghiệp, tình trạng hồ sơ đăng ký.", status:"soon", price:30000,
+    feats:["Nhắc thay đổi thông tin DN","Nhắc tiến độ hồ sơ","Nhắc hạn nghĩa vụ"] },
+  { id:"dvcqg", name:"Trợ lý Cổng DVC Quốc gia", short:"Nhắc tiến độ hồ sơ thủ tục hành chính đã nộp.", status:"soon", price:40000,
+    feats:["Nhắc tiến độ hồ sơ","Tổng hợp nhiều hồ sơ","Nhắc bổ sung giấy tờ"] },
+  { id:"phatnguoi", name:"Trợ lý Phạt nguội & Đăng kiểm", short:"Nhắc vi phạm giao thông qua hình ảnh và hạn đăng kiểm xe.", status:"soon", price:20000,
+    feats:["Nhắc phạt nguội theo biển số","Nhắc hạn đăng kiểm","Nhiều xe trong 1 gói"] }
+];
+const fmt = n => n.toLocaleString("vi-VN") + "đ";
+const yearly = p => p*10;
+let yearlyMode = false, filter = "all";
+
+function renderGrid(){
+  const g = document.getElementById("svcGrid");
+  g.innerHTML = SERVICES.filter(s=>filter==="all"||s.status===filter).map(s=>`
+    <div class="card svc">
+      <div class="svc-top"><h3>${s.name}</h3><span class="badge ${s.status}">${s.status==="live"?"Đang hoạt động":"Sắp ra mắt"}</span></div>
+      <p>${s.short}</p>
+      <div class="price">${fmt(yearlyMode?yearly(s.price):s.price)}<span> / ${yearlyMode?"năm":"tháng"}</span></div>
+      <div class="price-note">${yearlyMode?"≈ "+fmt(Math.round(yearly(s.price)/12))+"/tháng":"&nbsp;"}</div>
+      <ul class="feat">${s.feats.map(f=>`<li>${f}</li>`).join("")}</ul>
+      <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="#service-${s.id}">Chi tiết</a>
+        ${s.status==="live"?`<a class="btn btn-primary btn-sm" href="#payment">Đăng ký</a>`:`<a class="btn btn-ghost btn-sm" href="#about">Nhận tin</a>`}
+      </div>
+    </div>`).join("");
+}
+document.getElementById("priceRows").innerHTML = SERVICES.map(s=>`
+  <tr><td><a href="#service-${s.id}">${s.name}</a></td><td>${s.status==="live"?"Đang hoạt động":"Sắp ra mắt"}</td>
+  <td class="num">${fmt(s.price)}</td><td class="num">${fmt(yearly(s.price))}</td></tr>`).join("");
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+  document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on")); c.classList.add("on"); filter=c.dataset.filter; renderGrid();
+});
+document.getElementById("billSwitch").onclick=e=>{yearlyMode=!yearlyMode;e.currentTarget.classList.toggle("on",yearlyMode);renderGrid();};
+renderGrid();
+
+/* ---------- platforms & apps ----------
+   Logo: đặt file logo chính thức (SVG hoặc PNG) vào thư mục logos/ với tên = key,
+   ví dụ logos/claude.svg, logos/gmail.png. Nếu không có file, hiển thị ô chữ viết tắt. */
+const PLATFORMS = [
+  {key:"claude",  name:"Claude",  by:"Anthropic", mono:"Cl", color:"#0f2233", how:"Settings → Connectors → Add custom connector"},
+  {key:"chatgpt", name:"ChatGPT", by:"OpenAI",    mono:"GP", color:"#3a4d5e", how:"Settings → Apps & Connectors → Developer mode → Create"},
+  {key:"gemini",  name:"Gemini",  by:"Google",    mono:"Ge", color:"#0b6e5f", how:"Settings → Connected Apps → Add a custom app"},
+  {key:"copilot", name:"Microsoft Copilot", by:"Microsoft · Copilot Studio", mono:"Co", color:"#9a6416", how:"Agent → Tools → Add tool → Model Context Protocol"}
+];
+const APPS_G = [
+  {key:"gmail",  name:"Gmail",         mono:"Gm", color:"#b4432f", d:"Tự gửi báo cáo, đính kèm file C12"},
+  {key:"gdrive", name:"Google Drive",  mono:"Dr", color:"#0b6e5f", d:"Lưu file C12 theo thư mục năm/kỳ"},
+  {key:"gdocs",  name:"Google Docs",   mono:"Do", color:"#2f5c9a", d:"Soạn báo cáo, công văn từ số liệu"},
+  {key:"gsheets",name:"Google Sheets", mono:"Sh", color:"#1d7a46", d:"Cập nhật bảng theo dõi số phải đóng"}
+];
+const APPS_M = [
+  {key:"excel",   name:"Excel",    mono:"X",  color:"#1d7a46", d:"Ghi số liệu từng kỳ, lập bảng so sánh"},
+  {key:"outlook", name:"Outlook",  mono:"O",  color:"#2f5c9a", d:"Gửi email tổng hợp cho kế toán trưởng"},
+  {key:"onedrive",name:"OneDrive / SharePoint", mono:"OD", color:"#3a6fb0", d:"Lưu trữ chứng từ trong kho công ty"},
+  {key:"word",    name:"Word",     mono:"W",  color:"#24508f", d:"Xuất báo cáo quý, biên bản đối chiếu"}
+];
+function lg(x,cls=""){return `<span class="lg ${cls}" data-logo="${x.key}" style="background:${x.color}" aria-label="${x.name}">${x.mono}</span>`;}
+document.getElementById("plats").innerHTML = PLATFORMS.map(p=>`<div class="plat">${lg(p)}<b>${p.name}</b><small>${p.by}</small><div class="how">${p.how}</div></div>`).join("");
+const appHtml = a=>`<div class="app">${lg(a,"sm")}<div><b>${a.name}</b><span>${a.d}</span></div></div>`;
+document.getElementById("appsG").innerHTML = APPS_G.map(appHtml).join("");
+document.getElementById("appsM").innerHTML = APPS_M.map(appHtml).join("");
+const logoCache = {};
+function loadLogos(root=document){
+  root.querySelectorAll(".lg[data-logo]:not([data-done])").forEach(el=>{
+    el.dataset.done=1; const k=el.dataset.logo;
+    const apply = src=>{ if(src){ el.innerHTML=`<img src="${src}" alt="${el.getAttribute('aria-label')}">`; el.style.background="#fff"; el.style.border="1px solid var(--line)"; } };
+    if(k in logoCache){ logoCache[k].then(apply); return; }
+    logoCache[k] = new Promise(res=>{
+      const tryExt = exts=>{ if(!exts.length) return res(null); const i=new Image(); const s=`logos/${k}.${exts[0]}`; i.onload=()=>res(s); i.onerror=()=>tryExt(exts.slice(1)); i.src=s; };
+      tryExt(["svg","png"]);
+    });
+    logoCache[k].then(apply);
+  });
+}
+loadLogos();
+
+/* ---------- detail content ---------- */
+const URL_PH = "https://[ten-mien-may-chu]/mcp/DVCBaoHiemXaHoi";
+function codebox(t){return `<div class="codebox"><button class="copy" data-copy="${t.replace(/"/g,'&quot;')}">Sao chép</button>${t}</div>`;}
+function prompt(t){return `<div class="prompt"><span>“${t}”</span><button class="btn btn-ghost btn-sm" data-copy="${t}">Sao chép</button></div>`;}
+
+const DETAIL_BHXH = `
+<h2 id="tong-quan">Tổng quan</h2>
+<p><b>Trợ lý BHXH doanh nghiệp (VINBHXH)</b> là connector MCP giúp <b>tự động hoá 100%</b> chuỗi việc lặp lại mỗi kỳ với tài khoản BHXH của đơn vị: đăng nhập, nhắc khi có thông báo <b>C12</b> mới (thông báo kết quả đóng BHXH, BHYT, BHTN), tải file C12 PDF, rồi lưu trữ, ghi sổ và gửi báo cáo qua các ứng dụng văn phòng. Tất cả chạy theo lịch, không cần nhân viên ngồi thao tác.</p>
+<p><b>Phù hợp với:</b> kế toán, nhân sự, đại lý BHXH, văn phòng dịch vụ kế toán quản lý nhiều mã đơn vị.</p>
+<p><b>Chạy trên:</b> Claude, ChatGPT, Gemini, Microsoft Copilot và các ứng dụng có hỗ trợ chuẩn MCP.</p>
+
+<h2 id="tinh-nang">Tính năng &amp; công cụ</h2>
+<p>Claude tự chọn công cụ dựa vào câu hỏi của bạn. Các công cụ connector cung cấp:</p>
+<div class="table-wrap" style="margin-top:10px"><table class="tools-tbl">
+<thead><tr><th>Công cụ</th><th>Chức năng</th><th>Thông tin cần</th></tr></thead>
+<tbody>
+<tr><td>requestLoginByUsername</td><td>Lưu tài khoản VINBHXH sau khi đăng nhập thành công. Mã số thuế và tên đăng nhập phải khớp với lượt kết nối.</td><td>MST, tên đăng nhập, mật khẩu</td></tr>
+<tr><td>requestLoginSSOWeb / publicLoginSSOWeb</td><td>Đăng nhập qua cơ chế SSO trên web (không cần dán mật khẩu vào chat).</td><td>Theo hướng dẫn trên trang đăng nhập</td></tr>
+<tr><td>tracuuDanhSachC12</td><td>Tra cứu danh sách C12 của đơn vị; mặc định năm hiện tại.</td><td>MST (enterpriseId), năm</td></tr>
+<tr><td>downloadC12File</td><td>Tải file C12 theo kỳ, trả về đường dẫn PDF có thời hạn.</td><td>MST, kỳ dạng YYYYMM (vd 202609)</td></tr>
+</tbody></table></div>
+
+<h2 id="chuan-bi">Chuẩn bị</h2>
+<ul>
+<li>Một trợ lý AI có hỗ trợ MCP server tùy chỉnh (xem bảng gói bên dưới).</li>
+<li><b>Địa chỉ máy chủ MCP</b> và <b>API key</b> Toritech gửi qua email sau khi thanh toán.</li>
+<li>Tài khoản giao dịch BHXH điện tử của đơn vị (MST + tên đăng nhập + mật khẩu), hoặc dùng SSO.</li>
+</ul>
+<div class="note todo disc"><b>⚠ Lưu ý quan trọng về tài khoản &amp; dữ liệu</b><br>Để tự động hoá, hệ thống cần <b>lưu (mã hóa)</b> và <b>sử dụng</b> thông tin tài khoản dịch vụ công bạn cung cấp. Toritech <b>chỉ là trung gian kết nối</b>: không chịu trách nhiệm về dữ liệu do nguồn thông tin trả về, cũng không xác minh quyền sở hữu tài khoản. Bạn <b>tự bảo mật thông tin</b> và <b>chịu trách nhiệm xác nhận</b> mình có quyền sở hữu hoặc sử dụng các thông tin đã cung cấp. <a href="#privacy">Đọc đầy đủ</a></div>
+<div class="table-wrap" style="margin-top:6px"><table>
+<thead><tr><th>Nền tảng</th><th>Gói cần có để thêm MCP tùy chỉnh</th></tr></thead>
+<tbody>
+<tr><td>Claude</td><td>Pro, Max, Team, Enterprise</td></tr>
+<tr><td>ChatGPT</td><td>Business, Enterprise, Edu (đầy đủ đọc/ghi). Pro có thể bị giới hạn chỉ đọc. Gói Free không hỗ trợ.</td></tr>
+<tr><td>Gemini</td><td>Ứng dụng Gemini web (Connected Apps) hoặc Gemini Enterprise (quản trị viên thêm)</td></tr>
+<tr><td>Microsoft Copilot</td><td>Copilot Studio, gắn vào agent rồi xuất bản lên Microsoft 365 Copilot / Teams</td></tr>
+</tbody></table></div>
+<p style="font-size:13.5px">Điều kiện gói do từng hãng quy định và có thể thay đổi; vui lòng kiểm tra trang hỗ trợ chính thức của nền tảng.</p>
+
+<h2 id="cai-dat">Cách thêm connector</h2>
+<p>Chọn nền tảng bạn dùng:</p>
+<div class="ptabs">${PLATFORMS.map((p,i)=>`<button class="ptab ${i?"":"on"}" data-ptab="${p.key}">${lg(p)}${p.name}</button>`).join("")}</div>
+
+<div class="ppane" data-pane="chatgpt">
+<ol class="howto">
+<li><strong>Bật Developer mode</strong>Vào <span class="kbd">Settings</span> → <span class="kbd">Apps &amp; Connectors</span> → <span class="kbd">Advanced settings</span>, bật <b>Developer mode</b>. Với Business/Enterprise, quản trị viên cần cho phép trước trong <span class="kbd">Workspace Settings → Permissions &amp; Roles → Connected Data</span>.</li>
+<li><strong>Tạo app mới</strong>Trong <span class="kbd">Apps &amp; Connectors</span> chọn <span class="kbd">Create</span>. Đặt tên <code>DVC BHXH</code>, mô tả ngắn, dán URL máy chủ (phải có đường dẫn <code>/mcp</code>):${codebox(URL_PH+"?apikey=YOUR_API_KEY")}</li>
+<li><strong>Xác nhận &amp; dùng</strong>Tích chọn tin cậy app, bấm <span class="kbd">Create</span>. Trong cuộc trò chuyện, bấm <span class="kbd">+</span> → chọn app DVC BHXH.</li>
+<li><strong>Đặt lịch</strong>Dùng tính năng <b>Tasks</b> (tác vụ theo lịch) của ChatGPT nếu gói của bạn có.</li>
+</ol>
+</div>
+
+<div class="ppane" data-pane="gemini">
+<ol class="howto">
+<li><strong>Cá nhân: Connected Apps</strong>Mở <span class="kbd">gemini.google.com</span> → <span class="kbd">Settings</span> → <span class="kbd">Connected Apps</span> → <span class="kbd">Custom apps</span> → <span class="kbd">Add a custom app</span>. Dán URL máy chủ, bấm <span class="kbd">Next</span> và xác nhận. Hiện chỉ thêm được trên bản web; sau đó dùng được cả trên ứng dụng di động.</li>
+<li><strong>Doanh nghiệp: Gemini Enterprise</strong>Quản trị viên vào <span class="kbd">Settings &amp; help</span> → chọn team → <span class="kbd">Manage team</span> → <span class="kbd">Connected apps</span> → <span class="kbd">Add MCP Server</span>, dán URL HTTPS, bấm <span class="kbd">Add</span> rồi <b>bật</b> kết nối (mặc định đang tắt).${codebox(URL_PH+"?apikey=YOUR_API_KEY")}</li>
+<li><strong>Dùng trong chat</strong>Gọi connector bằng câu lệnh tiếng Việt như với Claude.</li>
+</ol>
+</div>
+
+<div class="ppane" data-pane="copilot">
+<ol class="howto">
+<li><strong>Mở Copilot Studio</strong>Tạo mới hoặc mở một agent.</li>
+<li><strong>Thêm công cụ MCP</strong>Vào <span class="kbd">Tools</span> → <span class="kbd">Add a tool</span> → <span class="kbd">New tool</span> → <span class="kbd">Model Context Protocol</span>. Nhập tên, mô tả, URL máy chủ (Streamable HTTP):${codebox(URL_PH)}</li>
+<li><strong>Xác thực</strong>Chọn kiểu <b>API key</b>, đặt dưới dạng query parameter tên <code>apikey</code>, rồi nhập key Toritech gửi.</li>
+<li><strong>Xuất bản</strong>Xuất bản agent lên Microsoft 365 Copilot / Teams. Chính sách dữ liệu (DLP) của Power Platform sẽ áp dụng cho connector.</li>
+</ol>
+</div>
+
+<div class="ppane on" data-pane="claude">
+<ol class="howto">
+<li><strong>Mở phần Connectors</strong>Trên claude.ai hoặc ứng dụng Claude Desktop, vào <span class="kbd">Settings</span> (Cài đặt) → <span class="kbd">Connectors</span>.</li>
+<li><strong>Thêm connector tùy chỉnh</strong>Bấm <span class="kbd">Add custom connector</span>. Với gói Team/Enterprise, chủ tổ chức thêm tại <span class="kbd">Organization settings → Connectors</span>, sau đó thành viên bấm <span class="kbd">Connect</span>.</li>
+<li><strong>Nhập thông tin</strong>
+  Tên: <code>DVC-BHXH-VINBHXH</code><br>Remote MCP server URL: dán địa chỉ trong email, có dạng:
+  ${codebox(URL_PH+"?apikey=YOUR_API_KEY")}
+  <span style="font-size:14px">Mỗi module có một endpoint riêng <code>/mcp/&lt;tên module&gt;</code>; endpoint gốc <code>/mcp</code> gồm tất cả module trong gói của bạn.</span></li>
+<li><strong>Kết nối</strong>Bấm <span class="kbd">Add</span>, rồi <span class="kbd">Connect</span>. Nếu có màn hình xác thực, đăng nhập và cho phép truy cập.</li>
+<li><strong>Bật trong cuộc trò chuyện</strong>Mở chat mới, bấm biểu tượng <span class="kbd">+</span> / <span class="kbd">Search and tools</span> và bật <b>DVC-BHXH-VINBHXH</b>. Bạn có thể đặt quyền cho từng công cụ: luôn cho phép, hoặc hỏi trước mỗi lần dùng.</li>
+<li><strong>Kiểm tra</strong>Hỏi Claude: <i>“Connector BHXH có những module nào?”</i> Claude sẽ gọi <code>list_modules</code> và liệt kê <code>DVCBaoHiemXaHoi</code>.</li>
+</ol>
+</div>
+<div class="note info"><b>Mẹo:</b> Đặt <b>“Hỏi trước”</b> (needs approval) cho công cụ đăng nhập để luôn biết khi nào trợ lý AI gửi thông tin tài khoản đi.</div>
+
+<h2 id="lich">Tự động chạy theo lịch</h2>
+<p>Sau khi thêm connector, chỉ cần mô tả lịch bằng một câu. Tác vụ sẽ tự chạy độc lập đúng chu kỳ, kể cả khi bạn không mở máy (qua tính năng tác vụ theo lịch của nền tảng AI bạn dùng).</p>
+${prompt("Đặt lịch 8h sáng ngày 5 hàng tháng: tải C12 kỳ trước của tất cả đơn vị trong danh sách, lưu vào Google Drive thư mục BHXH/năm/kỳ")}
+${prompt("Mỗi sáng 7h30 kiểm tra xem có C12 mới không, nếu có thì gửi Gmail báo cho tôi")}
+${prompt("Thứ Hai hàng tuần lập bảng so sánh số phải đóng 3 kỳ gần nhất và gửi Outlook cho kế toán trưởng")}
+<div class="note warn">Lần chạy đầu, hãy để chế độ hỏi xác nhận để kiểm tra kết quả. Khi đã ổn, chuyển sang tự động phê duyệt để tác vụ chạy hoàn toàn không cần người.</div>
+
+<h2 id="ket-hop">Kết hợp Google Drive, Gmail, Microsoft 365</h2>
+<p>Bật thêm các connector chính thức có sẵn trong kho của nền tảng AI (Google Drive, Gmail, Google Docs, Google Sheets, Microsoft 365 gồm Excel, Word, Outlook, OneDrive, SharePoint). DVC Connector lấy dữ liệu, các connector kia lưu trữ và gửi đi trong cùng một tác vụ.</p>
+<div class="apps" style="grid-template-columns:1fr 1fr">${[...APPS_G,...APPS_M].map(appHtml).join("")}</div>
+${prompt("Tải C12 tháng 10/2026, lưu vào Google Drive và ghi số phải đóng vào file Excel Theo dõi BHXH 2026 trên OneDrive")}
+${prompt("Soạn báo cáo BHXH quý 3/2026 trên Google Docs từ các file C12 và gửi link qua Gmail cho giám đốc")}
+
+<h2 id="su-dung">Hướng dẫn sử dụng</h2>
+<h4>Bước 1 — Đăng nhập tài khoản đơn vị</h4>
+<p>Lần đầu, cung cấp MST và tài khoản BHXH. Claude gọi <code>requestLoginByUsername</code> để lưu phiên. Nếu không muốn dán mật khẩu vào chat, yêu cầu đăng nhập SSO.</p>
+${prompt("Đăng nhập BHXH cho đơn vị MST 0312345678 bằng SSO giúp mình")}
+<h4>Bước 2 — Nhắc &amp; xem C12</h4>
+${prompt("Liệt kê các thông báo C12 năm 2026 của MST 0312345678")}
+${prompt("So sánh số phải đóng BHXH 3 tháng gần nhất và lập bảng")}
+<h4>Bước 3 — Tải file C12</h4>
+${prompt("Tải file C12 kỳ 09/2026 của MST 0312345678")}
+<p>Claude trả về đường dẫn PDF <b>có thời hạn</b>; hãy tải về ngay. Kỳ được truyền dạng <code>YYYYMM</code>, Claude tự chuyển đổi khi bạn viết “tháng 9/2026”.</p>
+
+<h2 id="luu-y">Lưu ý &amp; xử lý lỗi</h2>
+<ul>
+<li><b>Lỗi đăng nhập:</b> MST và tên đăng nhập phải khớp với lượt kết nối. Kiểm tra lại tài khoản trên cổng BHXH trước.</li>
+<li><b>Không có dữ liệu:</b> kỳ chưa được cơ quan BHXH phát hành C12, hoặc năm tra cứu sai.</li>
+<li><b>Lỗi quyền / IP:</b> quyền API và danh sách IP được phép vẫn được áp dụng. Liên hệ hỗ trợ nếu bị từ chối.</li>
+<li>Kết quả chỉ mang tính tham khảo; luôn đối chiếu với cổng chính thức trước khi nộp tiền hay kê khai.</li>
+</ul>
+<div class="note warn">Connector chỉ thực hiện thao tác khi bạn yêu cầu. Claude sẽ hỏi xác nhận trước các thao tác gửi thông tin hoặc phát sinh thay đổi.</div>
+
+<h2 id="faq">Câu hỏi thường gặp</h2>
+<h4>Toritech có lưu mật khẩu BHXH không?</h4><p>Có, ở dạng mã hóa, chỉ để duy trì phiên đăng nhập thay bạn. Bạn có thể yêu cầu xóa bất cứ lúc nào. Xem <a href="#privacy">Chính sách bảo mật</a>.</p>
+<h4>Một gói dùng được cho nhiều mã đơn vị?</h4><p>Được. Gói không giới hạn số MST bạn có quyền truy cập hợp pháp.</p>
+<h4>Dùng được trên điện thoại?</h4><p>Được. Connector đã thêm trên web sẽ có trên ứng dụng Claude di động với cùng tài khoản.</p>
+`;
+
+function genericDetail(s){
+  return `
+<h2 id="tong-quan">Tổng quan</h2>
+<p>${s.short}</p>
+<div class="note info"><b>Sắp ra mắt.</b> Connector đang được phát triển. Để lại email qua trang <a href="#about">Về chúng tôi</a> để nhận thông báo ngày mở bán và ưu đãi đăng ký sớm.</div>
+<h2 id="tinh-nang">Tính năng dự kiến</h2>
+<ul>${s.feats.map(f=>`<li>${f}</li>`).join("")}</ul>
+<div class="note todo disc"><b>⚠ Lưu ý quan trọng về tài khoản &amp; dữ liệu</b><br>Để tự động hoá, hệ thống cần <b>lưu (mã hóa)</b> và <b>sử dụng</b> thông tin tài khoản dịch vụ công bạn cung cấp. Toritech <b>chỉ là trung gian kết nối</b>: không chịu trách nhiệm về dữ liệu do nguồn thông tin trả về, cũng không xác minh quyền sở hữu tài khoản. Bạn <b>tự bảo mật thông tin</b> và <b>chịu trách nhiệm xác nhận</b> mình có quyền sở hữu hoặc sử dụng các thông tin đã cung cấp. <a href="#privacy">Đọc đầy đủ</a></div>
+<h2 id="cai-dat">Cách thêm vào trợ lý AI</h2>
+<p>Quy trình giống connector BHXH, dùng được trên Claude, ChatGPT, Gemini và Microsoft Copilot: dán địa chỉ máy chủ MCP và API key vào phần connector của nền tảng, sau đó bật connector trong cuộc trò chuyện hoặc đặt lịch chạy tự động. Xem hướng dẫn chi tiết tại <a href="#service-bhxh">trang connector BHXH</a>.</p>`;
+}
+
+function showDetail(id){
+  const s = SERVICES.find(x=>x.id===id); if(!s) return false;
+  document.getElementById("dCrumb").textContent = s.name;
+  document.getElementById("dTitle").textContent = s.name;
+  document.getElementById("dSub").textContent = s.short;
+  const b = document.getElementById("dBadge"); b.className="badge "+s.status; b.textContent = s.status==="live"?"Đang hoạt động":"Sắp ra mắt";
+  document.getElementById("dPrice").innerHTML = fmt(s.price)+"<span> / tháng</span>";
+  document.getElementById("dPriceY").textContent = "hoặc "+fmt(yearly(s.price))+" / năm (tặng 2 tháng)";
+  const body = document.getElementById("dBody");
+  body.innerHTML = s.id==="bhxh" ? DETAIL_BHXH : genericDetail(s);
+  loadLogos(body);
+  body.querySelectorAll("[data-ptab]").forEach(b=>b.onclick=()=>{
+    body.querySelectorAll("[data-ptab]").forEach(x=>x.classList.toggle("on",x===b));
+    body.querySelectorAll("[data-pane]").forEach(p=>p.classList.toggle("on",p.dataset.pane===b.dataset.ptab));
+  });
+  document.getElementById("dToc").innerHTML = [...body.querySelectorAll("h2[id]")].map(h=>`<li><a href="javascript:void(0)" data-jump="${h.id}">${h.textContent}</a></li>`).join("");
+  return true;
+}
+
+/* ---------- router ---------- */
+function route(){
+  const h = (location.hash||"#home").slice(1);
+  let view = "home";
+  if(["home","services","about","payment","privacy"].includes(h)) view = h;
+  else if(h.startsWith("service-") && showDetail(h.slice(8))) view = "detail";
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+view));
+  const navKey = view==="detail" ? "services" : view;
+  document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active", a.dataset.nav===navKey));
+  document.querySelector(".menu").classList.remove("open");
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+route();
+
+/* ---------- helpers ---------- */
+document.addEventListener("click", async e=>{
+  const c = e.target.closest("[data-copy]");
+  if(c){ try{ await navigator.clipboard.writeText(c.dataset.copy); toast("Đã sao chép"); }catch(_){ toast("Không sao chép được, hãy bôi đen để chép"); } }
+  const j = e.target.closest("[data-jump]");
+  if(j){ const el=document.getElementById(j.dataset.jump); if(el) window.scrollTo({top:el.getBoundingClientRect().top+scrollY-80,behavior:"smooth"}); }
+});
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600);}
+</script>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><section class="tt-crit" aria-label="Phản biện"><h2>Phản biện: vì sao nên làm?</h2><div class="tt-cols"><div class="tt-yes"><h3>Nên làm vì</h3><ul><li>Các thủ tục lặp lại hằng tháng (tra cứu, tải C12, lưu trữ, gửi báo cáo) có quy trình cố định, phù hợp để giao cho AI Agent làm theo lịch.</li><li>Nhân viên chỉ còn bước kiểm tra và phê duyệt, giảm sai sót nhập liệu.</li></ul></div><div class="tt-no"><h3>Nếu không làm</h3><ul><li>Mỗi kỳ vẫn mất nhiều giờ làm thủ công cho nhiều mã đơn vị, dễ sót kỳ hoặc sai file.</li><li>Kiến thức thao tác nằm trong đầu một vài người; họ nghỉ là quy trình gián đoạn.</li></ul></div></div><p class="tt-sub">Cần đánh giá cho đơn vị của bạn? <a href="../lien-he.html">Liên hệ TORITECH</a>.</p></section><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="van-thu-so-vi-pham-giao-thong.html"><img src="../assets/img/du-an/thumb/van-thu-so-vi-pham-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Văn thư số xử lý vi phạm giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>

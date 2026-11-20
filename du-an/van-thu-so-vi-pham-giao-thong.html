@@ -1,0 +1,834 @@
+<!doctype html><html><head><meta charset=utf8>
+<!-- toritech:meta -->
+<meta name="description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><link rel="canonical" href="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><meta property="og:url" content="https://toritech.vn/du-an/van-thu-so-vi-pham-giao-thong.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/van-thu-so-vi-pham-giao-thong.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Văn thư số xử lý vi phạm giao thông – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="Mô phỏng 2.5D luồng vượt đèn đỏ → camera → quyết định xử phạt → văn thư; so sánh AI Agent qua cổng đa kênh với bưu cục và nhập tay VNeTraffic."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/van-thu-so-vi-pham-giao-thong.jpg">
+<!-- /toritech:meta -->
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+#tt-foot .tt-crit{margin:0 0 30px;padding:0 0 26px;border-bottom:1px solid #1e2a44}
+#tt-foot .tt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:12px 0}
+#tt-foot .tt-cols>div{padding:14px 16px;border-radius:12px;border:1px solid #1e2a44;background:#111c33}
+#tt-foot .tt-yes{border-left:4px solid #14b8a6}#tt-foot .tt-no{border-left:4px solid #f97316}
+#tt-foot h3{margin:0 0 8px;font-size:15px;font-weight:700;color:#fff}
+#tt-foot .tt-cols ul{display:block;padding-left:18px;list-style:disc}#tt-foot .tt-cols li{margin:0 0 6px;color:#cbd5e1}
+#tt-foot .tt-sub a{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / Văn thư số xử lý vi phạm giao thông</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<title>Văn Thư Số Vi Phạm Giao Thông</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap&subset=vietnamese">
+<style>
+/* Layout: one long scroll — hero, shared opening scene, a fork, three flow scenes (each an isometric stage + step rail + verdict chips), then a comparison table. */
+:root{
+  --bg:#edf1f6; --surface:#f7f9fc; --card:#ffffff; --ink:#142033; --muted:#58637a; --line:#d5dce7;
+  --accent:#0b7b6f; --on-accent:#ffffff; --accent-soft:#d3eee8;
+  --sig:#cf2a1c; --sig-soft:#fbe3df; --amb:#a8690c; --amb-soft:#f9ecd2; --ok:#137a3a; --ok-soft:#d9f1e1;
+  --floor:#e1e7f0; --floor-l:#c7d0dd; --floor-r:#aebaca;
+  --wall:#e8e3d7; --wall-l:#d5cebd; --wall-r:#c1b8a4;
+  --dot:rgba(20,32,51,.07); --shadow:rgba(16,28,48,.14);
+  --f-d:"Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-m:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0c1220; --surface:#101a2b; --card:#16223a; --ink:#e6ebf4; --muted:#9aa6bc; --line:#27354f;
+  --accent:#2fd3bd; --on-accent:#05302a; --accent-soft:#0f3a37;
+  --sig:#ff6d5f; --sig-soft:#3e1b1a; --amb:#f2b84b; --amb-soft:#3a2b10; --ok:#4fd88a; --ok-soft:#123220;
+  --floor:#22304a; --floor-l:#1a263c; --floor-r:#131d2f;
+  --wall:#2b3953; --wall-l:#223048; --wall-r:#1b273b;
+  --dot:rgba(230,235,244,.05); --shadow:rgba(0,0,0,.45); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0c1220; --surface:#101a2b; --card:#16223a; --ink:#e6ebf4; --muted:#9aa6bc; --line:#27354f;
+  --accent:#2fd3bd; --on-accent:#05302a; --accent-soft:#0f3a37;
+  --sig:#ff6d5f; --sig-soft:#3e1b1a; --amb:#f2b84b; --amb-soft:#3a2b10; --ok:#4fd88a; --ok-soft:#123220;
+  --floor:#22304a; --floor-l:#1a263c; --floor-r:#131d2f;
+  --wall:#2b3953; --wall-l:#223048; --wall-r:#1b273b;
+  --dot:rgba(230,235,244,.05); --shadow:rgba(0,0,0,.45); color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-d);font-size:15px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-d);text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--f-m)}
+
+/* hero */
+.hero{padding-block:48px 28px;display:grid;gap:20px}
+.hero h1{font-size:clamp(30px,4.6vw,54px);font-weight:800;line-height:1.08;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lede{max-width:64ch;color:var(--muted);font-size:17px}
+.route{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px}
+.route span{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:13.5px;font-weight:600}
+.route i{font-style:normal;color:var(--muted)}
+.route .sig{color:var(--sig);border-color:color-mix(in srgb,var(--sig) 40%,var(--line))}
+
+/* sections */
+.sec{padding-block:28px 12px;display:grid;gap:16px}
+.sec-head{display:grid;gap:6px;max-width:80ch}
+.sec-head h2{font-size:clamp(22px,2.8vw,30px);font-weight:800;line-height:1.2}
+.sec-head p{color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:8px}
+.tag b{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 8px;border-radius:7px;font-size:13px;font-weight:800;color:var(--on-accent);background:var(--accent)}
+.tag.post b{background:var(--amb);color:var(--bg)}
+.tag.app b{background:var(--sig);color:var(--bg)}
+
+.stage{border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
+.stage-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+  background-image:radial-gradient(var(--dot) 1.2px, transparent 1.3px);background-size:22px 22px}
+svg.scene{display:block;width:100%;min-width:960px;height:auto}
+.swipe{display:none;padding:8px 16px 0;font-size:12.5px;color:var(--muted)}
+@media (max-width:980px){.swipe{display:block}}
+
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;padding:14px 16px;border-top:1px solid var(--line)}
+.btns{display:flex;gap:8px}
+.cbtn{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 13.5px var(--f-d);
+  padding:8px 14px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.cbtn:hover{border-color:var(--accent)}
+.cbtn:focus-visible,.steps button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cbtn svg{width:14px;height:14px;fill:currentColor}
+.cbtn.play.is-playing .i-play{display:none}
+.cbtn.play:not(.is-playing) .i-pause{display:none}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;flex:1 1 520px;min-width:0}
+.steps li{flex:1 1 150px;min-width:0}
+.steps button{width:100%;text-align:left;appearance:none;border:1px solid var(--line);background:var(--card);color:var(--muted);
+  font:500 13px/1.35 var(--f-d);padding:8px 10px 10px;border-radius:10px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:4px 8px;position:relative}
+.steps .n{font:800 12px var(--f-m);width:22px;height:22px;border-radius:6px;display:grid;place-items:center;background:var(--bg);color:var(--muted)}
+.steps .bar{grid-column:1/-1;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.steps .bar i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.steps button.on{color:var(--ink);border-color:var(--accent)}
+.steps button.on .n,.steps button.done .n{background:var(--accent);color:var(--on-accent)}
+.post-sec .steps .bar i,.post-sec .steps button.on .n,.post-sec .steps button.done .n{background:var(--amb);color:var(--bg)}
+.post-sec .steps button.on{border-color:var(--amb)}
+.app-sec .steps .bar i,.app-sec .steps button.on .n,.app-sec .steps button.done .n{background:var(--sig);color:var(--bg)}
+.app-sec .steps button.on{border-color:var(--sig)}
+
+.verdict{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.vc{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;display:grid;gap:4px;min-width:0}
+.vc .k{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.vc .k::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.vc.good .k::before{background:var(--ok)} .vc.warn .k::before{background:var(--amb)} .vc.bad .k::before{background:var(--sig)}
+.vc .v{font-weight:600;font-size:15px}
+
+/* fork */
+.fork{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.fork a{display:grid;gap:6px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:inherit;text-decoration:none}
+.fork a:hover{border-color:var(--accent)}
+.fork a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fork h3{font-size:17px;font-weight:700}
+.fork p{color:var(--muted);font-size:14px}
+.pill{justify-self:start;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.pill.good{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--amb-soft);color:var(--amb)} .pill.bad{background:var(--sig-soft);color:var(--sig)}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface)}
+thead th.hl{color:var(--accent)}
+tbody th{font-weight:600;width:18%}
+td.hl{background:color-mix(in srgb,var(--accent-soft) 55%,transparent)}
+tr:last-child th,tr:last-child td{border-bottom:0}
+td .pill{display:inline-block;margin-bottom:4px}
+.note{color:var(--muted);font-size:13px}
+
+/* svg text */
+svg text{font-family:var(--f-d)}
+.bx polygon{stroke:rgba(12,18,32,.30);stroke-width:.55;stroke-linejoin:round}
+.fl-t{fill:var(--floor)} .fl-l{fill:var(--floor-l)} .fl-r{fill:var(--floor-r)}
+.wl-t{fill:var(--wall)} .wl-l{fill:var(--wall-l)} .wl-r{fill:var(--wall-r)}
+.plt polygon{stroke:rgba(12,18,32,.12);stroke-width:.6}
+.card{fill:var(--card);stroke:var(--line);stroke-width:1}
+.t-cap{font-size:10.5px;font-weight:700;letter-spacing:.09em;fill:var(--muted)}
+.t-h{font-size:15px;font-weight:700;fill:var(--ink)}
+.t-h.lg{font-size:18px;font-weight:800}
+.t-s{font-size:11.5px;font-weight:500;fill:var(--muted)}
+.t-b{font-size:12.5px;font-weight:600;fill:var(--ink)}
+.t-num{font-family:var(--f-m);font-size:32px;font-weight:800;fill:var(--ink)}
+.t-m{font-family:var(--f-m);font-size:11px;font-weight:500;fill:var(--muted)}
+.t-chip{font-size:11px;font-weight:700}
+.acc{fill:var(--accent)} .sig{fill:var(--sig)} .amb{fill:var(--amb)} .okc{fill:var(--ok)}
+.f-acc{fill:var(--accent)} .f-sig{fill:var(--sig)} .f-amb{fill:var(--amb)} .f-ok{fill:var(--ok)} .f-mut{fill:var(--line)}
+.f-accs{fill:var(--accent-soft)} .f-sigs{fill:var(--sig-soft)} .f-ambs{fill:var(--amb-soft)} .f-oks{fill:var(--ok-soft)}
+.plate{font-family:var(--f-m);font-size:12px;font-weight:800;fill:#10141b}
+.flow{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:2 6;stroke-linecap:round;opacity:.75}
+.flow.acc{stroke:var(--accent);opacity:.9}
+.flow.sig{stroke:var(--sig);opacity:.9}
+.flow-l{font-size:11px;font-weight:600;fill:var(--muted)}
+.lead{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;opacity:.6}
+.pkt{fill:var(--accent)}
+.pkt.sig{fill:var(--sig)}
+.glow-acc{fill:var(--accent);opacity:.18}
+.ban{fill:var(--accent)}
+.ban-t{fill:var(--on-accent);font-weight:800}
+.wsign{font-size:8px;font-weight:800;fill:#fff;letter-spacing:.06em}
+.scr{font-family:var(--f-m);font-size:3.6px;font-weight:700}
+@media (prefers-reduced-motion: reduce){ .steps .bar i{transition:none} }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="fSh" x="-10%" y="-20%" width="120%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#0b1424" flood-opacity=".14"/></filter>
+    <radialGradient id="gFlash"><stop offset="0" stop-color="#ffffff" stop-opacity="1"/><stop offset=".35" stop-color="#fffbe0" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gRed"><stop offset="0" stop-color="#ff3b30" stop-opacity=".9"/><stop offset="1" stop-color="#ff3b30" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gAI" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#a7f3e6"/><stop offset=".55" stop-color="#14b8a6"/><stop offset="1" stop-color="#0b5f56"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Ý tưởng giải pháp · Văn thư xử lý vi phạm giao thông</span>
+    <h1>Từ một tập hồ sơ giấy đến <em>điện thoại của người dân</em> trong cùng một ngày</h1>
+    <p class="lede">Sau mỗi lần camera ghi nhận vi phạm, quyết định xử phạt và biên bản đều dồn về bàn văn thư. Trang này mô phỏng chặng đường của tập hồ sơ đó, rồi so sánh ba cách gửi thông báo cho người dân: tự động bằng AI Agent qua cổng đa kênh, gửi thư qua bưu cục, và nhập tay lên VNeTraffic.</p>
+    <div class="route" aria-label="Luồng chung">
+      <span class="sig">Xe vượt đèn đỏ</span><i>→</i>
+      <span>Camera phát hiện</span><i>→</i>
+      <span>CSGT ký quyết định</span><i>→</i>
+      <span>Văn thư cầm tập hồ sơ</span><i>→</i>
+      <span>3 cách gửi thông báo</span>
+    </div>
+  </header>
+
+  <section class="sec" id="chung" data-scene="s0">
+    <div class="sec-head">
+      <span class="eyebrow">Luồng chung</span>
+      <h2>Vi phạm được ghi nhận, quyết định được ký, hồ sơ về tay văn thư</h2>
+      <p>Mô phỏng tự chạy khi bạn cuộn tới. Bấm vào từng bước để xem lại đoạn đó.</p>
+    </div>
+    <div class="stage">
+      <p class="swipe">Vuốt ngang để xem toàn cảnh →</p>
+      <div class="stage-scroll"><svg class="scene" viewBox="-640 -280 1280 520" role="img" aria-label="Mô phỏng: xe vượt đèn đỏ, camera chụp, CSGT ký quyết định, văn thư nhận tập hồ sơ"></svg></div>
+      <div class="controls">
+        <div class="btns">
+          <button class="cbtn play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z"/></svg><span class="lbl">Phát</span></button>
+          <button class="cbtn replay" type="button" aria-label="Phát lại từ đầu"><svg viewBox="0 0 14 14"><path d="M7 2a5 5 0 1 1-4.6 3H.8L3.5 1.8 6 5H4.2A3.3 3.3 0 1 0 7 3.7z"/></svg>Từ đầu</button>
+        </div>
+        <ol class="steps"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="ba-cach">
+    <div class="sec-head">
+      <span class="eyebrow">Ngã ba của văn thư</span>
+      <h2>Cùng một tập 1.248 bộ hồ sơ, ba cách đưa tới người dân</h2>
+    </div>
+    <nav class="fork" aria-label="Ba luồng xử lý văn thư">
+      <a href="#luong-1"><span class="pill good">Đề xuất</span><h3>Luồng 1 · AI Agent và cổng đa kênh</h3><p>Cho tất cả vào máy scan. AI đọc, phân loại, tách theo biển số và gửi qua app ngân hàng, ví điện tử, ePass / VETC.</p></a>
+      <a href="#luong-2"><span class="pill warn">Hiện trạng</span><h3>Luồng 2 · Gửi thư qua bưu cục</h3><p>Gấp, đóng phong bì, ghi địa chỉ từng bộ, bàn giao bưu cục, chờ bưu tá đi phát.</p></a>
+      <a href="#luong-3"><span class="pill bad">Hiện trạng</span><h3>Luồng 3 · Nhập lên VNeTraffic</h3><p>Gõ lại từng hồ sơ lên hệ thống. Người dân chỉ nhận được nếu đã cài app, để ý thông báo và nhớ mật khẩu.</p></a>
+    </nav>
+  </section>
+
+  <section class="sec" id="luong-1" data-scene="s1">
+    <div class="sec-head">
+      <span class="tag"><b>1</b><span class="eyebrow">Luồng xử lý văn thư 1 · Đề xuất</span></span>
+      <h2>Văn thư chỉ cần cho cả tập vào máy scan, phần còn lại AI Agent làm</h2>
+      <p>Không cần phân loại hay sắp xếp trước. Máy scan tự lưu file, AI Agent tự đọc, tách quyết định xử phạt và biên bản vi phạm theo từng biển số, rồi đẩy lên Cổng chuyển tiếp thông báo đa kênh.</p>
+    </div>
+    <div class="stage">
+      <p class="swipe">Vuốt ngang để xem toàn cảnh →</p>
+      <div class="stage-scroll"><svg class="scene" viewBox="-640 -290 1280 540" role="img" aria-label="Mô phỏng luồng 1: máy scan, AI Agent, cổng chuyển tiếp, điện thoại người dân"></svg></div>
+      <div class="controls">
+        <div class="btns">
+          <button class="cbtn play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z"/></svg><span class="lbl">Phát</span></button>
+          <button class="cbtn replay" type="button" aria-label="Phát lại từ đầu"><svg viewBox="0 0 14 14"><path d="M7 2a5 5 0 1 1-4.6 3H.8L3.5 1.8 6 5H4.2A3.3 3.3 0 1 0 7 3.7z"/></svg>Từ đầu</button>
+        </div>
+        <ol class="steps"></ol>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="vc good"><span class="k">Văn thư làm gì</span><span class="v">Một thao tác: đặt cả tập vào máy</span></div>
+      <div class="vc good"><span class="k">Đến người dân</span><span class="v">Trong ngày, ngay sau khi scan</span></div>
+      <div class="vc good"><span class="k">Kênh nhận</span><span class="v">App ngân hàng, ví điện tử, ePass / VETC người dân đã dùng hằng ngày</span></div>
+      <div class="vc good"><span class="k">Theo dõi</span><span class="v">Biết đã gửi, đã xem theo từng biển số</span></div>
+    </div>
+  </section>
+
+  <section class="sec post-sec" id="luong-2" data-scene="s2">
+    <div class="sec-head">
+      <span class="tag post"><b>2</b><span class="eyebrow">Luồng xử lý văn thư 2 · Bưu cục</span></span>
+      <h2>Mỗi bộ hồ sơ là một phong bì, mỗi phong bì là năm việc làm tay</h2>
+      <p>Văn thư tra địa chỉ, gấp giấy, đóng phong bì, ghi địa chỉ, vào sổ rồi bàn giao từng đợt. Bưu tá đi phát từng nhà, và không phải nhà nào cũng nhận được.</p>
+    </div>
+    <div class="stage">
+      <p class="swipe">Vuốt ngang để xem toàn cảnh →</p>
+      <div class="stage-scroll"><svg class="scene" viewBox="-640 -290 1280 540" role="img" aria-label="Mô phỏng luồng 2: văn thư đóng phong bì, bàn giao bưu cục, bưu tá đi phát, thư bị chuyển hoàn"></svg></div>
+      <div class="controls">
+        <div class="btns">
+          <button class="cbtn play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z"/></svg><span class="lbl">Phát</span></button>
+          <button class="cbtn replay" type="button" aria-label="Phát lại từ đầu"><svg viewBox="0 0 14 14"><path d="M7 2a5 5 0 1 1-4.6 3H.8L3.5 1.8 6 5H4.2A3.3 3.3 0 1 0 7 3.7z"/></svg>Từ đầu</button>
+        </div>
+        <ol class="steps"></ol>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="vc bad"><span class="k">Văn thư làm gì</span><span class="v">5 bước thủ công × 1.248 phong bì</span></div>
+      <div class="vc bad"><span class="k">Đến người dân</span><span class="v">Thường mất 3–10 ngày</span></div>
+      <div class="vc warn"><span class="k">Chi phí</span><span class="v">Giấy in, phong bì, cước bưu chính, công phát</span></div>
+      <div class="vc bad"><span class="k">Rủi ro</span><span class="v">Vắng nhà, sai địa chỉ, thư chuyển hoàn về đơn vị</span></div>
+    </div>
+  </section>
+
+  <section class="sec app-sec" id="luong-3" data-scene="s3">
+    <div class="sec-head">
+      <span class="tag app"><b>3</b><span class="eyebrow">Luồng xử lý văn thư 3 · VNeTraffic</span></span>
+      <h2>Nhập tay lên VNeTraffic, nhưng thông báo chỉ tới người đang dùng app</h2>
+      <p>Văn thư phải gõ lại từng hồ sơ. Sau đó thông báo chỉ đến được người đã cài VNeTraffic, có để ý thông báo và còn đăng nhập được.</p>
+    </div>
+    <div class="stage">
+      <p class="swipe">Vuốt ngang để xem toàn cảnh →</p>
+      <div class="stage-scroll"><svg class="scene" viewBox="-640 -290 1280 540" role="img" aria-label="Mô phỏng luồng 3: văn thư nhập tay, hệ thống VNeTraffic, bốn người dân với bốn kết quả khác nhau"></svg></div>
+      <div class="controls">
+        <div class="btns">
+          <button class="cbtn play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z"/></svg><span class="lbl">Phát</span></button>
+          <button class="cbtn replay" type="button" aria-label="Phát lại từ đầu"><svg viewBox="0 0 14 14"><path d="M7 2a5 5 0 1 1-4.6 3H.8L3.5 1.8 6 5H4.2A3.3 3.3 0 1 0 7 3.7z"/></svg>Từ đầu</button>
+        </div>
+        <ol class="steps"></ol>
+      </div>
+    </div>
+    <div class="verdict">
+      <div class="vc bad"><span class="k">Văn thư làm gì</span><span class="v">Gõ lại từng hồ sơ, kiểm tra, bấm gửi</span></div>
+      <div class="vc bad"><span class="k">Kênh nhận</span><span class="v">Chỉ một app, phải cài và đăng nhập</span></div>
+      <div class="vc bad"><span class="k">Rủi ro</span><span class="v">Chưa cài app, sót thông báo, quên mật khẩu</span></div>
+      <div class="vc warn"><span class="k">Độ phủ</span><span class="v">Chỉ tới nhóm người dân đang dùng VNeTraffic</span></div>
+    </div>
+  </section>
+
+  <section class="sec" id="so-sanh">
+    <div class="sec-head">
+      <span class="eyebrow">So sánh</span>
+      <h2>Ba luồng đặt cạnh nhau</h2>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Tiêu chí</th><th class="hl">Luồng 1 · AI + cổng đa kênh</th><th>Luồng 2 · Bưu cục</th><th>Luồng 3 · VNeTraffic</th></tr></thead>
+        <tbody>
+          <tr><th>Công sức văn thư</th><td class="hl"><span class="pill good">Thấp</span><br>Đặt cả tập vào máy scan một lần</td><td><span class="pill bad">Rất cao</span><br>Tra địa chỉ, gấp, đóng phong bì, ghi địa chỉ, vào sổ, bàn giao từng bộ</td><td><span class="pill bad">Cao</span><br>Gõ lại thông tin từng hồ sơ lên hệ thống</td></tr>
+          <tr><th>Thời gian tới người dân</th><td class="hl"><span class="pill good">Trong ngày</span></td><td><span class="pill bad">3–10 ngày</span></td><td><span class="pill warn">Phụ thuộc tốc độ nhập tay</span></td></tr>
+          <tr><th>Người dân nhận qua</th><td class="hl">App ngân hàng số, ví điện tử, ePass / VETC đã có sẵn trên điện thoại</td><td>Thư giấy gửi tới địa chỉ đăng ký xe</td><td>Chỉ app VNeTraffic</td></tr>
+          <tr><th>Nguy cơ không nhận được</th><td class="hl"><span class="pill good">Thấp</span><br>Gửi song song nhiều kênh</td><td><span class="pill bad">Cao</span><br>Vắng nhà, sai địa chỉ, chuyển hoàn</td><td><span class="pill bad">Cao</span><br>Chưa cài app, sót thông báo, quên mật khẩu</td></tr>
+          <tr><th>Chi phí mỗi thông báo</th><td class="hl"><span class="pill good">Gần như không phát sinh</span></td><td><span class="pill bad">Giấy, phong bì, cước, công phát</span></td><td><span class="pill warn">Thấp, nhưng tốn giờ công nhập</span></td></tr>
+          <tr><th>Theo dõi trạng thái</th><td class="hl">Đã gửi / đã xem theo từng biển số, từng kênh</td><td>Chỉ biết khi có báo phát hoặc thư bị trả về</td><td>Chỉ trong phạm vi người dùng app</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Số lượng hồ sơ, biển số, thời gian và mức tiếp cận trong mô phỏng là ví dụ minh hoạ, không phải số liệu thống kê.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- isometric engine ---------- */
+const C30=0.8660254;
+const r1=n=>Math.round(n*10)/10;
+const P=(x,y,z=0)=>[(x-y)*C30,(x+y)/2-z];
+const pp=a=>a.map(q=>{const p=P(q[0],q[1],q[2]||0);return r1(p[0])+','+r1(p[1]);}).join(' ');
+function rgb(h){h=h.replace('#','');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255];}
+function sh(h,f){const c=rgb(h);return'rgb('+c.map(v=>Math.max(0,Math.min(255,Math.round(v*f)))).join(',')+')';}
+function faces(x,y,z,w,d,h){return{
+  t:pp([[x,y,z+h],[x+w,y,z+h],[x+w,y+d,z+h],[x,y+d,z+h]]),
+  l:pp([[x,y+d,z],[x+w,y+d,z],[x+w,y+d,z+h],[x,y+d,z+h]]),
+  r:pp([[x+w,y,z],[x+w,y+d,z],[x+w,y+d,z+h],[x+w,y,z+h]])};}
+function box(x,y,z,w,d,h,c,a=''){const f=faces(x,y,z,w,d,h);
+  return `<g class="bx" ${a}><polygon points="${f.l}" fill="${sh(c,.84)}"/><polygon points="${f.r}" fill="${sh(c,.68)}"/><polygon points="${f.t}" fill="${c}"/></g>`;}
+function tbox(cls,x,y,z,w,d,h){const f=faces(x,y,z,w,d,h);
+  return `<g class="plt"><polygon class="${cls}-l" points="${f.l}"/><polygon class="${cls}-r" points="${f.r}"/><polygon class="${cls}-t" points="${f.t}"/></g>`;}
+const plat=(x,y,z,w,d,h)=>tbox('fl',x,y,z,w,d,h);
+const wall=(x,y,z,w,d,h)=>tbox('wl',x,y,z,w,d,h);
+function tq(x1,y1,x2,y2,z,fill,a=''){return `<polygon ${a} points="${pp([[x1,y1,z],[x2,y1,z],[x2,y2,z],[x1,y2,z]])}" fill="${fill}"/>`;}
+function M(k,x,y,z){const p=P(x,y,z),e=r1(p[0]),f=r1(p[1]);
+  if(k==='L')return `matrix(${C30},0.5,0,1,${e},${f})`;
+  if(k==='R')return `matrix(${C30},-0.5,0,1,${e},${f})`;
+  return `matrix(${C30},0.5,${-C30},0.5,${e},${f})`;}
+const face=(k,x,y,z,inner,a='')=>`<g transform="${M(k,x,y,z)}" ${a}>${inner}</g>`;
+const SC=1.2;
+const PS=(x,y,z=0)=>{const p=P(x,y,z);return[p[0]*SC,p[1]*SC];};
+const at=(Z,x,y,z=0)=>{const p=PS(x,y,z);return[Z[0]+p[0],Z[1]+p[1]];};
+const zone=(Z,inner,over='')=>`<g transform="translate(${Z[0]},${Z[1]})"><g transform="scale(${SC})">${inner}</g>${over}</g>`;
+
+/* ---------- props ---------- */
+const SKIN='#e8b68e';
+function person(o){const x=o.x,y=o.y,z=o.z||0;
+  let s=box(x-4,y-4,z,8,8,24,o.pants)+box(x-6,y-5,z+24,12,10,22,o.shirt);
+  const h=P(x,y,z+55);
+  s+=`<circle cx="${r1(h[0])}" cy="${r1(h[1])}" r="8.6" fill="${o.hair||'#241a14'}"/>`;
+  if(!o.back)s+=`<circle cx="${r1(h[0]+2.6)}" cy="${r1(h[1]+1.6)}" r="6.6" fill="${SKIN}"/>`;
+  if(o.cap)s+=`<ellipse cx="${r1(h[0])}" cy="${r1(h[1]-6.5)}" rx="9.6" ry="4.8" fill="${o.cap}"/><rect x="${r1(h[0]-9)}" y="${r1(h[1]-6.6)}" width="18" height="2.2" fill="#b91c1c"/><ellipse cx="${r1(h[0]+4.5)}" cy="${r1(h[1]-3.4)}" rx="6.5" ry="2.2" fill="#2f3324"/>`;
+  return s;}
+function armX(x,y,z,len,c){const hp=P(x+len+1.2,y+1.5,z+2);return box(x,y,z,len,3,4,c)+`<circle cx="${r1(hp[0])}" cy="${r1(hp[1])}" r="2.7" fill="${SKIN}"/>`;}
+function armY(x,y,z,len,c){const hp=P(x+1.5,y-len-1.2,z+2);return box(x,y-len,z,3,len,4,c)+`<circle cx="${r1(hp[0])}" cy="${r1(hp[1])}" r="2.7" fill="${SKIN}"/>`;}
+const PAL={doc:['#1f5fb4','#f7f4ec','#f7f4ec','#e2c27c','#f7f4ec','#f7f4ec','#c2462f','#f7f4ec'],env:['#e6c487','#d8b06c'],paper:['#f7f4ec','#ffffff']};
+function stack(k,x,y,z,n,w,d,lh,pal){let s='';for(let i=0;i<n;i++)s+=`<g data-k="${k}${i}">${box(x,y,z+i*lh,w,d,lh,pal[i%pal.length])}</g>`;return s;}
+function layers(R,k,n,count){for(let i=0;i<n;i++){const e=R[k+i];const v=i<count?'1':'0';if(e.style.opacity!==v)e.style.opacity=v;}}
+function tree(x,y){const c=P(x,y,30);return box(x-2,y-2,0,4,4,20,'#7a5534')+`<circle cx="${r1(c[0])}" cy="${r1(c[1])}" r="15" fill="#3f8a4d"/><circle cx="${r1(c[0]-4)}" cy="${r1(c[1]-5)}" r="8" fill="#5aa866"/>`;}
+function car(){let s=`<polygon points="${pp([[-2,-2,0],[50,-2,0],[50,21,0],[-2,21,0]])}" fill="#000" opacity=".18"/>`;
+  s+=box(0,0,3,46,18,10,'#2563eb')+box(11,1.5,13,23,15,9,'#c3d6fb')+box(12.5,2.5,22,20,13,1.6,'#1d4ed8');
+  s+=face('L',0,18,8,`<circle cx="10" cy="4.5" r="4.4" fill="#12151b"/><circle cx="10" cy="4.5" r="1.6" fill="#9aa3b2"/><circle cx="36" cy="4.5" r="4.4" fill="#12151b"/><circle cx="36" cy="4.5" r="1.6" fill="#9aa3b2"/>`);
+  s+=face('R',46,18,13,`<rect x="1.5" y="1.5" width="3" height="2.2" fill="#fde68a"/><rect x="13.5" y="1.5" width="3" height="2.2" fill="#fde68a"/><rect x="5.5" y="4.6" width="7" height="3.6" fill="#fbfbf7" stroke="#111" stroke-width=".3"/>`);
+  return s;}
+function van(){let s=`<polygon points="${pp([[-2,-2,0],[54,-2,0],[54,20,0],[-2,20,0]])}" fill="#000" opacity=".18"/>`;
+  s+=box(0,0,4,38,18,22,'#f4f6f9')+box(38,1,4,13,16,15,'#f4f6f9');
+  s+=face('L',0,18,26,`<rect x="0" y="8" width="38" height="4" fill="#d97706"/><text x="19" y="19" text-anchor="middle" style="font:800 4.4px var(--f-d);fill:#b45309">BƯU CHÍNH</text>`);
+  s+=face('R',51,17,19,`<rect x="1.5" y="1" width="13" height="5.5" fill="#7fa3c9"/>`);
+  s+=face('L',0,18,8,`<circle cx="8" cy="4" r="4.2" fill="#12151b"/><circle cx="44" cy="4" r="4.2" fill="#12151b"/>`);
+  return s;}
+function house(x,y,wc,rc){const w=30,d=26,h=26;let s=box(x,y,0,w,d,h,wc);
+  s+=`<g class="bx"><polygon points="${pp([[x+w,y,h],[x+w,y+d,h],[x+w,y+d/2,h+14]])}" fill="${sh(wc,.7)}"/><polygon points="${pp([[x-1,y+d+1,h-1],[x+w+1,y+d+1,h-1],[x+w+1,y+d/2,h+14],[x-1,y+d/2,h+14]])}" fill="${rc}"/></g>`;
+  s+=face('L',x,y+d,18,`<rect x="12" y="2" width="7" height="16" fill="#6b4a2f"/><rect x="3" y="3" width="6" height="6" fill="#a7c4e4"/><rect x="22" y="3" width="6" height="6" fill="#a7c4e4"/>`);
+  return s;}
+function phone(x,y,inner,k){let s=plat(x-4,y-3,0,30,11,6);
+  s+=box(x,y,6,22,4,40,'#1c2230');
+  s+=face('L',x,y+4,46,`<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#0b1220"/>${inner}`,k?`data-k="${k}"`:'');
+  return s;}
+function plate(x,y,s,k){const w=s.length*7.3+12;return `<g ${k?`data-k="${k}"`:''} transform="translate(${x},${y})"><rect width="${r1(w)}" height="20" rx="3" fill="#fbfbf6" stroke="#1b1f27" stroke-width="1.3"/><text x="${r1(w/2)}" y="14.2" text-anchor="middle" class="plate">${s}</text></g>`;}
+function card(k,x,y,w,h,inner){return `<g data-k="${k}" data-x="${x}" data-y="${y}" transform="translate(${x},${y})"><rect class="card" width="${w}" height="${h}" rx="12" filter="url(#fSh)"/>${inner}</g>`;}
+function chip(x,y,w,label,tone,k){return `<g ${k?`data-k="${k}"`:''}><rect x="${x}" y="${y}" width="${w}" height="20" rx="10" class="f-${tone}s"/><text x="${x+w/2}" y="${y+14}" text-anchor="middle" class="t-chip ${tone==='ok'?'okc':tone}">${label}</text></g>`;}
+function flowPath(k,s,e,lift,cls='',label=''){const mx=(s[0]+e[0])/2,my=lift<0?Math.max(s[1],e[1])-lift:Math.min(s[1],e[1])-lift;
+  let o=`<path data-k="${k}" class="flow ${cls}" d="M${r1(s[0])},${r1(s[1])} Q${r1(mx)},${r1(my)} ${r1(e[0])},${r1(e[1])}"/>`;
+  if(label){const ly=(s[1]+2*my+e[1])/4+(lift<0?20:-8);o+=`<text data-k="${k}L" x="${r1(mx)}" y="${r1(ly)}" text-anchor="middle" class="flow-l">${label}</text>`;}
+  return o;}
+const sheetQ=(w,d,fill='#fffdf6',stroke='#c9bd9c')=>`<polygon points="${pp([[-w/2,-d/2,0],[w/2,-d/2,0],[w/2,d/2,0],[-w/2,d/2,0]])}" fill="${fill}" stroke="${stroke}" stroke-width=".6"/>`;
+
+/* ---------- animation helpers ---------- */
+const cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ez=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+const es=(t,a,b)=>ez(seg(t,a,b));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const fmtN=n=>Math.round(n).toLocaleString('vi-VN');
+function tr(el,x,y,extra=''){el.setAttribute('transform',`translate(${r1(x)},${r1(y)})${extra}`);}
+function iso(el,dx,dy,dz){const p=P(dx,dy,dz);tr(el,p[0],p[1]);}
+function op(el,o){const v=String(Math.round(o*100)/100);if(el.style.opacity!==v)el.style.opacity=v;}
+function txt(el,s){if(el.textContent!==s)el.textContent=s;}
+function pop(el,p){tr(el,+el.dataset.x,+el.dataset.y+(1-p)*10);op(el,p);}
+function along(el,path,p){const L=path._L||(path._L=path.getTotalLength());const q=path.getPointAtLength(L*cl(p));el.setAttribute('cx',r1(q.x));el.setAttribute('cy',r1(q.y));}
+function quad(s,c,e,p){const a=(1-p)*(1-p),b=2*(1-p)*p,d=p*p;return[a*s[0]+b*c[0]+d*e[0],a*s[1]+b*c[1]+d*e[1]];}
+function dash(el,t,speed=24){el.style.strokeDashoffset=String(r1(-t*speed));}
+const dots=(k,n,cls='pkt',r=3.6)=>Array.from({length:n},(_,i)=>`<circle data-k="${k}${i}" r="${r}" class="${cls}" style="opacity:0"/>`).join('');
+
+/* ===================================================== SCENE 0 */
+const Z0={A:[-410,70],B:[0,70],C:[410,70]};
+const S0={dur:11.4,
+ steps:[[0,'Xe vượt đèn đỏ'],[1.1,'Camera phát hiện vi phạm'],[3.8,'CSGT ký quyết định xử phạt'],[7.0,'Văn thư nhận tập hồ sơ']],
+ build(){
+  let a=plat(-110,-85,-10,220,170,10);
+  a+=`<polygon points="${pp([[-110,-26,0],[110,-26,0],[110,26,0],[-110,26,0]])}" fill="#3b4350"/>`;
+  a+=`<polygon points="${pp([[110,-26,0],[110,26,0],[110,26,-10],[110,-26,-10]])}" fill="#2a3039"/>`;
+  for(let x=-104;x<104;x+=20){if(x>-12&&x<40)continue;a+=tq(x,-1,x+10,1,.3,'#e6e9ee');}
+  a+=tq(3,-26,8,0,.3,'#ffffff');
+  for(let y=-24;y<24;y+=8)a+=tq(14,y,36,y+4,.3,'#e6e9ee');
+  a+=tree(-82,-60)+tree(76,-62);
+  a+=box(1,-44,0,3,3,96,'#5b6472');
+  a+=`<g data-k="car">${car()}</g>`;
+  a+=box(1,-41,93,3,29,3,'#5b6472');
+  a+=box(-3,-16,58,9,8,34,'#1c2029');
+  a+=face('L',-3,-8,92,`<circle cx="4.5" cy="6" r="3.4" fill="#ff3b30"/><circle cx="4.5" cy="16.5" r="3.4" fill="#4a3d17"/><circle cx="4.5" cy="27" r="3.4" fill="#123524"/>`);
+  const rp=P(1.5,-8,86);a+=`<circle data-k="redGlow" cx="${r1(rp[0])}" cy="${r1(rp[1])}" r="17" fill="url(#gRed)"/>`;
+  a+=box(45,34,0,3,3,104,'#5b6472')+box(45,12,101,3,25,3,'#5b6472')+box(38,13,91,14,9,10,'#eef1f5');
+  a+=face('L',38,22,101,`<circle cx="4" cy="5" r="3.2" fill="#1c2029"/><circle cx="4" cy="5" r="1.3" fill="#5eead4"/><circle cx="11" cy="2.5" r="1" fill="#ef4444"/>`);
+  const fp=P(38,22,96);let ao='';a+=`<circle data-k="flash" cx="${r1(fp[0])}" cy="${r1(fp[1])}" r="50" fill="url(#gFlash)" style="opacity:0"/>`;
+  a+=tree(-62,62);
+  ao+=`<path class="lead" d="M10,-238 L${r1(fp[0]*SC)},${r1((fp[1]-8)*SC)}" data-k="leadA"/>`;
+  ao+=card('cA',-130,-338,250,100,`<circle cx="20" cy="24" r="4.5" class="f-sig"/><text x="32" y="28" class="t-cap sig">CAMERA PHÁT HIỆN VI PHẠM</text>${plate(16,40,'30A-123.45')}<text x="118" y="55" class="t-h">Vượt đèn đỏ</text><text x="16" y="84" class="t-m">07:42:15 · 12/11/2026 · Nút giao số 12</text>`);
+
+  let b=plat(-110,-85,-10,220,170,10);
+  b+=wall(-114,-85,0,4,170,78);
+  b+=face('R',-110,85,78,`<rect x="44" y="10" width="86" height="18" rx="2" fill="#b91c1c"/><text x="87" y="22.4" text-anchor="middle" class="wsign">ĐỘI CSGT</text>`);
+  const OF={shirt:'#d6bc5a',pants:'#38452c',cap:'#d0b24c'};
+  b+=armX(-62,-8,33,30,OF.shirt);
+  b+=person({x:-64,y:3,...OF});
+  b+=box(-36,-26,0,58,60,28,'#9c6b43');
+  b+=box(-30,22,28,14,10,6,'#f7f4ec');
+  const paper=`<rect width="26" height="20" fill="#fffdf6" stroke="#cfc6b0" stroke-width=".35"/><text x="13" y="4.6" text-anchor="middle" style="font:800 2.7px var(--f-d);fill:#1f2937">QUYẾT ĐỊNH XỬ PHẠT</text><rect x="3" y="7" width="20" height=".7" fill="#9aa3b2"/><rect x="3" y="9" width="17" height=".7" fill="#9aa3b2"/><rect x="3" y="11" width="19" height=".7" fill="#9aa3b2"/><path data-k="sig" pathLength="1" d="M4,16.5 c2,-6 4,3 6.5,-3 s3,-4 4,1 s3,2 6,-4" fill="none" stroke="#1d3fae" stroke-width=".75" stroke-linecap="round" style="stroke-dasharray:1;stroke-dashoffset:1"/><g transform="translate(20,15)"><g data-k="stamp" style="opacity:0"><circle r="3.6" fill="none" stroke="#d11f1f" stroke-width=".7"/><circle r="2.3" fill="none" stroke="#d11f1f" stroke-width=".35"/><rect x="-1.6" y="-.4" width="3.2" height=".8" fill="#d11f1f"/></g></g>`;
+  b+=`<g data-k="bPaper">${face('T',-20,-8,28.4,paper)}</g>`;
+  b+=`<g data-k="penArm">${armX(-62,5,32,40,OF.shirt)}</g>`;
+  let bo=card('cB',-120,-338,250,104,`<text x="16" y="26" class="t-cap">CSGT RA QUYẾT ĐỊNH</text><text x="16" y="50" class="t-h lg">Quyết định xử phạt</text><text x="16" y="70" class="t-m">Số 1248/QĐ-XPHC · 30A-123.45</text>${chip(16,78,84,'✓ Đã ký','ok','signed')}`);
+
+  let c=plat(-110,-85,-10,220,170,10);
+  c+=box(-104,-80,0,24,66,72,'#8a96a8');
+  c+=face('R',-80,-14,72,`<rect x="4" y="18" width="58" height=".8" fill="#5d6878"/><rect x="4" y="37" width="58" height=".8" fill="#5d6878"/><rect x="4" y="56" width="58" height=".8" fill="#5d6878"/><rect x="28" y="8" width="10" height="2" fill="#e5e7eb"/><rect x="28" y="27" width="10" height="2" fill="#e5e7eb"/><rect x="28" y="46" width="10" height="2" fill="#e5e7eb"/>`);
+  const gp=P(-10,1,0);c+=`<ellipse data-k="cGlow" cx="${r1(gp[0])}" cy="${r1(gp[1])}" rx="72" ry="36" class="glow-acc" style="opacity:0"/>`;
+  const CL={shirt:'#eef2f7',pants:'#20385f',hair:'#1a1410'};
+  c+=armX(-36,-14,33,12,CL.shirt);
+  c+=person({x:-34,y:2,...CL});
+  c+=stack('cs',-26,-11,28,20,30,22,2.3,PAL.doc);
+  c+=armX(-36,11,33,12,CL.shirt);
+  const st=PS(-11,0,76);
+  let co=`<path class="lead" data-k="leadC" d="M10,-226 L${r1(st[0])},${r1(st[1]-4)}"/>`;
+  co+=card('cC',-120,-352,270,126,`<text x="16" y="26" class="t-cap acc">VĂN THƯ</text><text x="16" y="50" class="t-h lg">Nhận tập hồ sơ để gửi người dân</text><text data-k="cCount" x="16" y="90" class="t-num">0</text><text data-k="cUnit" x="104" y="88" class="t-b">bộ hồ sơ</text><text x="16" y="112" class="t-s">Quyết định xử phạt + Biên bản vi phạm</text>`);
+
+  let root=zone(Z0.A,a,ao)+zone(Z0.B,b,bo)+zone(Z0.C,c,co);
+  root+=flowPath('lAB',at(Z0.A,110,-85,20),at(Z0.B,-110,85,30),70,'','Dữ liệu vi phạm');
+  root+=flowPath('lBC',at(Z0.B,110,-85,20),at(Z0.C,-110,85,30),70,'acc','Hồ sơ đã ký');
+  for(let i=0;i<6;i++)root+=`<g data-k="fly${i}" style="opacity:0">${sheetQ(16,12)}</g>`;
+  return root;},
+ init(R){this.S=at(Z0.B,-7,2,30);this.E=at(Z0.C,-11,0,76);this.Cc=[(this.S[0]+this.E[0])/2,-170];},
+ render(t,R){
+  const dx=-112+232*seg(t,0,3.4);iso(R.car,dx,-22,0);op(R.car,1-seg(t,3.5,4.0));
+  op(R.redGlow,.55+.45*Math.sin(t*5));
+  const f=t<1.1?0:t<1.2?(t-1.1)/.1:Math.max(0,1-(t-1.2)/.7);op(R.flash,f);
+  pop(R.cA,es(t,1.3,1.7));op(R.leadA,es(t,1.3,1.7)*.6);
+  const ab=es(t,2.0,2.6);op(R.lAB,ab*.8);op(R.lABL,ab);dash(R.lAB,t);
+  const pin=es(t,3.8,4.3);iso(R.bPaper,0,-16*(1-pin),0);op(R.bPaper,pin);
+  pop(R.cB,es(t,3.9,4.3));
+  R.sig.style.strokeDashoffset=String(1-seg(t,4.5,6.1));
+  if(t>4.5&&t<6.1)iso(R.penArm,Math.sin(t*22)*1.6,Math.cos(t*15)*1.6,0);else iso(R.penArm,0,0,0);
+  const sp=es(t,6.25,6.55);R.stamp.setAttribute('transform',`scale(${r1(lerp(2.2,1,sp)*10)/10})`);op(R.stamp,sp);
+  op(R.signed,es(t,6.4,6.7));
+  const bc=es(t,6.7,7.1);op(R.lBC,bc*.9);op(R.lBCL,bc);dash(R.lBC,t);
+  for(let i=0;i<6;i++){const a0=7.0+i*.45,p=seg(t,a0,a0+.9);const el=R['fly'+i];
+    if(p<=0||p>=1){op(el,0);continue;}const q=quad(this.S,this.Cc,this.E,ez(p));tr(el,q[0],q[1]);op(el,1);}
+  const cp=seg(t,7.3,10.0);layers(R,'cs',20,Math.ceil(20*cp));
+  txt(R.cCount,fmtN(1248*cp));
+  R.cUnit.setAttribute('x',String(16+R.cCount.textContent.length*19.6+8));
+  pop(R.cC,es(t,7.0,7.4));op(R.leadC,es(t,7.0,7.4)*.6);
+  op(R.cGlow,t>9.6?.55+.45*Math.sin(t*4):0);
+ }};
+
+/* ===================================================== SCENE 1 */
+const Z1={A:[-410,78],B:[0,78],C:[405,78]};
+const CLK={shirt:'#eef2f7',pants:'#20385f',hair:'#1a1410'};
+const PLATES=['30A-123.45','51G-678.90','29H-246.80','43A-555.12'];
+const APPS=[['Ngân hàng số','#1e40af'],['Ví điện tử','#7e22ce'],['ePass / VETC','#c2410c']];
+const S1={dur:16.6,
+ steps:[[0,'Cho TẤT CẢ hồ sơ vào máy scan'],[2.6,'Máy scan tự scan và lưu vào máy tính'],[6.3,'AI Agent đọc, phân loại, tách theo biển số'],[10.9,'AI Agent tự nhập lên Cổng chuyển tiếp'],[12.5,'Thông báo tới điện thoại người dân']],
+ build(){
+  let a=plat(-110,-85,-10,220,170,10);
+  a+=`<g data-k="armB">${armX(-60,-8,33,14,CLK.shirt)}</g>`;
+  a+=person({x:-62,y:4,...CLK});
+  a+=box(-2,-36,0,58,52,40,'#d3d9e2')+box(-2,-36,40,58,52,9,'#eef1f6');
+  a+=face('L',-2,16,49,`<rect x="4" y="2.6" width="50" height="3.2" rx="1.6" fill="#0b1220"/><rect data-k="scanLed" x="4" y="2.6" width="12" height="3.2" rx="1.6" fill="#22d3ee" style="opacity:0"/>`);
+  a+=face('L',-2,16,36,`<rect x="40" y="2" width="12" height="7" rx="1" fill="#0b1220"/><rect x="41.5" y="3.5" width="9" height="4" fill="#0e7490"/>`);
+  a+=box(4,-30,49,40,40,2.5,'#8d97a8');
+  a+=box(56,-28,20,18,36,2,'#8d97a8');
+  a+=stack('so',58,-24,22,14,15,28,1.6,PAL.paper);
+  a+=`<g data-k="sheet" style="opacity:0">${sheetQ(14,24)}</g>`;
+  a+=`<g data-k="mv">${stack('si',0,0,0,16,24,18,2.2,PAL.doc)}</g>`;
+  a+=`<g data-k="armF">${armX(-60,9,33,14,CLK.shirt)}</g>`;
+  a+=`<g data-k="armD" style="opacity:0">${box(-62,9,27,3,3,20,CLK.shirt)}</g>`;
+  // banner
+  let ao=`<g data-k="cAll" data-x="-180" data-y="-350" transform="translate(-180,-350)"><rect class="ban" width="350" height="78" rx="14" filter="url(#fSh)"/><text x="20" y="36" class="ban-t" style="font-size:24px">CHO TẤT CẢ VÀO</text><text x="20" y="60" class="ban-t" style="font-size:12.5px;font-weight:600;opacity:.92">Nguyên tập, một lần, không cần phân loại trước</text></g>`;
+  const tp=PS(24,-11,60);
+  ao+=`<g data-k="arrow"><path d="M${r1(tp[0]-36)},-268 C${r1(tp[0]-36)},-190 ${r1(tp[0])},-150 ${r1(tp[0])},${r1(tp[1]-26)}" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"/><path d="M${r1(tp[0]-8)},${r1(tp[1]-36)} L${r1(tp[0])},${r1(tp[1]-22)} L${r1(tp[0]+8)},${r1(tp[1]-36)}" fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  ao+=card('cScan',92,-150,176,50,`<text x="14" y="21" class="t-cap acc">MÁY SCAN TỰ ĐỘNG</text><text data-k="scanTxt" x="14" y="39" class="t-b">Chờ hồ sơ</text>`);
+
+  let b=plat(-110,-85,-10,220,170,10);
+  b+=box(-50,-36,0,80,56,26,'#9c6b43');
+  b+=box(-20,-17,26,6,6,6,'#3b4252')+box(-40,-18,32,46,4,32,'#1b2233');
+  let scr=`<rect x="1.5" y="1.5" width="43" height="29" fill="#0b1527"/><text x="4" y="7" class="scr" fill="#5eead4">AI AGENT · ĐANG XỬ LÝ</text><rect x="4" y="9.5" width="38" height="1.8" fill="#1e293b"/><rect data-k="scrBar" x="4" y="9.5" width="0" height="1.8" fill="#2dd4bf"/>`;
+  for(let i=0;i<12;i++)scr+=`<rect data-k="sd${i}" x="${4+(i%6)*6.4}" y="${14+Math.floor(i/6)*7.5}" width="5" height="6" rx=".6" fill="#334155"/>`;
+  b+=face('L',-40,-14,64,scr);
+  b+=tq(-32,2,-2,12,26.3,'#2a3140');
+  b+=box(36,-30,0,14,30,38,'#2b3240');
+  b+=face('L',36,0,38,`<circle cx="7" cy="6" r="1.3" fill="#22c55e"/><rect x="3" y="12" width="8" height="1" fill="#475569"/>`);
+  const orb=P(-17,-16,94);
+  b+=`<g transform="translate(${r1(orb[0])},${r1(orb[1])})"><circle data-k="orbRing" r="14" fill="none" stroke="var(--accent)" stroke-width="2" style="opacity:0"/><circle r="14" fill="url(#gAI)"/><text y="4.5" text-anchor="middle" style="font:800 12px var(--f-d);fill:#fff">AI</text></g>`;
+  // AI panel
+  let ai=`<text x="18" y="28" class="t-cap acc">AI AGENT TRÊN MÁY TÍNH VĂN THƯ</text>`;
+  ai+=`<g data-k="r1" style="opacity:0"><circle cx="26" cy="52" r="9" class="f-accs"/><text x="26" y="56" text-anchor="middle" class="t-chip acc">1</text><text x="44" y="50" class="t-b">Tự lưu file scan</text><text x="44" y="65" class="t-m">D:\\VanThu\\Scan_12-11-2026 · 1.248 trang</text></g>`;
+  ai+=`<g data-k="r2" style="opacity:0"><circle cx="26" cy="90" r="9" class="f-accs"/><text x="26" y="94" text-anchor="middle" class="t-chip acc">2</text><text x="44" y="88" class="t-b">Đọc từng trang</text><rect x="44" y="96" width="220" height="6" rx="3" class="f-mut"/><rect data-k="aiBar" x="44" y="96" width="0" height="6" rx="3" class="f-acc"/><text data-k="aiPct" x="274" y="103" class="t-m">0%</text></g>`;
+  ai+=`<g data-k="r3" style="opacity:0"><circle cx="26" cy="128" r="9" class="f-accs"/><text x="26" y="132" text-anchor="middle" class="t-chip acc">3</text><text x="44" y="126" class="t-b">Phân loại hồ sơ</text><rect x="44" y="134" width="150" height="20" rx="10" fill="#1f5fb4" opacity=".15"/><text data-k="nQD" x="56" y="148" class="t-chip" style="fill:#3b82f6">Quyết định xử phạt · 0</text><rect x="200" y="134" width="146" height="20" rx="10" class="f-ambs"/><text data-k="nBB" x="212" y="148" class="t-chip amb">Biên bản vi phạm · 0</text></g>`;
+  ai+=`<g data-k="r4" style="opacity:0"><circle cx="26" cy="176" r="9" class="f-accs"/><text x="26" y="180" text-anchor="middle" class="t-chip acc">4</text><text x="44" y="174" class="t-b">Tách theo biển số (mỗi xe: QĐ + BB)</text>`;
+  PLATES.forEach((p,i)=>{ai+=`<g data-k="pl${i}" style="opacity:0" transform="translate(${44+i*70},184)"><rect width="64" height="18" rx="3" fill="#fbfbf6" stroke="#1b1f27" stroke-width="1.2"/><text x="32" y="12.6" text-anchor="middle" class="plate" style="font-size:9.2px">${p}</text></g>`;});
+  ai+=`<text data-k="plMore" x="${44+4*70}" y="198" class="t-m" style="opacity:0">+620</text>`;
+  const bo=card('cAI',-210,-366,360,214,ai);
+
+  let c=plat(-122,-98,-10,200,182,10);
+  c+=box(-118,-62,0,36,36,92,'#0f766e');
+  let rack='';for(let i=0;i<7;i++)rack+=`<rect x="4" y="${8+i*11}" width="28" height="6" fill="#0b4f4a"/><circle data-k="gl${i}" cx="28" cy="${11+i*11}" r="1.4" fill="#5eead4"/>`;
+  c+=face('L',-118,-26,92,rack);
+  c+=face('T',-118,-62,92,`<circle data-k="gwRing" cx="18" cy="18" r="10" fill="none" stroke="#5eead4" stroke-width="1.6"/>`);
+  const PH=[[-57,-78],[-17,-8],[23,62]];
+  PH.forEach(([x,y],i)=>{const [nm,col]=APPS[i];
+    const inner=`<rect x="1.6" y="2.4" width="18.8" height="5.5" fill="${col}"/><text x="3" y="6.3" style="font:800 2.9px var(--f-d);fill:#fff">${nm.toUpperCase()}</text><rect x="3" y="10" width="16" height="24" rx="1" fill="#111a2c"/><g data-k="nt${i}" style="opacity:0"><rect x="2.6" y="10" width="16.8" height="9" rx="1.2" fill="#ffffff"/><circle cx="5" cy="13" r="1.3" fill="#dc2626"/><rect x="7.2" y="12" width="10" height="1" fill="#334155"/><rect x="7.2" y="14.6" width="7" height="1" fill="#94a3b8"/><rect x="4" y="22" width="14" height="3.4" rx="1.7" fill="${col}"/></g>`;
+    c+=phone(x,y,inner);});
+  let co=card('cGW',-238,-330,300,72,`<text x="16" y="26" class="t-cap acc">CỔNG CHUYỂN TIẾP</text><text x="16" y="48" class="t-h">Thông báo đa kênh</text><text x="16" y="63" class="t-s">Nhận dữ liệu từ AI Agent, gửi song song 3 kênh</text>`);
+  PH.forEach(([x,y],i)=>{const [nm,col]=APPS[i];const q=PS(x+22,y,46);
+    co+=card('bb'+i,r1(q[0]+8),r1(q[1]-10),176,48,`<rect x="12" y="12" width="8" height="24" rx="3" fill="${col}"/><text x="28" y="22" class="t-b">${nm}</text><text x="28" y="38" class="t-s">QĐ xử phạt · ${PLATES[0]}</text><g data-k="seen${i}" style="opacity:0"><text x="166" y="22" text-anchor="end" class="t-chip okc">✓ Đã xem</text></g>`);});
+
+  let root=zone(Z1.A,a,ao)+zone(Z1.B,b,bo)+zone(Z1.C,c,co);
+  root+=flowPath('pAB',at(Z1.A,56,-10,48),at(Z1.B,-40,-16,60),90,'acc','File scan');
+  root+=dots('dAB',4);
+  root+=flowPath('pBC',at(Z1.B,30,-60,30),at(Z1.C,-100,-44,92),70,'acc','AI Agent tự nhập');
+  root+=dots('dBC',4);
+  PH.forEach(([x,y],i)=>{root+=flowPath('pP'+i,at(Z1.C,-100,-44,94),at(Z1.C,x+11,y+2,48),28,'acc');root+=dots('dP'+i+'_',1);});
+  return root;},
+ render(t,R){
+  const mp=es(t,1.2,2.4);
+  iso(R.mv,lerp(-50,12,mp),lerp(-5,-20,mp),lerp(30,51.5,mp)+Math.sin(Math.PI*mp)*34);
+  const up=t<1.45;op(R.armF,up?1:0);op(R.armB,up?1:0);op(R.armD,up?0:1);
+  pop(R.cAll,es(t,.2,.7));
+  op(R.arrow,es(t,.4,.9)*(1-seg(t,3.0,3.6)*.75));tr(R.arrow,0,t<3?Math.sin(t*6)*4:0);
+  const sp=seg(t,2.6,6.2);
+  layers(R,'si',16,16-Math.floor(16*sp));layers(R,'so',14,Math.ceil(14*sp));
+  if(t>2.6&&t<6.2){const ph=((t-2.6)/.24)%1;iso(R.sheet,lerp(52,66,ph),-10,24+Math.ceil(14*sp)*1.6+1);op(R.sheet,1);
+    R.scanLed.setAttribute('x',String(r1(4+((t*30)%38))));op(R.scanLed,1);}else{op(R.sheet,0);op(R.scanLed,0);}
+  pop(R.cScan,es(t,2.5,2.9));
+  txt(R.scanTxt,t<2.6?'Chờ hồ sơ':t<6.2?`Đang scan ${fmtN(1248*sp)} / 1.248 trang`:'Đã scan và lưu 1.248 trang ✓');
+  const onAB=t>3.0&&t<6.6;dash(R.pAB,t);op(R.pAB,es(t,2.9,3.2)*.9);op(R.pABL,es(t,2.9,3.2));
+  for(let i=0;i<4;i++){const d=R['dAB'+i];if(onAB){along(d,R.pAB,((t-3)*.7+i/4)%1);op(d,1);}else op(d,0);}
+  pop(R.cAI,es(t,3.4,3.9));op(R.r1,es(t,4.0,4.4));op(R.r2,es(t,6.2,6.5));
+  const rd=seg(t,6.4,8.0);R.aiBar.setAttribute('width',String(r1(220*rd)));txt(R.aiPct,Math.round(rd*100)+'%');
+  op(R.r3,es(t,7.9,8.2));const cls=seg(t,8.0,9.4);txt(R.nQD,'Quyết định xử phạt · '+fmtN(624*cls));txt(R.nBB,'Biên bản vi phạm · '+fmtN(624*cls));
+  op(R.r4,es(t,9.2,9.5));for(let i=0;i<4;i++)op(R['pl'+i],es(t,9.4+i*.25,9.6+i*.25));op(R.plMore,es(t,10.4,10.7));
+  R.scrBar.setAttribute('width',String(r1(38*seg(t,6.4,10.8))));
+  const nd=Math.floor(12*cls);for(let i=0;i<12;i++)R['sd'+i].setAttribute('fill',i<nd?(i%2?'#f59e0b':'#3b82f6'):'#334155');
+  if(t>6.2&&t<11.2){const f=(t*1.1)%1;R.orbRing.setAttribute('r',String(r1(14+f*16)));op(R.orbRing,1-f);}else op(R.orbRing,0);
+  pop(R.cGW,es(t,10.8,11.2));dash(R.pBC,t);op(R.pBC,es(t,10.9,11.2)*.9);op(R.pBCL,es(t,10.9,11.2));
+  const onBC=t>11.0&&t<12.7;for(let i=0;i<4;i++){const d=R['dBC'+i];if(onBC){along(d,R.pBC,((t-11)*.9+i/4)%1);op(d,1);}else op(d,0);}
+  if(t>12.2){const f=(t*1.3)%1;R.gwRing.setAttribute('r',String(r1(8+f*10)));op(R.gwRing,1-f);}else{R.gwRing.setAttribute('r','10');op(R.gwRing,.5);}
+  for(let i=0;i<7;i++)op(R['gl'+i],t>11?(Math.sin(t*9+i*1.7)>0?1:.25):.35);
+  for(let i=0;i<3;i++){const t0=12.9+i*.45;const pl=R['pP'+i];op(pl,es(t,12.4,12.8)*.9);dash(pl,t);
+    const d=R['dP'+i+'_0'];const p=seg(t,t0-.6,t0);if(p>0&&p<1){along(d,pl,p);op(d,1);}else op(d,0);
+    op(R['nt'+i],es(t,t0,t0+.2));pop(R['bb'+i],es(t,t0,t0+.3));op(R['seen'+i],es(t,t0+1.3,t0+1.6));}
+ }};
+
+/* ===================================================== SCENE 2 */
+const Z2={A:[-410,72],B:[0,72],C:[410,72]};
+const TASKS=['Tra địa chỉ chủ phương tiện','Gấp quyết định + biên bản','Cho vào phong bì, dán kín','Ghi địa chỉ, dán tem','Vào sổ, lập danh sách bàn giao'];
+const S2={dur:16.4,
+ steps:[[0,'Văn thư đóng từng phong bì bằng tay'],[4.5,'Bàn giao từng đợt cho bưu cục'],[8.0,'Bưu tá đi phát từng nhà'],[12.6,'Vắng nhà, sai địa chỉ, chuyển hoàn']],
+ build(){
+  let a=plat(-110,-85,-10,220,170,10);
+  a+=wall(-114,-85,0,4,170,70);
+  a+=face('R',-110,85,70,`<rect x="112" y="10" width="36" height="34" fill="#ffffff" stroke="#cfd5df" stroke-width=".6"/><rect x="112" y="10" width="36" height="9" fill="#c2410c"/><text x="130" y="17" text-anchor="middle" style="font:800 5.5px var(--f-d);fill:#fff">NGÀY</text><text data-k="calDay" x="130" y="38" text-anchor="middle" style="font:800 17px var(--f-m);fill:#1f2937">1</text><circle cx="66" cy="27" r="12" fill="#ffffff" stroke="#cfd5df" stroke-width=".8"/><line data-k="clk" x1="66" y1="27" x2="66" y2="18" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round"/><line data-k="clk2" x1="66" y1="27" x2="71" y2="27" stroke="#c2410c" stroke-width="1.6" stroke-linecap="round"/>`);
+  a+=`<g data-k="armWB">${armX(-64,-9,31,30,CLK.shirt)}</g>`;
+  a+=person({x:-66,y:0,...CLK});
+  a+=box(-42,-30,0,64,60,26,'#9c6b43');
+  a+=stack('ds',-36,-26,26,10,14,14,2,PAL.doc);
+  let wk=`<g data-k="wDoc"><rect x="1" y="1" width="16" height="12" fill="#fffdf6" stroke="#cfc6b0" stroke-width=".3"/><rect x="3" y="3.5" width="11" height=".6" fill="#9aa3b2"/><rect x="3" y="5.5" width="9" height=".6" fill="#9aa3b2"/><rect x="3" y="7.5" width="10" height=".6" fill="#9aa3b2"/></g>`;
+  wk+=`<g data-k="wEnv" style="opacity:0"><rect x="0" y="1" width="18" height="12" fill="#e9c88a" stroke="#b98f4a" stroke-width=".35"/><path d="M0,1 L9,7 L18,1" fill="none" stroke="#b98f4a" stroke-width=".35"/><rect data-k="wAddr" x="5" y="8.5" width="0" height=".8" fill="#1f2937"/><rect data-k="wAddr2" x="5" y="10.3" width="0" height=".8" fill="#1f2937"/><rect data-k="wStamp" x="13.5" y="2.4" width="3.4" height="3.8" fill="#dc2626" style="opacity:0"/></g>`;
+  a+=face('T',-20,-6,26.3,wk);
+  a+=stack('ep',30,16,0,18,22,16,1.6,PAL.env);
+  a+=`<g data-k="wFly" style="opacity:0">${sheetQ(16,11,'#e9c88a','#b98f4a')}</g>`;
+  a+=`<g data-k="armW">${armX(-64,6,31,30,CLK.shirt)}</g>`;
+  const hd=P(-66,0,58);a+=`<g data-k="sweat"><path d="M${r1(hd[0]+11)},${r1(hd[1]-6)} c2,3 2,5 0,5.5 c-2,-.5 -2,-2.5 0,-5.5z" fill="#60a5fa"/></g><g data-k="sweat2"><path d="M${r1(hd[0]-10)},${r1(hd[1]-4)} c2,3 2,5 0,5.5 c-2,-.5 -2,-2.5 0,-5.5z" fill="#60a5fa"/></g>`;
+  let ck=`<text x="18" y="28" class="t-cap amb">VĂN THƯ LÀM TAY TỪNG PHONG BÌ</text>`;
+  TASKS.forEach((s,i)=>{ck+=`<g data-k="tk${i}"><rect x="12" y="${40+i*21}" width="216" height="19" rx="6" class="f-ambs" data-k="tkb${i}" style="opacity:0"/><text x="22" y="${53.5+i*21}" class="t-m" style="font-weight:700">${i+1}</text><text x="36" y="${54+i*21}" class="t-b" style="font-size:12px">${s}</text></g>`;});
+  ck+=`<text data-k="eCount" x="244" y="76" class="t-num" style="font-size:30px">40</text><text x="246" y="94" class="t-s">/ 1.248 phong bì</text><text x="246" y="124" class="t-s">≈ 4 phút / phong bì</text><text data-k="eDays" x="246" y="142" class="t-b amb">Ngày làm việc thứ 1</text>`;
+  const ao=card('cTask',-186,-372,370,156,ck);
+
+  let b=plat(-110,-85,-10,220,170,10);
+  b+=wall(-114,-85,0,4,170,70);
+  b+=face('R',-110,85,70,`<rect x="40" y="8" width="90" height="18" rx="2" fill="#d97706"/><text x="85" y="20.4" text-anchor="middle" class="wsign">BƯU CỤC</text>`);
+  b+=box(-104,-78,0,22,64,62,'#c8a26a');
+  let ph='';for(let r=0;r<4;r++)for(let q=0;q<5;q++)ph+=`<rect x="${4+q*11.6}" y="${5+r*14}" width="9.6" height="11" fill="#8a6a3c"/>`;
+  b+=face('R',-82,-14,62,ph);
+  b+=`<g data-k="pwArmB">${armX(-56,-12,31,26,'#2f7d4e')}</g>`;
+  b+=person({x:-58,y:-6,shirt:'#2f7d4e',pants:'#1f2a22',cap:'#2f7d4e'});
+  b+=box(-34,-50,0,24,92,30,'#e2b35a');
+  b+=box(-28,-40,30,12,12,3,'#9aa3b2');
+  b+=`<g data-k="pwArm">${armX(-56,2,31,26,'#2f7d4e')}</g>`;
+  const SK=[[8,-16,0],[26,-16,0],[8,2,0],[26,2,0],[16,-8,14],[44,-8,0]];
+  SK.forEach(([x,y,z],i)=>{const tp=P(x+8,y+7,z+15);b+=`<g data-k="sk${i}" style="opacity:0">${box(x,y,z,16,14,14,'#b88a52')}<ellipse cx="${r1(tp[0])}" cy="${r1(tp[1])}" rx="4" ry="2" fill="#7a5a32"/></g>`;});
+  const bo=card('cPost',-150,-338,300,100,`<text x="16" y="26" class="t-cap amb">BƯU CỤC TIẾP NHẬN</text><text x="16" y="50" class="t-h">Cân, tính cước, kiểm đếm, ký sổ</text><text data-k="skTxt" x="16" y="72" class="t-s">Chờ văn thư bàn giao</text><text x="16" y="88" class="t-s">Mỗi đợt: đối chiếu danh sách từng bưu gửi</text>`);
+
+  let c=plat(-120,-90,-10,225,165,10);
+  c+=`<polygon points="${pp([[-120,0,0],[105,0,0],[105,36,0],[-120,36,0]])}" fill="#3b4350"/>`;
+  c+=`<polygon points="${pp([[105,0,0],[105,36,0],[105,36,-10],[105,0,-10]])}" fill="#2a3039"/>`;
+  for(let x=-114;x<100;x+=20)c+=tq(x,17,x+10,19,.3,'#e6e9ee');
+  const HX=[-95,-30,35];const HC=[['#f1e3c6','#b4532a'],['#dde7f0','#3f6fa5'],['#efe0e0','#8a3b3b']];
+  HX.forEach((x,i)=>{c+=house(x,-62,HC[i][0],HC[i][1]);});
+  c+=`<g data-k="van" style="opacity:0">${van()}</g>`;
+  const MK=[['✓','f-ok'],['!','f-amb'],['✕','f-sig']];
+  HX.forEach((x,i)=>{const p=P(x+15,-49,50);c+=`<g data-k="hm${i}" data-x="${r1(p[0])}" data-y="${r1(p[1]-10)}" transform="translate(${r1(p[0])},${r1(p[1]-10)})" style="opacity:0"><circle r="11" class="${MK[i][1]}"/><text y="4.5" text-anchor="middle" style="font:800 13px var(--f-d);fill:var(--bg)">${MK[i][0]}</text><text x="0" y="-16" text-anchor="middle" class="t-cap">NHÀ ${i+1}</text></g>`;});
+  const OUT=[['ok','Nhà 1 · Đã nhận thư','sau 5 ngày kể từ khi ký quyết định'],['amb','Nhà 2 · Vắng nhà','bưu tá hẹn phát lại lần 2'],['sig','Nhà 3 · Sai địa chỉ','thư chuyển hoàn về đơn vị']];
+  let oc=`<text x="16" y="26" class="t-cap">KẾT QUẢ ĐI PHÁT (MINH HOẠ)</text>`;
+  OUT.forEach(([tone,h,s],i)=>{oc+=`<g data-k="o${i}" style="opacity:0"><circle cx="24" cy="${48+i*30}" r="6" class="f-${tone==='amb'?'amb':tone}"/><text x="38" y="${47+i*30}" class="t-b">${h}</text><text x="38" y="${61+i*30}" class="t-s">${s}</text></g>`;});
+  const co=card('cOut',-150,-352,290,136,oc);
+
+  let root=zone(Z2.A,a,ao)+zone(Z2.B,b,bo)+zone(Z2.C,c,co);
+  root+=flowPath('pAB',at(Z2.A,110,-85,20),at(Z2.B,-110,85,30),70,'','Bàn giao từng đợt');
+  root+=`<g data-k="fSack" style="opacity:0">${box(-8,-7,0,16,14,14,'#b88a52')}</g>`;
+  root+=flowPath('pRet',at(Z2.C,95,0,0),at(Z2.A,100,80,0),-150,'sig','Thư chuyển hoàn → văn thư xử lý lại');
+  root+=`<g data-k="retEnv" style="opacity:0"><rect x="-11" y="-7" width="22" height="14" rx="1.5" fill="#e9c88a" stroke="#b98f4a"/><path d="M-11,-7 L0,1 L11,-7" fill="none" stroke="#b98f4a"/><circle cx="10" cy="-8" r="5" fill="#dc2626"/><text x="10" y="-5.6" text-anchor="middle" style="font:800 7px var(--f-d);fill:#fff">✕</text></g>`;
+  return root;},
+ init(){this.SA=at(Z2.A,40,26,30);this.SB=at(Z2.B,26,-2,16);this.SC=[(this.SA[0]+this.SB[0])/2,-80];},
+ render(t,R){
+  const cyc=1.6,ph=(t%cyc)/cyc,n=Math.floor(t/cyc);
+  const fold=ph<.25?1:lerp(1,.45,seg(ph,.25,.42));
+  R.wDoc.setAttribute('transform',`translate(0,${r1(1-fold)}) scale(1,${r1(fold*100)/100})`);
+  op(R.wDoc,ph<.45?1:0);op(R.wEnv,ph>=.42&&ph<.92?1:0);
+  R.wAddr.setAttribute('width',String(r1(8*seg(ph,.55,.72))));R.wAddr2.setAttribute('width',String(r1(6*seg(ph,.7,.82))));
+  op(R.wStamp,seg(ph,.82,.88));
+  if(ph>.9){const p=seg(ph,.9,1);iso(R.wFly,lerp(-11,42,p),lerp(1,27,p),26+Math.sin(Math.PI*p)*16);op(R.wFly,1);}else op(R.wFly,0);
+  layers(R,'ep',18,Math.min(18,3+n));layers(R,'ds',10,Math.max(3,10-Math.floor(n/2)));
+  for(let i=0;i<5;i++)op(R['tkb'+i],i===Math.min(4,Math.floor(ph*5))?1:0);
+  txt(R.eCount,fmtN(40+n));
+  const day=1+Math.floor(t/3.5);txt(R.calDay,String(day));txt(R.eDays,'Ngày làm việc thứ '+day);
+  R.clk.setAttribute('transform',`rotate(${r1(t*240)} 66 27)`);R.clk2.setAttribute('transform',`rotate(${r1(t*20)} 66 27)`);
+  iso(R.armW,Math.sin(t*9)*1.6,0,Math.abs(Math.sin(t*7))*1.6);iso(R.armWB,Math.cos(t*8)*1.4,0,0);
+  const s1=(t%1.1)/1.1;tr(R.sweat,0,s1*16);op(R.sweat,1-s1);const s2=((t+.5)%1.3)/1.3;tr(R.sweat2,0,s2*14);op(R.sweat2,1-s2);
+  // sacks
+  dash(R.pAB,t);const ab=es(t,4.3,4.7);op(R.pAB,ab*.8);op(R.pABL,ab);
+  pop(R.cPost,es(t,4.6,5.0));
+  let done=0,flying=false;
+  for(let j=0;j<3;j++){const t0=4.6+j*1.1,p=seg(t,t0,t0+.9);if(p>=1)done++;else if(p>0){flying=true;const q=quad(this.SA,this.SC,this.SB,ez(p));tr(R.fSack,q[0],q[1]);}}
+  op(R.fSack,flying?1:0);
+  for(let i=0;i<6;i++)op(R['sk'+i],i<done*2?1:0);
+  txt(R.skTxt,done===0?'Chờ văn thư bàn giao':`Đã nhận đợt ${done} / 3 · ký sổ bàn giao`);
+  iso(R.pwArm,t>5&&t<8.5?Math.sin(t*10)*2:0,0,0);
+  // van
+  let vx;
+  if(t<8)vx=-140;else if(t<9)vx=lerp(-140,-106,ez(seg(t,8,9)));else if(t<9.8)vx=-106;
+  else if(t<10.6)vx=lerp(-106,-41,ez(seg(t,9.8,10.6)));else if(t<11.4)vx=-41;
+  else if(t<12.2)vx=lerp(-41,24,ez(seg(t,11.4,12.2)));else if(t<13.4)vx=24;else vx=lerp(24,60,ez(seg(t,13.4,14.6)));
+  iso(R.van,vx,8,0);op(R.van,es(t,7.8,8.2)*(1-seg(t,14.2,14.7)));
+  pop(R.cOut,es(t,8.0,8.4));
+  [9.3,10.9,12.4].forEach((t0,i)=>{pop(R['hm'+i],es(t,t0,t0+.3));op(R['o'+i],es(t,t0,t0+.3));});
+  dash(R.pRet,t);const rp=es(t,12.7,13.1);op(R.pRet,rp*.9);op(R.pRetL,rp);
+  const re=seg(t,13.0,15.2);if(re>0&&re<1){const L=R.pRet._L||(R.pRet._L=R.pRet.getTotalLength());const q=R.pRet.getPointAtLength(L*ez(re));tr(R.retEnv,q.x,q.y);op(R.retEnv,1);}else op(R.retEnv,0);
+ }};
+
+/* ===================================================== SCENE 3 */
+const Z3={A:[-410,78],B:[-20,78],C:[360,78]};
+const RECS=[['30A-123.45','Vượt đèn đỏ','1248/QĐ-XPHC','Nguyễn Văn A'],['51G-678.90','Vượt đèn đỏ','1249/QĐ-XPHC','Trần Thị B'],['29H-246.80','Sai làn đường','1250/QĐ-XPHC','Lê Văn C'],['43A-555.12','Vượt đèn đỏ','1251/QĐ-XPHC','Phạm Thị D']];
+const FL=['Biển số','Hành vi','Số quyết định','Chủ phương tiện'];
+const CIT=[['ok','Đã cài VNeTraffic','Nhận và đã xem thông báo'],['sig','Chưa cài VNeTraffic','Không nhận được gì'],['amb','Có app nhưng bỏ sót','Thông báo bị trôi, không để ý'],['sig','Quên mật khẩu','Không đăng nhập được để xem']];
+const S3={dur:13.8,
+ steps:[[0,'Văn thư gõ tay từng hồ sơ'],[4.2,'VNeTraffic gửi thông báo trong app'],[6.0,'Chưa cài app, sót tin, quên mật khẩu'],[10.6,'Chỉ một phần người dân nhận được']],
+ build(){
+  let a=plat(-110,-85,-10,220,170,10);
+  a+=box(-45,-42,0,82,52,26,'#9c6b43');
+  a+=box(-12,-34,26,6,6,6,'#3b4252')+box(-34,-38,32,50,4,32,'#1b2233');
+  let sc=`<rect x="1.5" y="1.5" width="47" height="29" fill="#f8fafc"/><rect x="1.5" y="1.5" width="47" height="5" fill="#1d4ed8"/><text x="3.5" y="5.2" style="font:800 3.2px var(--f-d);fill:#fff">VNeTraffic · Nhập thông báo</text>`;
+  for(let i=0;i<4;i++)sc+=`<rect x="4" y="${9+i*5.2}" width="12" height="2.6" fill="#cbd5e1"/><rect x="18" y="${9+i*5.2}" width="28" height="3.2" fill="#ffffff" stroke="#cbd5e1" stroke-width=".3"/><rect data-k="sf${i}" x="18.6" y="${9.7+i*5.2}" width="0" height="1.8" fill="#334155"/>`;
+  a+=face('L',-34,-34,64,sc);
+  let kb=`<rect width="30" height="10" fill="#2a3140"/>`;for(let i=0;i<20;i++)kb+=`<rect data-k="ky${i}" x="${1.2+(i%10)*2.9}" y="${1.2+Math.floor(i/10)*4.2}" width="2.3" height="3.4" fill="#475569"/>`;
+  a+=face('T',-24,-16,26.3,kb);
+  a+=box(16,-10,26,10,7,9,'#f7f4ec');
+  a+=armY(-14,28,31,30,CLK.shirt)+armY(-1,28,31,30,CLK.shirt);
+  a+=person({x:-7,y:32,back:true,...CLK});
+  let fm=`<text x="18" y="28" class="t-cap sig">VĂN THƯ NHẬP TAY TỪNG HỒ SƠ</text>`;
+  FL.forEach((l,i)=>{fm+=`<text x="18" y="${54+i*22}" class="t-s">${l}</text><rect x="122" y="${40+i*22}" width="140" height="19" rx="5" fill="none" stroke="var(--line)"/><text data-k="ff${i}" x="130" y="${54+i*22}" class="t-m" style="fill:var(--ink);font-weight:700"></text>`;});
+  fm+=`<text data-k="tCount" x="280" y="70" class="t-num" style="font-size:28px">212</text><text x="282" y="88" class="t-s">/ 1.248 hồ sơ</text><text x="282" y="118" class="t-s">Mở · gõ · kiểm · gửi</text><text x="282" y="134" class="t-b sig">lặp lại từng bộ</text>`;
+  const ao=card('cForm',-190,-372,380,150,fm);
+
+  let b=plat(-90,-70,-10,160,140,10);
+  b+=box(-50,-40,0,40,40,96,'#1d4ed8');
+  let rk='';for(let i=0;i<7;i++)rk+=`<rect x="4" y="${8+i*12}" width="32" height="7" fill="#1e3a8a"/><circle data-k="vl${i}" cx="32" cy="${11.5+i*12}" r="1.5" fill="#93c5fd"/>`;
+  b+=face('L',-50,0,96,rk);
+  const bo=card('cSrv',-130,-330,250,78,`<text x="16" y="26" class="t-cap">HỆ THỐNG</text><text x="16" y="48" class="t-h">VNeTraffic</text><text x="16" y="66" class="t-s">Chỉ gửi được trong ứng dụng VNeTraffic</text>`);
+
+  let c=plat(-92,-112,-10,180,200,10);
+  const PH=[[-75,-98],[-37,-40],[1,18],[39,76]];
+  const INN=[
+   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#eff6ff"/><rect x="1.6" y="2.4" width="18.8" height="5.4" fill="#1d4ed8"/><text x="3" y="6.4" style="font:800 2.8px var(--f-d);fill:#fff">VNeTraffic</text><g data-k="n0" style="opacity:0"><rect x="3" y="10" width="16" height="9" rx="1.2" fill="#fff" stroke="#bfdbfe" stroke-width=".4"/><circle cx="5.4" cy="13" r="1.3" fill="#dc2626"/><rect x="7.6" y="12" width="9.6" height="1" fill="#334155"/><rect x="7.6" y="14.6" width="6.8" height="1" fill="#94a3b8"/><circle cx="11" cy="28" r="4.2" fill="#16a34a"/><path d="M9,28 l1.5,1.6 l3,-3.2" fill="none" stroke="#fff" stroke-width=".9"/></g>`,
+   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#1e293b"/>${[0,1,2,3,4,5,6,7,8].map(i=>`<rect x="${3.5+(i%3)*5.6}" y="${6+Math.floor(i/3)*6.2}" width="4" height="4" rx="1" fill="${['#f97316','#22c55e','#eab308','#a855f7','#ec4899','#14b8a6','#64748b','#ef4444','#0ea5e9'][i]}"/>`).join('')}<g data-k="n1" style="opacity:0"><circle cx="11" cy="30" r="4.4" fill="#dc2626"/><path d="M9,28 l4,4 M13,28 l-4,4" stroke="#fff" stroke-width=".9"/></g>`,
+   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#f1f5f9"/>${[0,1,2,3,4,5].map(i=>`<rect data-k="m${i}" x="3" y="${4+i*5}" width="16" height="4.2" rx="1" fill="${i===4?'#bfdbfe':'#cbd5e1'}" style="opacity:0"/>`).join('')}<g data-k="n2" style="opacity:0"><circle cx="18" cy="5" r="3" fill="#dc2626"/><text x="18" y="6.1" text-anchor="middle" style="font:800 2.8px var(--f-m);fill:#fff">37</text></g>`,
+   `<rect x="1.6" y="2.4" width="18.8" height="35.2" rx="1.5" fill="#ffffff"/><rect x="1.6" y="2.4" width="18.8" height="5.4" fill="#1d4ed8"/><text x="3" y="6.4" style="font:800 2.8px var(--f-d);fill:#fff">Đăng nhập</text><rect x="7.5" y="10" width="7" height="6" rx="1" fill="#94a3b8"/><path d="M8.8,10 v-1.6 a2.2,2.2 0 0 1 4.4,0 v1.6" fill="none" stroke="#94a3b8" stroke-width=".8"/><g data-k="pw"><rect x="3.5" y="19" width="15" height="4" rx="1" fill="#f1f5f9" stroke="#cbd5e1" stroke-width=".3"/><text x="11" y="22.2" text-anchor="middle" style="font:800 3.4px var(--f-m);fill:#334155">••••••</text></g><g data-k="n3" style="opacity:0"><text x="11" y="28" text-anchor="middle" style="font:800 2.6px var(--f-d);fill:#dc2626">Sai mật khẩu</text><text x="11" y="32" text-anchor="middle" style="font:600 2.4px var(--f-d);fill:#1d4ed8">Quên mật khẩu?</text></g>`];
+  PH.forEach(([x,y],i)=>{c+=phone(x,y,INN[i]);});
+  let co='';PH.forEach(([x,y],i)=>{const [tone,h,s]=CIT[i];const q=PS(x+22,y,46);
+    co+=card('cb'+i,r1(q[0]+8),r1(q[1]-6),206,44,`<circle cx="18" cy="22" r="6" class="f-${tone}"/><text x="32" y="19" class="t-b">${h}</text><text x="32" y="34" class="t-s">${s}</text>`);});
+  let rc=`<text x="16" y="26" class="t-cap">MỨC TIẾP CẬN (MÔ PHỎNG 4 NGƯỜI DÂN)</text>`;
+  for(let i=0;i<4;i++)rc+=`<circle data-k="rd${i}" cx="${26+i*24}" cy="52" r="8" class="f-mut"/>`;
+  rc+=`<text data-k="rTxt" x="128" y="57" class="t-h">0 / 4 người xem được</text>`;
+  co+=card('cReach',-130,-352,320,76,rc);
+
+  let root=zone(Z3.A,a,ao)+zone(Z3.B,b,bo)+zone(Z3.C,c,co);
+  root+=flowPath('pAB',at(Z3.A,16,-38,62),at(Z3.B,-50,-20,90),60,'','Nhập tay từng bản ghi');
+  root+=`<circle data-k="dAB" r="3.6" class="pkt sig" style="opacity:0"/>`;
+  PH.forEach(([x,y],i)=>{root+=flowPath('pP'+i,at(Z3.B,-30,-20,98),at(Z3.C,x+11,y+2,48),36);root+=`<circle data-k="dP${i}" r="3.6" class="pkt" style="opacity:0"/>`;});
+  root+=`<g data-k="bounce" style="opacity:0"><circle r="9" class="f-sig"/><text y="4" text-anchor="middle" style="font:800 11px var(--f-d);fill:var(--bg)">✕</text></g>`;
+  return root;},
+ render(t,R){
+  const cyc=2.6,n=Math.floor(t/cyc),ph=(t%cyc)/cyc;const rec=RECS[n%RECS.length];
+  const total=rec.reduce((s,v)=>s+v.length,0);let k=Math.floor(total*seg(ph,0,.82));
+  rec.forEach((v,i)=>{const take=Math.max(0,Math.min(v.length,k));k-=v.length;const caret=(take<v.length&&take>0)||(i===0&&take===0)?'▏':'';txt(R['ff'+i],v.slice(0,take)+caret);R['sf'+i].setAttribute('width',String(r1(26*take/v.length)));});
+  txt(R.tCount,fmtN(212+n));
+  for(let i=0;i<20;i++)R['ky'+i].setAttribute('fill',(ph<.82&&Math.sin(t*37+i*13.3)>.82)?'#e2e8f0':'#475569');
+  pop(R.cForm,es(t,.1,.5));
+  dash(R.pAB,t);op(R.pAB,.8);op(R.pABL,1);
+  if(ph>.84){along(R.dAB,R.pAB,seg(ph,.84,1));op(R.dAB,1);}else op(R.dAB,0);
+  pop(R.cSrv,es(t,4.0,4.4));
+  for(let i=0;i<7;i++)op(R['vl'+i],t>4.2?(Math.sin(t*8+i*2)>0?1:.3):.35);
+  const T0=[5.2,6.4,7.8,9.2];
+  for(let i=0;i<4;i++){const pl=R['pP'+i];op(pl,es(t,4.2,4.6)*.75);dash(pl,t);
+    const d=R['dP'+i];const p=seg(t,T0[i]-.9,T0[i]);if(p>0&&p<1){along(d,pl,p);op(d,1);}else op(d,0);
+    op(R['n'+i],es(t,T0[i],T0[i]+.25));pop(R['cb'+i],es(t,T0[i]+.1,T0[i]+.4));}
+  // bounce on phone 2
+  const bq=seg(t,6.4,7.4);if(bq>0&&bq<1){const L=R.pP1._L||(R.pP1._L=R.pP1.getTotalLength());const q=R.pP1.getPointAtLength(L*(1-bq*.35));tr(R.bounce,q.x,q.y-Math.sin(Math.PI*bq)*20);op(R.bounce,1-bq*.6);}else op(R.bounce,0);
+  for(let i=0;i<6;i++)op(R['m'+i],es(t,7.2+i*.12,7.4+i*.12));
+  const sk=t>9.2&&t<9.8?Math.sin(t*60)*1.4:0;R.pw.setAttribute('transform',`translate(${r1(sk)},0)`);
+  pop(R.cReach,es(t,10.6,11.0));
+  const st=['ok','sig','amb','sig'];let okc=0;
+  for(let i=0;i<4;i++){const shown=t>T0[i]+.3;R['rd'+i].setAttribute('class',shown?'f-'+st[i]:'f-mut');if(shown&&i===0)okc=1;}
+  txt(R.rTxt,okc+' / 4 người xem được');
+ }};
+
+/* ===================================================== player */
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MAP={s0:S0,s1:S1,s2:S2,s3:S3};
+document.querySelectorAll('[data-scene]').forEach(sec=>{
+  const cfg=MAP[sec.dataset.scene];const svg=sec.querySelector('svg.scene');
+  svg.innerHTML=cfg.build();
+  const R={};svg.querySelectorAll('[data-k]').forEach(e=>{R[e.dataset.k]=e;});
+  cfg.init&&cfg.init(R);
+  const stepsEl=sec.querySelector('.steps');
+  stepsEl.innerHTML=cfg.steps.map((s,i)=>`<li><button type="button"><span class="n">${i+1}</span><span class="l">${s[1]}</span><span class="bar"><i></i></span></button></li>`).join('');
+  const btns=[...stepsEl.querySelectorAll('button')];const bars=btns.map(b=>b.querySelector('i'));
+  const playBtn=sec.querySelector('.play'),lbl=playBtn.querySelector('.lbl');
+  let t=cfg.dur,playing=false,visible=false,started=false,last=0,raf=0;
+  function draw(){const tt=Math.min(t,cfg.dur);cfg.render(tt,R);
+    let ai=0;cfg.steps.forEach((s,i)=>{if(tt>=s[0])ai=i;});
+    btns.forEach((b,i)=>{b.classList.toggle('on',i===ai);b.classList.toggle('done',i<ai);
+      const st=cfg.steps[i][0],en=i+1<cfg.steps.length?cfg.steps[i+1][0]:cfg.dur;
+      bars[i].style.transform=`scaleX(${i<ai?1:i===ai?r1(cl((tt-st)/(en-st))*100)/100:0})`;});}
+  function loop(ts){raf=0;if(!playing||!visible){last=0;return;}
+    if(last){t+=Math.min(.05,(ts-last)/1000);if(t>cfg.dur+2.4)t=0;}last=ts;draw();raf=requestAnimationFrame(loop);}
+  function kick(){if(!raf){last=0;raf=requestAnimationFrame(loop);}}
+  function setPlaying(p){playing=p;playBtn.setAttribute('aria-pressed',String(p));lbl.textContent=p?'Tạm dừng':'Phát';playBtn.classList.toggle('is-playing',p);if(p)kick();}
+  playBtn.addEventListener('click',()=>{started=true;if(!playing&&t>=cfg.dur)t=0;setPlaying(!playing);});
+  sec.querySelector('.replay').addEventListener('click',()=>{started=true;t=0;draw();setPlaying(true);});
+  btns.forEach((b,i)=>b.addEventListener('click',()=>{started=true;t=cfg.steps[i][0]+.001;draw();setPlaying(true);}));
+  draw();
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>{es.forEach(e=>{visible=e.isIntersecting;
+      if(visible){if(!started&&!reduce){started=true;t=0;setPlaying(true);}else if(playing)kick();}});},{threshold:.3}).observe(svg);
+  }else{visible=true;}
+});
+})();
+</script>
+
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><section class="tt-crit" aria-label="Phản biện"><h2>Phản biện: vì sao nên làm?</h2><div class="tt-cols"><div class="tt-yes"><h3>Nên làm vì</h3><ul><li>Khâu chậm nhất của xử phạt nguội là gửi thông báo và theo dõi văn thư; tự động hoá khâu này rút ngắn thời gian từ vi phạm đến khi người dân nhận được thông báo.</li><li>Hồ sơ số có nhật ký đầy đủ, dễ tra soát khi người dân khiếu nại.</li></ul></div><div class="tt-no"><h3>Nếu không làm</h3><ul><li>Tiếp tục in, gửi bưu điện, nhập tay: tốn nhân sự, thất lạc, người vi phạm không biết để chấp hành.</li><li>Tồn đọng quyết định chưa tống đạt tăng dần theo số camera được lắp thêm.</li></ul></div></div><p class="tt-sub">Cần đánh giá cho đơn vị của bạn? <a href="../lien-he.html">Liên hệ TORITECH</a>.</p></section><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body></html>
