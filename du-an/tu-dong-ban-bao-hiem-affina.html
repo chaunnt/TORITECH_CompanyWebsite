@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- toritech:meta -->
+<meta name="description" content="AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm Affina qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng để không nhắn trùng người đã mua, rồi báo cáo chuyển đổi."><link rel="canonical" href="https://toritech.vn/du-an/tu-dong-ban-bao-hiem-affina.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="Tự động bán bảo hiểm Affina qua Zalo – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm Affina qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng để không nhắn trùng người đã mua, rồi báo cáo chuyển đổi."><meta property="og:url" content="https://toritech.vn/du-an/tu-dong-ban-bao-hiem-affina.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/tu-dong-ban-bao-hiem-affina.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Tự động bán bảo hiểm Affina qua Zalo – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm Affina qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng để không nhắn trùng người đã mua, rồi báo cáo chuyển đổi."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/tu-dong-ban-bao-hiem-affina.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tự động bán bảo hiểm Affina qua Zalo bằng AI Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+body{background:#f6f8fb}
+.hero-p{background:linear-gradient(150deg,#0b1426,#12305a 60%,#0e7490);color:#e2e8f0;padding:56px 0 48px}
+.hero-p h1{color:#fff;font-size:clamp(28px,4.2vw,44px);line-height:1.15;margin:12px 0}
+.hero-p .lead{color:#cbd5e1;max-width:760px}
+.hero-p .eyebrow{background:rgba(255,255,255,.1);color:#67e8f9}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.chips span{border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:5px 12px;font-size:13px;color:#e2e8f0}
+.sec{padding:52px 0}.sec h2{margin:0 0 8px}.sec .lead{margin-bottom:22px}
+.fn{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.fn .card h3{font-size:16px;margin:6px 0 4px}.fn .card p{margin:0;color:var(--muted);font-size:14.5px}
+.fn .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#ecfeff;color:#0e7490;font-weight:700;font-size:13px}
+.timeline{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.timeline li{display:grid;grid-template-columns:86px 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.timeline b.t{color:#0e7490;font-variant-numeric:tabular-nums}
+.timeline .who{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px}
+.who.ai{background:#ecfeff;color:#0e7490}.who.hu{background:#fff7ed;color:#9a3412}
+.chat{background:#0b1426;border-radius:16px;padding:16px;display:grid;gap:10px;max-width:820px}
+.bub{max-width:88%;padding:10px 13px;border-radius:14px;font-size:14.5px;line-height:1.5}
+.bub.u{justify-self:end;background:#14b8a6;color:#04201c}.bub.a{background:#1e2a44;color:#e2e8f0}
+.tool{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#a5f3fc;background:#111c33;border:1px solid #1e2a44;border-radius:10px;padding:7px 10px;justify-self:start;max-width:100%;overflow:auto}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.pb{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.pb .card{border-left:5px solid #14b8a6}.pb .card.no{border-left-color:#f97316}
+.pb h3{margin:0 0 10px}.pb ul{margin:0;padding-left:20px}.pb li{margin-bottom:8px}
+table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px}
+table.t th,table.t td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}table.t th{background:#f1f5f9}
+table.t code{font-size:12.5px}
+@media(max-width:600px){.timeline li{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / Tự động bán bảo hiểm Affina qua Zalo</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<main>
+<header class="hero-p"><div class="wrap">
+<span class="eyebrow">MCP Doanh nghiệp · Đối tác Affina</span>
+<h1>Tự động bán bảo hiểm Affina qua Zalo bằng AI Agent</h1>
+<p class="lead">Chủ xe sắp đến hạn đăng kiểm cũng thường là người cần mua hoặc gia hạn bảo hiểm xe. Hệ thống dùng AI Agent qua MCP để mỗi ngày chọn đúng tệp khách, gửi ưu đãi bảo hiểm Affina qua Zalo (ZNS), tự kiểm tra lịch hẹn và đơn hàng để không làm phiền người đã mua. Cùng mô hình với VMGPortal, nhưng kênh là Zalo và có thêm vòng kiểm tra chuyển đổi.</p>
+<div class="chips"><span>Gửi Zalo ZNS hằng ngày</span><span>Chọn tệp theo hạn đăng kiểm</span><span>Tự check lịch hẹn</span><span>Tự check đơn hàng</span><span>Báo cáo chuyển đổi</span></div>
+</div></header>
+
+<section class="sec"><div class="wrap">
+<h2>Bán bảo hiểm qua tin nhắn làm thủ công vướng ở đâu?</h2>
+<ul class="check"><li>Lọc tệp khách sắp đến hạn đăng kiểm mỗi ngày bằng tay rất dễ sót ngày hoặc trùng người.</li><li>Khách đã đặt lịch, đã mua bảo hiểm vẫn nhận tin mời mua: phiền khách và tốn tiền gửi.</li><li>Gửi xong không ai theo dõi trạng thái tin, không biết tin nào dẫn tới đơn hàng.</li><li>Chỉ tiêu gửi theo ngày thay đổi theo giai đoạn, làm tay dễ gửi thiếu hoặc gửi trùng 2 lần.</li></ul>
+</div></section>
+
+<section class="sec" style="background:#eef3fa"><div class="wrap">
+<h2>AI Agent làm gì mỗi ngày?</h2><p class="lead">Mỗi bước là công cụ MCP gọi vào nền tảng đặt lịch và hệ thống gửi tin; AI điều phối theo kịch bản đã duyệt.</p>
+<div class="fn"><div class="card"><span class="num">01</span><h3>Chọn tệp khách</h3><p>Lấy xe có hạn đăng kiểm sắp tới theo mốc ngày đã chọn; thiếu thì bổ sung theo nguồn dự phòng đã duyệt.</p></div><div class="card"><span class="num">02</span><h3>Lọc & chuẩn hoá</h3><p>Bỏ số sai định dạng, trùng số, trùng biển; chỉ giữ khách đã đồng ý nhận thông báo.</p></div><div class="card"><span class="num">03</span><h3>Check lịch hẹn</h3><p>Đối chiếu lịch hẹn đăng kiểm để chọn nội dung phù hợp và tránh nhắn trùng với nhắc lịch.</p></div><div class="card"><span class="num">04</span><h3>Check đơn hàng</h3><p>Khách đã mua bảo hiểm thì loại khỏi tệp, ghi nhận là chuyển đổi.</p></div><div class="card"><span class="num">05</span><h3>Gửi Zalo ZNS</h3><p>Gửi theo mẫu ZNS đã được Zalo duyệt, chia lô, đúng chỉ tiêu trong ngày.</p></div><div class="card"><span class="num">06</span><h3>Chống gửi trùng</h3><p>Kiểm tra chiến dịch trong ngày trước khi gửi; đã gửi thì chỉ báo cáo, không gửi lại.</p></div><div class="card"><span class="num">07</span><h3>Theo dõi kết quả</h3><p>Sau vài phút đọc trạng thái: thành công, chờ gửi, lỗi.</p></div><div class="card"><span class="num">08</span><h3>Báo cáo</h3><p>Số tin theo nguồn, tỷ lệ thành công, chi phí ước tính, số đơn phát sinh.</p></div><div class="card"><span class="num">09</span><h3>Tối ưu</h3><p>Đề xuất đổi mốc ngày, khung giờ, nội dung dựa trên tỷ lệ chuyển đổi.</p></div></div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+<h2>Một vòng chạy hằng ngày</h2><p class="lead">Chạy theo lịch cố định; con người duyệt kịch bản và mẫu tin một lần, sau đó nhận báo cáo mỗi ngày.</p>
+<ol class="timeline"><li><b class="t">07:55</b><div>Kiểm tra hôm nay đã gửi chưa; đã gửi thì dừng và chỉ báo cáo.<span class="who ai">AI</span></div></li><li><b class="t">08:00</b><div>Lấy tệp xe sắp đến hạn, lọc, đối chiếu lịch hẹn và đơn hàng.<span class="who ai">AI</span></div></li><li><b class="t">08:05</b><div>Chạy thử (không gửi): kiểm tra số lượng từng nguồn, nếu thiếu nhiều so với chỉ tiêu thì dừng và báo.<span class="who ai">AI</span></div></li><li><b class="t">08:10</b><div>Gửi ZNS theo lô.<span class="who ai">AI</span></div></li><li><b class="t">08:15</b><div>Đọc trạng thái tin, ghi nhật ký, gửi báo cáo ngắn.<span class="who ai">AI</span></div></li><li><b class="t">Hằng tuần</b><div>Xem báo cáo chuyển đổi, quyết định đổi chỉ tiêu, mẫu tin hoặc mốc ngày.<span class="who hu">Người</span></div></li></ol>
+</div></section>
+
+<section class="sec" style="background:#eef3fa"><div class="wrap">
+<h2>Ví dụ trò chuyện với AI Agent</h2><p class="lead">Người vận hành ra lệnh bằng ngôn ngữ tự nhiên; AI gọi công cụ MCP và trả lời. Dữ liệu dưới đây là minh hoạ.</p>
+<div class="chat"><div class="bub u">Hôm nay gửi được bao nhiêu tin Affina? Có ai mua chưa?</div><div class="tool">▸ getList({ chiến dịch: hôm nay }) → trạng thái tin (minh hoạ)</div><div class="tool">▸ kiểm tra đơn hàng({ tệp hôm nay }) → đơn phát sinh (minh hoạ)</div><div class="bub a">Hôm nay đã gửi đủ chỉ tiêu, phần lớn gửi thành công, một số ít lỗi do số không dùng Zalo. Có vài khách đã mua sau khi nhận tin, em đã loại họ khỏi tệp các ngày sau.</div><div class="bub u">Tuần sau giảm chỉ tiêu còn một nửa nhé.</div><div class="bub a">Em sẽ cập nhật chỉ tiêu từ thứ Hai. Thay đổi này cần anh xác nhận lần cuối trước khi áp dụng.</div></div>
+<p class="note">Mọi thao tác gửi tin hoặc phát sinh chi phí đều chờ người vận hành xác nhận.</p>
+</div></section>
+
+<section class="sec"><div class="wrap">
+<h2>Công cụ MCP và kiểm soát an toàn</h2>
+<div style="overflow-x:auto"><table class="t"><thead><tr><th>Công cụ</th><th>Chức năng</th><th>Quyền</th></tr></thead><tbody><tr><td><code>Tra cứu xe / lịch hẹn</code></td><td>Lấy xe theo hạn đăng kiểm, lịch hẹn theo ngày</td><td>Chỉ đọc</td></tr><tr><td><code>Tra cứu đơn hàng</code></td><td>Kiểm tra khách đã mua bảo hiểm</td><td>Chỉ đọc</td></tr><tr><td><code>Gửi ZNS theo danh sách</code></td><td>Gửi tin theo mẫu đã duyệt</td><td>Ghi – theo kịch bản đã duyệt</td></tr><tr><td><code>Xem danh sách tin đã gửi</code></td><td>Trạng thái từng tin, chống gửi trùng</td><td>Chỉ đọc</td></tr></tbody></table></div>
+<ul class="check" style="margin-top:18px"><li>Chỉ gửi bằng mẫu ZNS đã được duyệt; không tự viết nội dung khác khi chạy tự động.</li><li>Mỗi ngày gửi tối đa một lần; luôn kiểm tra trước khi gửi để tránh trùng.</li><li>Chỉ đọc dữ liệu xe và lịch hẹn, không sửa hay xoá.</li><li>Không công khai số điện thoại khách; báo cáo chỉ ghi số lượng.</li><li>Chỉ gửi cho khách đã đồng ý nhận thông báo, theo quy định hiện hành về tin nhắn quảng cáo.</li></ul>
+</div></section>
+
+<section class="sec" style="background:#eef3fa" id="phan-bien"><div class="wrap">
+<h2>Phản biện: có nên triển khai?</h2><p class="lead">Tin nhắn bán hàng tự động dễ trở thành tin rác nếu làm ẩu. Đây là lý do nên làm, và cái giá nếu bỏ qua.</p>
+<div class="pb"><div class="card"><h3>Vì sao nên làm</h3><ul><li>Hạn đăng kiểm là thời điểm chủ xe đang nghĩ tới chi phí xe; ưu đãi bảo hiểm đến đúng lúc này có lý do rõ ràng, không phải tin quảng cáo ngẫu nhiên.</li><li>Tự kiểm tra lịch hẹn và đơn hàng giúp không nhắn cho người đã mua, giảm phiền khách và tiết kiệm chi phí gửi.</li><li>Chạy đều mỗi ngày theo chỉ tiêu mà không cần người trực; người chỉ xem báo cáo và quyết định.</li><li>Đo được từ tin gửi tới đơn hàng, nên biết chính xác chi phí cho mỗi đơn.</li></ul></div><div class="card no"><h3>Nếu không làm thì sao</h3><ul><li>Bỏ lỡ thời điểm khách cần mua; họ mua ở kênh khác khi đi đăng kiểm.</li><li>Làm tay thì gửi không đều, có ngày thiếu, có ngày trùng; khách nhận 2 tin giống nhau sẽ chặn Zalo OA.</li><li>Không đối chiếu đơn hàng thì tiếp tục trả tiền gửi cho người đã mua.</li><li>Không có số liệu chuyển đổi nên không biết nên tăng hay dừng chiến dịch.</li></ul></div></div>
+<p style="margin-top:22px"><a class="btn btn-primary" href="../lien-he.html?topic=mcp">Trao đổi triển khai</a></p>
+</div></section>
+</main>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="van-thu-so-vi-pham-giao-thong.html"><img src="../assets/img/du-an/thumb/van-thu-so-vi-pham-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Văn thư số xử lý vi phạm giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="vmgportal-ai-sms.html"><img src="../assets/img/du-an/thumb/vmgportal-ai-sms.webp" alt="" loading="lazy" width="112" height="59"><span><b>VMGPortal – AI Agent vận hành hệ thống SMS</b><small>Trang sản phẩm</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>

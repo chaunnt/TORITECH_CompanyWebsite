@@ -108,6 +108,22 @@
       "desc": "Mô phỏng trận bóng đá 11 người chạy hoàn toàn trên trình duyệt: AI cầu thủ tự chuyền, sút, tắc bóng; có thống kê trực tiếp và bình luận viên đọc tiếng Việt bằng Web Speech API.",
       "kind": "Ứng dụng web",
       "old_href": "showcase/tran-bong-ngau-nhien.html"
+    },
+    {
+      "artifact_slug": "site-vmgportal",
+      "href": "du-an/vmgportal-ai-sms.html",
+      "cat": "mcp",
+      "title": "VMGPortal – AI Agent vận hành hệ thống SMS",
+      "desc": "Connector MCP cho phép AI Agent thao tác thay người dùng trên cổng SMS của đối tác VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt.",
+      "kind": "Trang sản phẩm"
+    },
+    {
+      "artifact_slug": "site-affina-zns",
+      "href": "du-an/tu-dong-ban-bao-hiem-affina.html",
+      "cat": "mcp",
+      "title": "Tự động bán bảo hiểm Affina qua Zalo",
+      "desc": "AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm Affina qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng để không nhắn trùng người đã mua, rồi báo cáo chuyển đổi.",
+      "kind": "Trang sản phẩm"
     }
   ],
   "docs": [

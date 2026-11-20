@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- toritech:meta -->
+<meta name="description" content="Connector MCP cho phép AI Agent thao tác thay người dùng trên cổng SMS của đối tác VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt."><link rel="canonical" href="https://toritech.vn/du-an/vmgportal-ai-sms.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="VMGPortal – AI Agent vận hành hệ thống SMS – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="Connector MCP cho phép AI Agent thao tác thay người dùng trên cổng SMS của đối tác VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt."><meta property="og:url" content="https://toritech.vn/du-an/vmgportal-ai-sms.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/vmgportal-ai-sms.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="VMGPortal – AI Agent vận hành hệ thống SMS – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="Connector MCP cho phép AI Agent thao tác thay người dùng trên cổng SMS của đối tác VMG: soạn mẫu, lọc khách hàng, gửi tin hằng ngày, kiểm tra số dư, xem kết quả, báo cáo và đối soát; gửi tin luôn chờ người duyệt."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/vmgportal-ai-sms.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VMGPortal – AI Agent vận hành hệ thống SMS của đối tác VMG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+body{background:#f6f8fb}
+.hero-p{background:linear-gradient(150deg,#0b1426,#12305a 60%,#0e7490);color:#e2e8f0;padding:56px 0 48px}
+.hero-p h1{color:#fff;font-size:clamp(28px,4.2vw,44px);line-height:1.15;margin:12px 0}
+.hero-p .lead{color:#cbd5e1;max-width:760px}
+.hero-p .eyebrow{background:rgba(255,255,255,.1);color:#67e8f9}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.chips span{border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:5px 12px;font-size:13px;color:#e2e8f0}
+.sec{padding:52px 0}.sec h2{margin:0 0 8px}.sec .lead{margin-bottom:22px}
+.fn{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.fn .card h3{font-size:16px;margin:6px 0 4px}.fn .card p{margin:0;color:var(--muted);font-size:14.5px}
+.fn .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#ecfeff;color:#0e7490;font-weight:700;font-size:13px}
+.timeline{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.timeline li{display:grid;grid-template-columns:86px 1fr;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.timeline b.t{color:#0e7490;font-variant-numeric:tabular-nums}
+.timeline .who{font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px}
+.who.ai{background:#ecfeff;color:#0e7490}.who.hu{background:#fff7ed;color:#9a3412}
+.chat{background:#0b1426;border-radius:16px;padding:16px;display:grid;gap:10px;max-width:820px}
+.bub{max-width:88%;padding:10px 13px;border-radius:14px;font-size:14.5px;line-height:1.5}
+.bub.u{justify-self:end;background:#14b8a6;color:#04201c}.bub.a{background:#1e2a44;color:#e2e8f0}
+.tool{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:#a5f3fc;background:#111c33;border:1px solid #1e2a44;border-radius:10px;padding:7px 10px;justify-self:start;max-width:100%;overflow:auto}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.pb{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.pb .card{border-left:5px solid #14b8a6}.pb .card.no{border-left-color:#f97316}
+.pb h3{margin:0 0 10px}.pb ul{margin:0;padding-left:20px}.pb li{margin-bottom:8px}
+table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px}
+table.t th,table.t td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}table.t th{background:#f1f5f9}
+table.t code{font-size:12.5px}
+@media(max-width:600px){.timeline li{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / VMGPortal – AI Agent vận hành hệ thống SMS</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<main>
+<header class="hero-p"><div class="wrap">
+<span class="eyebrow">MCP Dịch vụ · Đối tác VMG</span>
+<h1>VMGPortal: AI Agent vận hành hệ thống gửi SMS thay người dùng</h1>
+<p class="lead">Vận hành SMS brandname hằng ngày gồm nhiều việc lặp lại: soạn mẫu, lọc tệp khách, gửi, theo dõi số dư, xem kết quả, đối soát. VMGPortal là connector MCP (Model Context Protocol) cho phép AI Agent đăng nhập cổng của đối tác VMG và làm các việc đó thay người dùng. Người vận hành chỉ ra lệnh bằng câu nói thường và duyệt trước khi gửi.</p>
+<div class="chips"><span>Soạn mẫu tin</span><span>Gửi tin hằng ngày</span><span>Lọc khách hàng</span><span>Kiểm tra số dư</span><span>Báo cáo & đối soát</span><span>Chạy trên Claude, ChatGPT, Gemini, Copilot</span></div>
+</div></header>
+
+<section class="sec"><div class="wrap">
+<h2>Vận hành SMS thủ công tốn thời gian ở đâu?</h2>
+<ul class="check"><li>Đăng nhập cổng, chọn brandname, dán nội dung, tải tệp số điện thoại cho từng đợt gửi.</li><li>Lọc tệp bằng Excel: bỏ số trùng, sai định dạng, khách đã từ chối nhận tin; dễ sót hoặc gửi nhầm.</li><li>Không ai để ý số dư cho tới khi chiến dịch dừng giữa chừng vì hết tiền.</li><li>Kết quả gửi, tỷ lệ lỗi, chi phí phải xuất báo cáo tay; cuối tháng đối soát với hoá đơn mất nhiều giờ.</li></ul>
+</div></section>
+
+<section class="sec" style="background:#eef3fa"><div class="wrap">
+<h2>AI Agent làm được gì trên VMGPortal?</h2><p class="lead">Mỗi chức năng là một công cụ MCP; AI tự chọn công cụ theo yêu cầu của người vận hành.</p>
+<div class="fn"><div class="card"><span class="num">01</span><h3>Soạn mẫu tin</h3><p>Viết nội dung theo mục tiêu chiến dịch, kiểm tra độ dài, ký tự đặc biệt và từ ngữ dễ bị chặn.</p></div><div class="card"><span class="num">02</span><h3>Lên chiến lược</h3><p>Đề xuất tệp khách, khung giờ, tần suất gửi dựa trên kết quả các đợt trước.</p></div><div class="card"><span class="num">03</span><h3>Gửi tin hằng ngày</h3><p>Chạy theo lịch đã duyệt, chia lô, dừng khi có lỗi bất thường.</p></div><div class="card"><span class="num">04</span><h3>Lọc khách hàng</h3><p>Chuẩn hoá số, bỏ trùng, bỏ số sai, bỏ khách đã từ chối nhận tin; tra cứu số khi cần.</p></div><div class="card"><span class="num">05</span><h3>Tối ưu chiến dịch</h3><p>So sánh tỷ lệ gửi thành công giữa mẫu tin, khung giờ, tệp khách; đề xuất điều chỉnh.</p></div><div class="card"><span class="num">06</span><h3>Kiểm tra số dư</h3><p>Xem số dư trước mỗi đợt, cảnh báo khi không đủ cho lô sắp gửi.</p></div><div class="card"><span class="num">07</span><h3>Xem kết quả</h3><p>Đọc trạng thái từng tin đã gửi: thành công, lỗi, lý do lỗi.</p></div><div class="card"><span class="num">08</span><h3>Báo cáo</h3><p>Tổng hợp theo ngày/tuần/tháng: số tin, tỷ lệ thành công, chi phí; xuất Excel hoặc gửi email.</p></div><div class="card"><span class="num">09</span><h3>Đối soát</h3><p>Đối chiếu số tin thành công với sản lượng tính cước, chỉ ra chênh lệch cần làm rõ.</p></div></div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+<h2>Một ngày vận hành mẫu</h2><p class="lead">AI làm phần lặp lại; con người giữ quyền quyết định ở bước gửi và chi tiền.</p>
+<ol class="timeline"><li><b class="t">07:30</b><div>Kiểm tra số dư và tin lỗi tồn từ hôm trước, gửi tóm tắt cho người vận hành.<span class="who ai">AI</span></div></li><li><b class="t">08:00</b><div>Lọc tệp khách cho đợt gửi trong ngày, đề xuất mẫu tin và khung giờ.<span class="who ai">AI</span></div></li><li><b class="t">08:15</b><div>Xem đề xuất, sửa nội dung nếu cần, bấm duyệt.<span class="who hu">Người</span></div></li><li><b class="t">09:00</b><div>Gửi theo lô, theo dõi lỗi; dừng và báo ngay nếu tỷ lệ lỗi tăng bất thường.<span class="who ai">AI</span></div></li><li><b class="t">09:30</b><div>Đọc kết quả gửi, cập nhật báo cáo ngày.<span class="who ai">AI</span></div></li><li><b class="t">Cuối tháng</b><div>Lập bảng đối soát sản lượng, đánh dấu chênh lệch để kế toán xử lý.<span class="who hu">AI + Người</span></div></li></ol>
+</div></section>
+
+<section class="sec" style="background:#eef3fa"><div class="wrap">
+<h2>Ví dụ trò chuyện với AI Agent</h2><p class="lead">Người vận hành ra lệnh bằng ngôn ngữ tự nhiên; AI gọi công cụ MCP và trả lời. Dữ liệu dưới đây là minh hoạ.</p>
+<div class="chat"><div class="bub u">Số dư còn bao nhiêu? Đủ gửi 2.000 tin nhắc lịch sáng nay không?</div><div class="tool">▸ PortalVMG_getBalance() → số dư tài khoản (minh hoạ)</div><div class="bub a">Số dư hiện đủ cho khoảng 2.000 tin theo đơn giá hợp đồng, còn dư khoảng 15%. Em đề xuất gửi lúc 9:00, chia 4 lô 500 tin. Anh duyệt để em gửi?</div><div class="bub u">Hôm qua gửi lỗi bao nhiêu, vì sao?</div><div class="tool">▸ PortalVMG_listSentMessages({ ngày: hôm qua }) → danh sách tin và trạng thái</div><div class="bub a">Hôm qua có 3% tin lỗi, chủ yếu do số thuê bao không tồn tại. Em đã đánh dấu các số này để loại khỏi tệp lần sau.</div></div>
+<p class="note">Mọi thao tác gửi tin hoặc phát sinh chi phí đều chờ người vận hành xác nhận.</p>
+</div></section>
+
+<section class="sec"><div class="wrap">
+<h2>Công cụ MCP và kiểm soát an toàn</h2>
+<div style="overflow-x:auto"><table class="t"><thead><tr><th>Công cụ</th><th>Chức năng</th><th>Quyền</th></tr></thead><tbody><tr><td><code>PortalVMG_login</code></td><td>Đăng nhập cổng VMG bằng tài khoản được cấp</td><td>Hệ thống</td></tr><tr><td><code>PortalVMG_getAccountInfo / getRoles</code></td><td>Xem thông tin tài khoản, quyền được phép</td><td>Chỉ đọc</td></tr><tr><td><code>PortalVMG_getBalance</code></td><td>Kiểm tra số dư</td><td>Chỉ đọc</td></tr><tr><td><code>PortalVMG_listSentMessages</code></td><td>Xem tin đã gửi và trạng thái</td><td>Chỉ đọc</td></tr><tr><td><code>PortalVMG_lookupPhoneNumber</code></td><td>Tra cứu thông tin số điện thoại khi lọc tệp</td><td>Chỉ đọc</td></tr><tr><td><code>Gửi tin / tạo chiến dịch</code></td><td>Gửi theo mẫu và tệp đã duyệt</td><td>Ghi – cần xác nhận</td></tr></tbody></table></div>
+<ul class="check" style="margin-top:18px"><li>AI dùng đúng tài khoản và quyền mà VMG cấp cho doanh nghiệp; không vượt quyền tài khoản.</li><li>Gửi tin, tạo chiến dịch, mọi thao tác phát sinh chi phí đều cần người vận hành xác nhận (Human-in-the-loop).</li><li>Chỉ gửi tin quảng cáo cho khách đã đồng ý nhận, theo quy định hiện hành về chống tin nhắn rác; tin dùng brandname đã đăng ký.</li><li>Mọi lệnh có nhật ký (ai yêu cầu, AI gọi công cụ gì, kết quả) để tra soát.</li><li>Số điện thoại khách hàng không được dùng để huấn luyện mô hình; báo cáo chỉ hiển thị số lượng hoặc số đã che.</li></ul>
+</div></section>
+
+<section class="sec" style="background:#eef3fa" id="phan-bien"><div class="wrap">
+<h2>Phản biện: có nên triển khai?</h2><p class="lead">Không phải doanh nghiệp nào cũng cần AI cho SMS. Dưới đây là lý do nên và cái giá của việc tiếp tục làm tay.</p>
+<div class="pb"><div class="card"><h3>Vì sao nên làm</h3><ul><li>Việc vận hành SMS có quy trình cố định và lặp lại mỗi ngày, đúng loại việc AI Agent làm ổn định và nhanh hơn người.</li><li>Kiểm tra số dư và lọc tệp trước khi gửi giúp tránh hai lỗi tốn tiền nhất: chiến dịch dừng giữa chừng và gửi tin cho số không còn dùng.</li><li>Báo cáo và đối soát có sẵn mỗi ngày, cuối tháng chỉ còn xử lý phần chênh lệch thay vì làm lại từ đầu.</li><li>Không phải xây hệ thống mới: AI dùng chính cổng VMG mà doanh nghiệp đang trả phí.</li></ul></div><div class="card no"><h3>Nếu không làm thì sao</h3><ul><li>Một nhân sự vẫn mất nhiều giờ mỗi tuần cho thao tác lặp lại; người đó nghỉ là chiến dịch bị gián đoạn.</li><li>Gửi tin cho số sai, số trùng hoặc khách đã từ chối làm tăng chi phí và rủi ro bị phản ánh tin nhắn rác, ảnh hưởng tới brandname.</li><li>Không có số liệu so sánh giữa các đợt nên không biết mẫu tin, khung giờ nào hiệu quả; chi phí SMS tăng mà không đo được kết quả.</li><li>Đối soát cuối tháng dựa vào file tay, chênh lệch phát hiện muộn và khó đòi lại.</li></ul></div></div>
+<p style="margin-top:22px"><a class="btn btn-primary" href="../lien-he.html?topic=mcp">Trao đổi triển khai</a></p>
+</div></section>
+</main>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="van-thu-so-vi-pham-giao-thong.html"><img src="../assets/img/du-an/thumb/van-thu-so-vi-pham-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Văn thư số xử lý vi phạm giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="tu-dong-ban-bao-hiem-affina.html"><img src="../assets/img/du-an/thumb/tu-dong-ban-bao-hiem-affina.webp" alt="" loading="lazy" width="112" height="59"><span><b>Tự động bán bảo hiểm Affina qua Zalo</b><small>Trang sản phẩm</small></span></a></li><li><a href="../du-an-mcp-ai-agent.html#ho-so"><span><b>Đề xuất tự động hoá văn thư &amp; thông báo vi phạm giao thông</b><small>Công văn / Đề xuất · cung cấp theo yêu cầu</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>
