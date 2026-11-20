@@ -6,6 +6,7 @@ Tài liệu nội bộ (không deploy). Dùng khi cần thêm/sửa trang, và c
 - **Công văn, đề xuất/kiến nghị gửi cơ quan là tài liệu CƠ MẬT → KHÔNG đăng** dưới bất kỳ hình thức nào (kể cả thẻ tóm tắt). Artifact dạng công văn (có "Kính gửi", "Kiến nghị", số hiệu văn bản, chữ ký…) → `add_work.py --doc` (chỉ ghi vào `skipped`). Website chỉ đăng **mô hình, dự án**.
 - **Không nêu tên riêng của đơn vị triển khai / đối tác** (cơ quan, sở, cục, ngân hàng, ví điện tử, nhà mạng, hãng bảo hiểm, nền tảng của đối tác…) **trừ khi chủ sở hữu ghi rõ trong yêu cầu**. Dùng tên chung: "cơ quan quản lý đô thị", "Sở quản lý", "CSGT", "cơ quan đăng kiểm", "ứng dụng giao thông", "ví điện tử", "ngân hàng", "ví thu phí ETC", "hãng bảo hiểm"…
   - Đã được phép nêu: **VMG** ("Nền tảng nhắn tin SMS của VMG").
+  - Mô hình "Review đơn vị dịch vụ" (`du-an/review-tram-dang-kiem.html`): được giữ thương hiệu **TTDK** và tên các trạm đăng kiểm thật (dữ liệu công khai, chủ sở hữu duyệt 20/11/2026).
   - Được giữ: tên văn bản pháp luật và cơ quan ban hành khi trích dẫn căn cứ pháp lý; công nghệ/kênh phổ thông (Zalo, Google Drive, Claude, ChatGPT…).
   - Artifact mới có tên riêng đơn vị/đối tác: thay bằng tên chung trong bản trên website (chỉ đổi chữ hiển thị, không đổi mã/logic), hoặc `--skip` với lý do "cần chủ sở hữu duyệt" nếu tên gắn liền với nội dung (thương hiệu trang, danh sách cơ sở thật).
 

@@ -106,6 +106,15 @@
       "title": "Tự động bán bảo hiểm xe qua Zalo",
       "desc": "AI Agent mỗi ngày chọn chủ xe sắp đến hạn đăng kiểm, gửi ưu đãi bảo hiểm xe qua Zalo ZNS, tự kiểm tra lịch hẹn và đơn hàng, rồi báo cáo chuyển đổi. Ai cũng triển khai được (đại lý, đăng kiểm, garage, nền tảng) và bán được sản phẩm của nhiều hãng bảo hiểm.",
       "kind": "Trang sản phẩm"
+    },
+    {
+      "artifact_slug": "118514e3-a56a-4982-a413-e37c40be1cf4",
+      "href": "du-an/review-tram-dang-kiem.html",
+      "cat": "booking",
+      "title": "Review đơn vị dịch vụ – ví dụ: Review trạm đăng kiểm",
+      "desc": "Mô hình trang review đơn vị dịch vụ, minh hoạ bằng trạm đăng kiểm: danh bạ toàn quốc lấy từ API, bản đồ, giờ làm việc, đánh giá của khách hàng và đặt lịch trực tuyến. Áp dụng được cho garage, cứu hộ, bảo hiểm và các loại cơ sở dịch vụ khác.",
+      "kind": "Mô hình tương tác",
+      "old_href": "showcase/danh-ba-dang-kiem-ttdk.html"
     }
   ],
   "docs": [],
@@ -129,11 +138,6 @@
       "artifact_slug": "350aeed0-bcdd-42bb-8147-e8d46a298293",
       "title": "Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
       "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật (trang là đề xuất có phần Kính gửi/Kiến nghị gửi cơ quan, nêu tên đơn vị và đối tác)"
-    },
-    {
-      "artifact_slug": "118514e3-a56a-4982-a413-e37c40be1cf4",
-      "title": "Danh bạ đăng kiểm TTDK",
-      "reason": "gỡ khỏi website (20/11/2026), cần chủ sở hữu duyệt: trang mang tên riêng nền tảng TTDK và tên các trung tâm đăng kiểm thật"
     }
   ]
 }
