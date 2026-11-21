@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<!-- toritech:meta -->
+<meta name="description" content="AI Model đọc hiểu thủ tục trên Cổng Dịch vụ công, chỉ truy cập hồ sơ được người dân, doanh nghiệp cấp quyền rồi điền form và nộp hồ sơ thay con người. Mô hình gồm cầu nối (connector/skill) chuẩn hoá từng cổng, phân công trách nhiệm và hướng kinh doanh."><link rel="canonical" href="https://toritech.vn/du-an/ai-ho-tro-thu-tuc-hanh-chinh-cong.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="Mô hình AI hỗ trợ thủ tục hành chính công – MCP &amp; AI Agent | TORITECH"><meta property="og:description" content="AI Model đọc hiểu thủ tục trên Cổng Dịch vụ công, chỉ truy cập hồ sơ được người dân, doanh nghiệp cấp quyền rồi điền form và nộp hồ sơ thay con người. Mô hình gồm cầu nối (connector/skill) chuẩn hoá từng cổng, phân công trách nhiệm và hướng kinh doanh."><meta property="og:url" content="https://toritech.vn/du-an/ai-ho-tro-thu-tuc-hanh-chinh-cong.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/ai-ho-tro-thu-tuc-hanh-chinh-cong.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mô hình AI hỗ trợ thủ tục hành chính công – MCP &amp; AI Agent | TORITECH"><meta name="twitter:description" content="AI Model đọc hiểu thủ tục trên Cổng Dịch vụ công, chỉ truy cập hồ sơ được người dân, doanh nghiệp cấp quyền rồi điền form và nộp hồ sơ thay con người. Mô hình gồm cầu nối (connector/skill) chuẩn hoá từng cổng, phân công trách nhiệm và hướng kinh doanh."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/ai-ho-tro-thu-tuc-hanh-chinh-cong.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mô hình AI hỗ trợ thủ tục hành chính công</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f7fb; --ink:#14213d; --muted:#5b6478; --line:#dfe3ec; --card:#fff;
+  --user:#0f766e; --user-bg:#e6f6f3;
+  --ai:#c2410c; --ai-bg:#fff1e8;
+  --gov:#1d4ed8; --gov-bg:#e8efff;
+  --warn:#b91c1c; --warn-bg:#fdecec;
+  --biz:#7c3aed; --biz-bg:#f2ecff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 18px 60px}
+header{text-align:center;margin-bottom:26px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ai);background:var(--ai-bg);padding:5px 12px;border-radius:99px}
+h1{font-size:clamp(22px,4vw,36px);font-weight:800;margin:12px 0 8px;line-height:1.2}
+header p{color:var(--muted);max-width:720px;margin:0 auto;font-size:15px}
+
+/* ===== DIAGRAM ===== */
+.diagram{display:grid;grid-template-columns:1fr 150px 1.15fr 150px 1fr;align-items:stretch;gap:0;margin:26px 0 12px}
+.zone{border-radius:18px;padding:18px;border:2px solid;position:relative;background:var(--card);display:flex;flex-direction:column;gap:10px;transition:box-shadow .3s,transform .3s}
+.zone h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.zone .sub{font-size:12.5px;color:var(--muted);margin-top:-6px}
+.z-user{border-color:var(--user)} .z-user h2{color:var(--user)}
+.z-ai{border-color:var(--ai);background:linear-gradient(180deg,#fff,var(--ai-bg))} .z-ai h2{color:var(--ai)}
+.z-gov{border-color:var(--gov)} .z-gov h2{color:var(--gov)}
+.ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.z-user .ico{background:var(--user-bg)} .z-ai .ico{background:#ffe0cc} .z-gov .ico{background:var(--gov-bg)}
+.box{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;font-size:13.5px}
+.box b{display:block;font-size:13.5px;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:12px;padding:3px 9px;border-radius:99px;background:#f1f3f8;border:1px solid var(--line);white-space:nowrap}
+.z-user .chip{background:var(--user-bg);border-color:#bfe7df}
+.z-gov .chip{background:var(--gov-bg);border-color:#c9d8ff}
+.z-ai .chip{background:#fff;border-color:#fbcfb0}
+.lock{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--user);background:var(--user-bg);border-radius:10px;padding:8px 10px;font-weight:600}
+.core{border:2px dashed var(--ai);border-radius:14px;padding:12px;text-align:center;background:#fff}
+.core .t{font-weight:800;color:var(--ai);font-size:15px}
+.models{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:8px}
+.model{font-weight:700;font-size:13px;padding:5px 11px;border-radius:9px;background:var(--ai);color:#fff}
+.model.alt{background:#fff;color:var(--ai);border:1px solid var(--ai)}
+.bridge{border-radius:12px;padding:10px 12px;background:var(--ai);color:#fff;font-size:13px}
+.bridge b{display:block;font-size:13.5px}
+
+/* connectors */
+.conn{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:0 6px}
+.arrow{position:relative;font-size:11.5px;font-weight:600;text-align:center;color:var(--muted);padding-bottom:14px;opacity:.55;transition:opacity .3s,color .3s}
+.arrow .num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;margin-bottom:3px}
+.arrow .bar{position:absolute;left:0;right:0;bottom:4px;height:3px;border-radius:3px;background:var(--line);overflow:hidden}
+.arrow .bar::after{content:"";position:absolute;top:0;bottom:0;width:40%;border-radius:3px;background:currentColor;animation:flowR 1.6s linear infinite}
+.arrow.left .bar::after{animation-name:flowL}
+.arrow::before{content:"";position:absolute;bottom:0;width:0;height:0;border-top:5.5px solid transparent;border-bottom:5.5px solid transparent}
+.arrow.right::before{right:-2px;border-left:9px solid var(--line)}
+.arrow.left::before{left:-2px;border-right:9px solid var(--line)}
+.arrow.c-user{color:var(--user)} .arrow.c-gov{color:var(--gov)} .arrow.c-ai{color:var(--ai)}
+.arrow.on{opacity:1}
+.arrow.on.right::before{border-left-color:currentColor}
+.arrow.on.left::before{border-right-color:currentColor}
+@keyframes flowR{from{left:-40%}to{left:100%}}
+@keyframes flowL{from{left:100%}to{left:-40%}}
+.zone.hl{box-shadow:0 0 0 5px rgba(194,65,12,.15),0 10px 30px rgba(20,33,61,.12);transform:translateY(-2px)}
+.z-user.hl{box-shadow:0 0 0 5px rgba(15,118,110,.15),0 10px 30px rgba(20,33,61,.12)}
+.z-gov.hl{box-shadow:0 0 0 5px rgba(29,78,216,.15),0 10px 30px rgba(20,33,61,.12)}
+
+/* step controls */
+.steps{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:18px 0 6px}
+.steps button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:99px;cursor:pointer}
+.steps button.act{background:var(--ink);color:#fff;border-color:var(--ink)}
+.caption{text-align:center;min-height:48px;font-size:14.5px;max-width:760px;margin:6px auto 0;color:var(--ink)}
+.caption b{color:var(--ai)}
+
+/* ===== SECTIONS ===== */
+section{margin-top:40px}
+section > h3{font-size:20px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+section > h3::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--ai)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.card .k{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.card h4{font-size:16px;margin-bottom:6px}
+.card p{font-size:14px;color:var(--muted)}
+.pro .k{color:var(--user)} .pro{border-top:4px solid var(--user)}
+.social{background:linear-gradient(120deg,#14213d,#273b6b);color:#fff;border-radius:18px;padding:22px;display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
+.social .side{background:rgba(255,255,255,.08);border-radius:14px;padding:14px}
+.social .side .k{font-size:12px;opacity:.75;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.social .side h4{font-size:17px;margin:4px 0}
+.social .side p{font-size:13.5px;opacity:.85}
+.social .vs{font-weight:800;font-size:22px;opacity:.6;text-align:center}
+.social .side.good{background:rgba(251,146,60,.2);border:1px solid rgba(251,146,60,.5)}
+.challenge{background:var(--warn-bg);border:1px solid #f6c7c7;border-radius:18px;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.challenge h4{color:var(--warn);font-size:16px;margin-bottom:8px}
+.challenge ul{padding-left:18px;font-size:14px}
+.challenge li{margin-bottom:4px}
+.challenge .why{background:#fff;border-radius:14px;padding:14px;border-left:4px solid var(--warn);font-size:14px}
+.biz .card{border-top:4px solid var(--biz)}
+.biz .k{color:var(--biz)}
+.biz .n{font-size:28px;font-weight:800;color:var(--biz);line-height:1}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:14px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f3f8;font-size:13px}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.tag.u{background:var(--user-bg);color:var(--user)} .tag.g{background:var(--gov-bg);color:var(--gov)} .tag.a{background:var(--ai-bg);color:var(--ai)}
+footer{margin-top:40px;text-align:center;font-size:12.5px;color:var(--muted)}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:900px){
+  .diagram{grid-template-columns:1fr;gap:0}
+  .conn{flex-direction:row;justify-content:center;gap:10px;padding:10px 0}
+  .arrow{flex:1;max-width:170px;padding-bottom:0;padding-right:16px;text-align:left;display:flex;gap:6px;align-items:center;min-height:56px}
+  .arrow .num{flex:none;margin:0}
+  .arrow .bar{left:auto;right:4px;top:0;bottom:0;width:3px;height:auto}
+  .arrow .bar::after{width:3px;height:40%;left:0;animation:flowD 1.6s linear infinite}
+  .arrow.up .bar::after{animation-name:flowU}
+  .arrow::before{right:0;left:auto!important;border:none!important;border-left:5.5px solid transparent!important;border-right:5.5px solid transparent!important}
+  .arrow.down::before{bottom:-4px;top:auto;border-top:9px solid var(--line)!important}
+  .arrow.up::before{top:-4px;bottom:auto;border-bottom:9px solid var(--line)!important}
+  .arrow.on.down::before{border-top-color:currentColor!important}
+  .arrow.on.up::before{border-bottom-color:currentColor!important}
+  .social{grid-template-columns:1fr}
+  .challenge{grid-template-columns:1fr}
+}
+@keyframes flowD{from{top:-40%}to{top:100%}}
+@keyframes flowU{from{top:100%}to{top:-40%}}
+@media (max-width:560px){
+  .hide-sm{display:none}
+  th:nth-child(3),td:nth-child(3){display:none}
+}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-mcp-ai-agent.html">MCP &amp; AI Agent</a> / Mô hình AI hỗ trợ thủ tục hành chính công</nav><a class="tt-btn" href="../du-an-mcp-ai-agent.html">← Về hạng mục MCP &amp; AI Agent</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Mô hình vận hành</span>
+  <h1>AI Model hỗ trợ doanh nghiệp &amp; người dân<br>thực hiện thủ tục hành chính công</h1>
+  <p>Dữ liệu ở lại với người dùng — AI đọc hiểu thủ tục từ Cổng Dịch vụ công, chỉ truy cập phần dữ liệu được cấp quyền, rồi điền form và nộp hồ sơ thay con người.</p>
+</header>
+
+<!-- ===== DIAGRAM ===== -->
+<div class="diagram" id="diagram">
+
+  <!-- Zone 1: user -->
+  <div class="zone z-user" data-z="user">
+    <h2><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.1a4 4 0 0 1 0 7.8M21 21v-2a4 4 0 0 0-3-3.9"/></svg></span>Doanh nghiệp / Người dân</h2>
+    <div class="sub">Chủ sở hữu dữ liệu</div>
+    <div class="box"><b>① Hồ sơ, giấy tờ cần thiết</b>
+      Lưu trên Drive, máy tính cá nhân, kho lưu trữ riêng
+      <div class="chips"><span class="chip">🖼️ Ảnh chụp</span><span class="chip">📄 File scan / PDF</span><span class="chip">📊 Word, Excel</span></div>
+    </div>
+    <div class="box"><b>Nơi lưu trữ</b>
+      <div class="chips"><span class="chip">Google Drive / OneDrive</span><span class="chip">Máy tính cá nhân</span><span class="chip">Kho bảo mật chuẩn BCA</span></div>
+    </div>
+    <div class="lock"><span>🔒</span><span>Dữ liệu vẫn trong tay doanh nghiệp. AI chỉ đọc khi được cấp quyền.</span></div>
+  </div>
+
+  <!-- connectors user <-> ai -->
+  <div class="conn">
+    <div class="arrow right down c-user" data-s="3"><span class="num">3a</span><span>Yêu cầu + cấp quyền dữ liệu</span><i class="bar"></i></div>
+    <div class="arrow left up c-ai" data-s="3"><span class="num">3c</span><span>Báo cáo kết quả, xin xác nhận</span><i class="bar"></i></div>
+  </div>
+
+  <!-- Zone 2: AI -->
+  <div class="zone z-ai" data-z="ai">
+    <h2><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2" stroke-linecap="round"><rect x="5" y="7" width="14" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6M2 12h3M19 12h3"/></svg></span>AI Model</h2>
+    <div class="sub">Trợ lý thực thi thủ tục 24/7</div>
+    <div class="core">
+      <div class="t">Core AI Model</div>
+      <div class="models"><span class="model">Claude</span><span class="model alt">ChatGPT</span><span class="model alt">Model khác</span></div>
+      <div class="chips" style="justify-content:center"><span class="chip">Công cụ có liên kết AI Model</span><span class="chip">Agent / Desktop / Browser</span></div>
+    </div>
+    <div class="bridge"><b>🔗 Cầu nối (Connector / Skill)</b>Hướng dẫn AI đọc đúng quy trình, đúng biểu mẫu của từng cổng DVC</div>
+    <div class="box"><b>3b. AI thực hiện</b>
+      <div class="chips"><span class="chip">Đọc hiểu thủ tục</span><span class="chip">Trích xuất dữ liệu từ hồ sơ</span><span class="chip">Điền form</span><span class="chip">Lập báo cáo</span><span class="chip">Nộp hồ sơ</span></div>
+    </div>
+  </div>
+
+  <!-- connectors ai <-> gov -->
+  <div class="conn">
+    <div class="arrow left up c-gov" data-s="2"><span class="num">2</span><span>Quy định, thủ tục, hồ sơ cần thiết</span><i class="bar"></i></div>
+    <div class="arrow right down c-ai" data-s="3"><span class="num">3b</span><span>Điền form, nộp hồ sơ, báo cáo</span><i class="bar"></i></div>
+  </div>
+
+  <!-- Zone 3: gov -->
+  <div class="zone z-gov" data-z="gov">
+    <h2><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M2 10l10-6 10 6"/></svg></span>Cổng Dịch vụ công</h2>
+    <div class="sub">Nguồn quy định &amp; nơi tiếp nhận hồ sơ</div>
+    <div class="box"><b>② Cung cấp</b>
+      <div class="chips"><span class="chip">Quy định pháp lý</span><span class="chip">Quy trình thủ tục</span><span class="chip">Danh mục hồ sơ</span><span class="chip">Biểu mẫu</span></div>
+    </div>
+    <div class="box"><b>Tiếp nhận &amp; xử lý</b>
+      <div class="chips"><span class="chip">Form trực tuyến</span><span class="chip">Báo cáo định kỳ</span><span class="chip">Tra cứu kết quả</span></div>
+    </div>
+    <div class="box"><b>Các cổng hiện nay</b>
+      <div class="chips"><span class="chip">DVC Quốc gia</span><span class="chip">DVC tỉnh / thành</span><span class="chip">BHXH</span><span class="chip">Thuế</span><span class="chip">Đăng kiểm…</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="steps" id="steps">
+  <button data-step="0">Toàn cảnh</button>
+  <button data-step="1">① Dữ liệu</button>
+  <button data-step="2">② Thủ tục</button>
+  <button data-step="3">③ AI thực thi</button>
+</div>
+<div class="caption" id="caption"></div>
+
+<!-- ===== ADVANTAGES ===== -->
+<section>
+  <h3>Ưu điểm của mô hình</h3>
+  <div class="grid">
+    <div class="card pro"><div class="k">Bảo mật</div><h4>Dữ liệu vẫn trong tay người dùng</h4><p>Hồ sơ nằm trên Drive, máy tính hoặc kho lưu trữ của doanh nghiệp. Không bị rò rỉ nếu chưa được cấp quyền; quyền có thể thu hồi bất cứ lúc nào.</p></div>
+    <div class="card pro"><div class="k">Tốc độ</div><h4>Nhanh hơn người thường rất nhiều</h4><p>AI đọc hiểu quy định và thao tác thủ tục trong vài phút thay vì hàng giờ, tiết kiệm đáng kể thời gian nhập liệu và tra cứu.</p></div>
+    <div class="card pro"><div class="k">An toàn cho cổng DVC</div><h4>Chỉ thực thi đúng việc được giao</h4><p>AI không quấy rối, không truy cập trái phép, không gây ảnh hưởng hạ tầng Cổng Dịch vụ công. Mọi thao tác theo phạm vi được ủy quyền.</p></div>
+  </div>
+</section>
+
+<section>
+  <h3>Ưu điểm của dự án: Xã hội hoá</h3>
+  <div class="social">
+    <div class="side"><div class="k">Cách cũ</div><h4>Thuê nhân sự là con người</h4><p>Giờ hành chính, chi phí lương cố định, phụ thuộc kinh nghiệm từng người.</p></div>
+    <div class="vs">→</div>
+    <div class="side good"><div class="k">Mô hình mới</div><h4>Tự thuê AI Model 24/7</h4><p>Người dân, doanh nghiệp tự chủ động thuê AI theo nhu cầu, làm việc mọi lúc, chi phí linh hoạt — Nhà nước không phải đầu tư thêm.</p></div>
+  </div>
+</section>
+
+<section>
+  <h3>Nhược điểm &amp; bài toán cần giải</h3>
+  <div class="challenge">
+    <div>
+      <h4>⚠️ Thách thức hiện tại</h4>
+      <ul>
+        <li>Nhiều thủ tục phức tạp, nhiều bước, nhiều điều kiện</li>
+        <li>Cổng dịch vụ công phân mảnh theo ngành, theo địa phương</li>
+        <li>Biểu mẫu, cách đăng nhập, cách nộp khác nhau ở mỗi cổng</li>
+      </ul>
+    </div>
+    <div class="why"><b>Đây chính là lý do chúng ta bắt đầu xây dựng.</b><br>Mỗi thủ tục, mỗi cổng cần một “cầu nối” chuẩn hoá để AI hiểu đúng và làm đúng — đó là sản phẩm cốt lõi của dự án.</div>
+  </div>
+</section>
+
+<section class="biz">
+  <h3>Điểm kinh doanh</h3>
+  <div class="grid">
+    <div class="card"><div class="n">01</div><div class="k" style="margin-top:8px">License cầu nối</div><h4>Hướng dẫn AI thực hiện thủ tục</h4><p>Bán license connector / skill cho từng nhóm thủ tục, từng cổng dịch vụ công.</p></div>
+    <div class="card"><div class="n">02</div><div class="k" style="margin-top:8px">Phân phối license AI Model</div><h4>Claude, ChatGPT…</h4><p>Phân phối lại license sử dụng model AI từ các đơn vị quốc tế cho doanh nghiệp trong nước.</p></div>
+    <div class="card"><div class="n">03</div><div class="k" style="margin-top:8px">Lưu trữ bảo mật</div><h4>Theo tiêu chuẩn an toàn của BCA</h4><p>Phân phối nơi lưu trữ hồ sơ bảo mật, đáp ứng yêu cầu an toàn thông tin của Bộ Công an.</p></div>
+  </div>
+</section>
+
+<section>
+  <h3>Phân công trách nhiệm</h3>
+  <table>
+    <tr><th>Bên</th><th>Trách nhiệm</th><th>Ghi chú</th></tr>
+    <tr><td><span class="tag u">Doanh nghiệp / Người dân</span></td><td>Chịu trách nhiệm về dữ liệu: tính chính xác, đầy đủ, hợp pháp của hồ sơ và việc cấp quyền cho AI.</td><td>Chủ động cấp / thu hồi quyền truy cập.</td></tr>
+    <tr><td><span class="tag g">Cổng Dịch vụ công</span></td><td>Hỗ trợ làm rõ quy trình thủ tục và chỉ ra nơi cần liên kết.</td><td>Không phải đầu tư thêm nhân sự xử lý nhập liệu.</td></tr>
+    <tr><td><span class="tag a">Đơn vị cầu nối (dự án)</span></td><td>Xây dựng, duy trì cầu nối giữa AI Model và các cổng; phân phối license và lưu trữ bảo mật.</td><td>Đảm bảo AI chỉ thực thi đúng việc được giao.</td></tr>
+  </table>
+</section>
+
+<footer>Mô hình minh hoạ — AI Model hỗ trợ thủ tục hành chính công</footer>
+</div>
+
+<script>
+const caps = [
+  "<b>Toàn cảnh:</b> Doanh nghiệp giữ dữ liệu, Cổng DVC giữ quy định — AI Model đứng giữa, đọc hiểu và thực thi thay con người.",
+  "<b>Bước 1:</b> Doanh nghiệp / người dân nắm dữ liệu — hồ sơ, giấy tờ dạng ảnh, file scan, file Office — lưu trên Drive hoặc máy tính cá nhân.",
+  "<b>Bước 2:</b> Cổng Dịch vụ công cung cấp quy định, quy trình thủ tục và danh mục hồ sơ cần thiết.",
+  "<b>Bước 3:</b> Khi có yêu cầu, AI Model (Claude, ChatGPT và các công cụ liên kết) đọc hiểu thủ tục, truy cập dữ liệu được cấp quyền, rồi điền form, lập báo cáo và nộp hồ sơ."
+];
+const zonesFor = {0:[],1:["user"],2:["gov"],3:["ai"]};
+const btns=[...document.querySelectorAll("#steps button")];
+const arrows=[...document.querySelectorAll(".arrow")];
+const zones=[...document.querySelectorAll(".zone")];
+let cur=0, timer;
+function show(s){
+  cur=s;
+  btns.forEach(b=>b.classList.toggle("act",+b.dataset.step===s));
+  arrows.forEach(a=>a.classList.toggle("on", s===0 || +a.dataset.s===s));
+  zones.forEach(z=>z.classList.toggle("hl", zonesFor[s].includes(z.dataset.z)));
+  document.getElementById("caption").innerHTML=caps[s];
+}
+function auto(){clearInterval(timer);timer=setInterval(()=>show((cur+1)%4),4500);}
+btns.forEach(b=>b.addEventListener("click",()=>{show(+b.dataset.step);auto();}));
+show(0);auto();
+</script>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: MCP &amp; AI Agent</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="van-thu-so-vi-pham-giao-thong.html"><img src="../assets/img/du-an/thumb/van-thu-so-vi-pham-giao-thong.webp" alt="" loading="lazy" width="112" height="59"><span><b>Văn thư số xử lý vi phạm giao thông</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="dvc-connector-ai.html"><img src="../assets/img/du-an/thumb/dvc-connector-ai.webp" alt="" loading="lazy" width="112" height="59"><span><b>DVC Connector – Tự động hoá dịch vụ công bằng AI</b><small>Trang sản phẩm</small></span></a></li><li><a href="claude-van-hanh-nhan-tin-cskh-mcp.html"><img src="../assets/img/du-an/thumb/claude-van-hanh-nhan-tin-cskh-mcp.webp" alt="" loading="lazy" width="112" height="59"><span><b>AI Agent vận hành hệ thống nhắn tin CSKH qua MCP</b><small>Mô phỏng 2.5D</small></span></a></li><li><a href="vmgportal-ai-sms.html"><img src="../assets/img/du-an/thumb/vmgportal-ai-sms.webp" alt="" loading="lazy" width="112" height="59"><span><b>VMGPortal – AI Agent vận hành Nền tảng nhắn tin SMS của VMG</b><small>Trang sản phẩm</small></span></a></li><li><a href="tu-dong-ban-bao-hiem-xe-qua-zalo.html"><img src="../assets/img/du-an/thumb/tu-dong-ban-bao-hiem-xe-qua-zalo.webp" alt="" loading="lazy" width="112" height="59"><span><b>Tự động bán bảo hiểm xe qua Zalo</b><small>Trang sản phẩm</small></span></a></li><li><a href="tro-ly-giao-thong-bao-hiem-tnds.html"><img src="../assets/img/du-an/thumb/tro-ly-giao-thong-bao-hiem-tnds.webp" alt="" loading="lazy" width="112" height="59"><span><b>Tặng gói trợ lý giao thông kèm bảo hiểm TNDS ô tô, xe máy</b><small>Mô hình tương tác</small></span></a></li></ul><a class="tt-more" href="../du-an-mcp-ai-agent.html">Xem toàn bộ hạng mục MCP &amp; AI Agent →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>

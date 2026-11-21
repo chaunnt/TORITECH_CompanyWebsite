@@ -123,6 +123,14 @@
       "title": "Tặng gói trợ lý giao thông kèm bảo hiểm TNDS ô tô, xe máy",
       "desc": "Mô hình hợp tác giúp hãng bảo hiểm tăng tỷ lệ gia hạn và có khách mới bằng quà tặng gói trợ lý giao thông (phạt nguội, nhắc đăng kiểm, hỗ trợ bồi thường); chỉ trả tiền khi khách kích hoạt, không chia phí bảo hiểm. Có bảng dự toán 4 phương án sửa được và giả lập trên điện thoại.",
       "kind": "Mô hình tương tác"
+    },
+    {
+      "artifact_slug": "545d6f71-46f1-4825-b3e1-29cecf9dc02d",
+      "href": "du-an/ai-ho-tro-thu-tuc-hanh-chinh-cong.html",
+      "cat": "mcp",
+      "title": "Mô hình AI hỗ trợ thủ tục hành chính công",
+      "desc": "AI Model đọc hiểu thủ tục trên Cổng Dịch vụ công, chỉ truy cập hồ sơ được người dân, doanh nghiệp cấp quyền rồi điền form và nộp hồ sơ thay con người. Mô hình gồm cầu nối (connector/skill) chuẩn hoá từng cổng, phân công trách nhiệm và hướng kinh doanh.",
+      "kind": "Mô hình tương tác"
     }
   ],
   "docs": [],
