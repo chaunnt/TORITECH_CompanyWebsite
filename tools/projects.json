@@ -154,6 +154,11 @@
       "artifact_slug": "350aeed0-bcdd-42bb-8147-e8d46a298293",
       "title": "Nền tảng đặt lịch kiểm định khí thải xe máy TP.HCM",
       "reason": "không đăng (chủ sở hữu 20/11/2026): công văn/đề xuất gửi cơ quan là tài liệu cơ mật (trang là đề xuất có phần Kính gửi/Kiến nghị gửi cơ quan, nêu tên đơn vị và đối tác)"
+    },
+    {
+      "artifact_slug": "d831718f-1047-43aa-9148-4a242ea5e855",
+      "title": "Khách B2B TP.HCM – đợt 1 (bảng tính)",
+      "reason": "Bảng tính danh sách khách hàng B2B (Sheets) – dữ liệu kinh doanh nội bộ, không phải mô hình/dự án; có thể chứa dữ liệu khách hàng thật"
     }
   ]
 }
