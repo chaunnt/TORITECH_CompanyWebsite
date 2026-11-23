@@ -131,6 +131,14 @@
       "title": "Mô hình AI hỗ trợ thủ tục hành chính công",
       "desc": "AI Model đọc hiểu thủ tục trên Cổng Dịch vụ công, chỉ truy cập hồ sơ được người dân, doanh nghiệp cấp quyền rồi điền form và nộp hồ sơ thay con người. Mô hình gồm cầu nối (connector/skill) chuẩn hoá từng cổng, phân công trách nhiệm và hướng kinh doanh.",
       "kind": "Mô hình tương tác"
+    },
+    {
+      "artifact_slug": "7f4928b0-743d-402b-857d-cfa5b2691f67",
+      "href": "du-an/dat-lich-thu-phi-use-case.html",
+      "cat": "booking",
+      "title": "Use Case – Luồng đặt lịch dịch vụ & thu phí",
+      "desc": "Sơ đồ use case hệ thống đặt lịch với hai luồng: thu phí trước rồi mới tạo lịch hẹn, hoặc tạo lịch trước và thu phí online/tại cơ sở sau. Kèm vòng đời trạng thái lịch hẹn và gợi ý triển khai cho developer, đối tác.",
+      "kind": "Mô hình tương tác"
     }
   ],
   "docs": [],

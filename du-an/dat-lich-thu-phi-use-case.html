@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- toritech:meta -->
+<meta name="description" content="Sơ đồ use case hệ thống đặt lịch với hai luồng: thu phí trước rồi mới tạo lịch hẹn, hoặc tạo lịch trước và thu phí online/tại cơ sở sau. Kèm vòng đời trạng thái lịch hẹn và gợi ý triển khai cho developer, đối tác."><link rel="canonical" href="https://toritech.vn/du-an/dat-lich-thu-phi-use-case.html">
+<link rel="icon" href="../assets/img/logo.svg" type="image/svg+xml">
+<meta property="og:type" content="article"><meta property="og:site_name" content="TORITECH"><meta property="og:locale" content="vi_VN">
+<meta property="og:title" content="Use Case – Luồng đặt lịch dịch vụ &amp; thu phí – Đặt lịch &amp; Điều phối | TORITECH"><meta property="og:description" content="Sơ đồ use case hệ thống đặt lịch với hai luồng: thu phí trước rồi mới tạo lịch hẹn, hoặc tạo lịch trước và thu phí online/tại cơ sở sau. Kèm vòng đời trạng thái lịch hẹn và gợi ý triển khai cho developer, đối tác."><meta property="og:url" content="https://toritech.vn/du-an/dat-lich-thu-phi-use-case.html">
+<meta property="og:image" content="https://toritech.vn/assets/img/du-an/dat-lich-thu-phi-use-case.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Use Case – Luồng đặt lịch dịch vụ &amp; thu phí – Đặt lịch &amp; Điều phối | TORITECH"><meta name="twitter:description" content="Sơ đồ use case hệ thống đặt lịch với hai luồng: thu phí trước rồi mới tạo lịch hẹn, hoặc tạo lịch trước và thu phí online/tại cơ sở sau. Kèm vòng đời trạng thái lịch hẹn và gợi ý triển khai cho developer, đối tác."><meta name="twitter:image" content="https://toritech.vn/assets/img/du-an/dat-lich-thu-phi-use-case.jpg">
+<!-- /toritech:meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use Case – Luồng đặt lịch dịch vụ & thu phí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#ffffff; --fg:#1d1f23; --muted:#62666d; --line:#d9dad6;
+    --uc:#ffffff; --lane:#f0f0ec;
+    --f1:#2457c5; --f1-bg:#eaf0fd; --f1-lane:rgba(36,87,197,.06);
+    --f2:#b4610b; --f2-bg:#fdf1e3; --f2-lane:rgba(180,97,11,.07);
+    --pay:#6b46c1; --pay-bg:#f1ecfb;
+    --ok:#1f8a4c; --bad:#c0392b;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#141518; --card:#1c1e22; --fg:#e8e8e6; --muted:#9a9ea6; --line:#33363c;
+      --uc:#202328; --lane:#1a1c20;
+      --f1:#7ea3f2; --f1-bg:#1d2840; --f1-lane:rgba(126,163,242,.07);
+      --f2:#f0a75a; --f2-bg:#3a2a18; --f2-lane:rgba(240,167,90,.07);
+      --pay:#b59cf0; --pay-bg:#2a2240;
+      --ok:#5ccf8c; --bad:#f07a6c;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:"Be Vietnam Pro",system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:1280px;margin:0 auto;padding:32px 20px 60px}
+  header h1{font-size:26px;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+  header p{margin:0;color:var(--muted);max-width:820px}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 12px}
+  .toolbar span{color:var(--muted);font-size:14px;margin-right:4px}
+  .btn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 14px;border-radius:999px;cursor:pointer}
+  .btn[aria-pressed="true"]{border-color:var(--fg);font-weight:600}
+  .btn.f1[aria-pressed="true"]{border-color:var(--f1);color:var(--f1);background:var(--f1-bg)}
+  .btn.f2[aria-pressed="true"]{border-color:var(--f2);color:var(--f2);background:var(--f2-bg)}
+  figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;overflow-x:auto}
+  figure svg{display:block;width:100%;min-width:980px;height:auto;color:var(--fg)}
+  figcaption{color:var(--muted);font-size:14px;padding:10px 6px 2px}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--muted);padding:10px 6px 0}
+  .legend i{display:inline-block;width:30px;height:0;vertical-align:middle;margin-right:6px;border-top:1.5px solid currentColor}
+  .legend i.d{border-top-style:dashed}
+  .legend i.s{border-top:2px solid var(--pay)}
+  .legend b{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+
+  /* SVG */
+  svg text{font-family:"Be Vietnam Pro",system-ui,sans-serif;fill:currentColor}
+  .t{font-size:13px;font-weight:600}
+  .s{font-size:11px;fill:var(--muted)}
+  .lbl{font-size:10.5px;font-style:italic;fill:var(--muted)}
+  .hdr{font-size:12px;font-weight:700;letter-spacing:.06em}
+  .uc{fill:var(--uc);stroke:currentColor;stroke-width:1.3}
+  .uc.f1{fill:var(--f1-bg);stroke:var(--f1)}
+  .uc.f2{fill:var(--f2-bg);stroke:var(--f2)}
+  .uc.pay{fill:var(--pay-bg);stroke:var(--pay)}
+  .assoc{stroke:currentColor;stroke-width:1.2;fill:none}
+  .dep{stroke:currentColor;stroke-width:1.2;fill:none;stroke-dasharray:5 4}
+  .state{stroke:var(--pay);stroke-width:1.8;fill:none}
+  .actor line,.actor circle{stroke:currentColor;stroke-width:1.6;fill:none}
+  .el{transition:opacity .2s}
+  svg[data-active="1"] .el:not([data-flow~="1"]),
+  svg[data-active="2"] .el:not([data-flow~="2"]){opacity:.12}
+
+  section{margin-top:36px}
+  h2{font-size:20px;margin:0 0 14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h3{margin:0 0 4px;font-size:17px}
+  .card .tag{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .card.f1{border-top:4px solid var(--f1)} .card.f1 .tag{color:var(--f1)}
+  .card.f2{border-top:4px solid var(--f2)} .card.f2 .tag{color:var(--f2)}
+  ol{padding-left:20px;margin:10px 0}
+  ol li{margin:4px 0}
+  .ok{color:var(--ok);font-weight:600} .bad{color:var(--bad);font-weight:600}
+  dl{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;margin:14px 0 0;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+  dt{color:var(--muted)} dd{margin:0}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap}
+  .p-draft{background:var(--lane);color:var(--muted);border:1px dashed var(--muted)}
+  .p-unpaid{background:var(--f2-bg);color:var(--f2)}
+  .p-paid{background:var(--f1-bg);color:var(--f1)}
+  .p-done{background:var(--pay-bg);color:var(--pay)}
+  ul.notes{margin:0;padding-left:20px} ul.notes li{margin:6px 0}
+  code{font-size:13px;background:var(--lane);padding:1px 6px;border-radius:5px}
+</style>
+</head>
+<body>
+<!-- toritech:top -->
+<style>
+#tt-top,#tt-top :not(svg,svg *),#tt-foot,#tt-foot :not(svg,svg *){all:revert;box-sizing:border-box}
+#tt-top{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#e2e8f0;font:500 14px/1.4 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;border-bottom:1px solid #1e2a44;position:relative;z-index:2147483000}
+#tt-top .tt-in{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+#tt-top a{color:inherit;text-decoration:none}
+#tt-top .tt-brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.04em;color:#fff}
+#tt-top .tt-brand svg{width:26px;height:26px;display:block}
+#tt-top .tt-crumb{flex:1;min-width:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+#tt-top .tt-crumb a{color:#cbd5e1}#tt-top .tt-crumb a:hover{color:#22d3ee}
+#tt-top .tt-btn{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #334155;font-size:13px;font-weight:600;white-space:nowrap}
+#tt-top .tt-btn:hover{border-color:#22d3ee;color:#22d3ee}
+#tt-top .tt-cta{background:#14b8a6;border-color:#14b8a6;color:#04201c}
+#tt-top .tt-cta:hover{background:#2dd4bf;color:#04201c}
+#tt-foot{display:block;width:100%;align-self:stretch;justify-self:stretch;grid-column:1/-1;margin:0;background:#0b1426;color:#cbd5e1;font:400 14px/1.55 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;position:relative;z-index:2}
+#tt-foot .tt-in{max-width:1200px;margin:0 auto;padding:32px 16px 22px}
+#tt-foot h2{margin:0 0 4px;font-size:20px;font-weight:700;color:#fff}
+#tt-foot .tt-sub{margin:0 0 18px;color:#94a3b8;font-size:13.5px}
+#tt-foot a{color:inherit;text-decoration:none}
+#tt-foot ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+#tt-foot li{margin:0;padding:0}
+#tt-foot li a{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid #1e2a44;border-radius:12px;background:#111c33;height:100%}
+#tt-foot li a:hover{border-color:#22d3ee}
+#tt-foot li img{width:112px;height:59px;object-fit:cover;border-radius:6px;flex:none;background:#1e2a44;display:block}
+#tt-foot li b{display:block;color:#fff;font-size:14px;font-weight:600;line-height:1.35}
+#tt-foot li small{display:block;color:#94a3b8;font-size:12px;margin-top:3px}
+#tt-foot .tt-more{display:inline-block;margin-top:16px;color:#22d3ee;font-weight:600}
+#tt-foot .tt-legal{margin-top:24px;padding-top:14px;border-top:1px solid #1e2a44;font-size:12.5px;color:#94a3b8;display:flex;gap:6px 16px;flex-wrap:wrap}
+#tt-foot .tt-legal a:hover{color:#22d3ee}
+@media print{#tt-top,#tt-foot{display:none}}
+</style>
+<div id="tt-top" role="banner"><div class="tt-in"><a class="tt-brand" href="../index.html" aria-label="TORITECH – Trang chủ"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="tt-lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs><path d="M20 3l15 8.5v17L20 37 5 28.5v-17z" fill="url(#tt-lg)"/><path d="M20 3l15 8.5L20 20 5 11.5z" fill="#a5f3fc" opacity=".55"/><path d="M13 15h14M20 15v13" stroke="#062029" stroke-width="3.2" stroke-linecap="round"/></svg>TORITECH</a><nav class="tt-crumb" aria-label="Vị trí"><a href="../du-an.html">Dự án</a> / <a href="../du-an-dat-lich.html">Đặt lịch &amp; Điều phối</a> / Use Case – Luồng đặt lịch dịch vụ &amp; thu phí</nav><a class="tt-btn" href="../du-an-dat-lich.html">← Về hạng mục Đặt lịch &amp; Điều phối</a><a class="tt-btn tt-cta" href="../lien-he.html">Liên hệ</a></div></div>
+<!-- /toritech:top -->
+<div class="wrap">
+  <header>
+    <h1>Use Case: Đặt lịch dịch vụ & thu phí</h1>
+    <p>Một hệ thống đặt lịch, hai luồng chạy song song. Loại dịch vụ quyết định luồng: <strong style="color:var(--f1)">Luồng 1</strong> thu phí trước rồi mới tạo lịch hẹn, <strong style="color:var(--f2)">Luồng 2</strong> tạo lịch hẹn trước rồi thu phí sau.</p>
+  </header>
+
+  <div class="toolbar" role="group" aria-label="Lọc theo luồng">
+    <span>Làm nổi bật:</span>
+    <button class="btn" data-show="all" aria-pressed="true">Cả hai luồng</button>
+    <button class="btn f1" data-show="1" aria-pressed="false">Luồng 1 · Thanh toán trước</button>
+    <button class="btn f2" data-show="2" aria-pressed="false">Luồng 2 · Thanh toán sau</button>
+  </div>
+
+  <figure>
+    <svg id="uc" viewBox="0 0 1440 945" role="img" aria-label="Sơ đồ Use Case hệ thống đặt lịch dịch vụ: Khách hàng đặt lịch dịch vụ; nếu dịch vụ yêu cầu trả trước thì thanh toán online qua cổng thanh toán rồi mới ghi nhận lịch hẹn, thất bại thì chỉ lưu tạm; nếu không yêu cầu trả trước thì ghi nhận lịch hẹn Chưa thanh toán, sau đó khách thanh toán online từ chi tiết lịch hẹn hoặc trả trực tiếp tại cơ sở để hoàn tất.">
+      <defs>
+        <marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </marker>
+        <marker id="solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--pay)"/>
+        </marker>
+      </defs>
+
+      <!-- System boundary -->
+      <rect x="190" y="40" width="1035" height="870" rx="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <text x="210" y="68" class="t" style="font-size:15px">Hệ thống Đặt lịch Dịch vụ (Website)</text>
+      <text x="1205" y="68" class="hdr" text-anchor="end" style="fill:var(--muted)">BƯỚC CHUNG · LUỒNG 1 &amp; 2</text>
+
+      <!-- Lanes -->
+      <g class="el" data-flow="1 2"><rect x="205" y="330" width="235" height="565" rx="10" fill="var(--lane)"/>
+        <text x="220" y="357" class="hdr" style="fill:var(--muted)">DÙNG CHUNG</text></g>
+      <g class="el" data-flow="2"><rect x="450" y="330" width="370" height="565" rx="10" fill="var(--f2-lane)"/>
+        <text x="465" y="357" class="hdr" style="fill:var(--f2)">LUỒNG 2 · THANH TOÁN SAU</text>
+        <text x="465" y="373" class="s">DV không yêu cầu trả trước</text></g>
+      <g class="el" data-flow="1"><rect x="830" y="330" width="380" height="565" rx="10" fill="var(--f1-lane)"/>
+        <text x="1195" y="357" class="hdr" text-anchor="end" style="fill:var(--f1)">LUỒNG 1 · THANH TOÁN TRƯỚC</text>
+        <text x="1195" y="373" class="s" text-anchor="end">DV yêu cầu thanh toán trước</text></g>
+
+      <!-- ===== Actors ===== -->
+      <g class="actor">
+        <circle cx="95" cy="290" r="13"/><line x1="95" y1="303" x2="95" y2="340"/>
+        <line x1="73" y1="316" x2="117" y2="316"/><line x1="95" y1="340" x2="77" y2="370"/><line x1="95" y1="340" x2="113" y2="370"/>
+      </g>
+      <text x="95" y="392" class="t" text-anchor="middle">Khách hàng</text>
+
+      <g class="el" data-flow="1 2">
+        <g class="actor">
+          <circle cx="1330" cy="535" r="13"/><line x1="1330" y1="548" x2="1330" y2="585"/>
+          <line x1="1308" y1="561" x2="1352" y2="561"/><line x1="1330" y1="585" x2="1312" y2="615"/><line x1="1330" y1="585" x2="1348" y2="615"/>
+        </g>
+        <text x="1330" y="637" class="t" text-anchor="middle">Cổng thanh toán</text>
+        <text x="1330" y="653" class="s" text-anchor="middle">«system» · hệ thống ngoài</text>
+      </g>
+
+      <g class="el" data-flow="2">
+        <g class="actor">
+          <circle cx="1330" cy="805" r="13"/><line x1="1330" y1="818" x2="1330" y2="855"/>
+          <line x1="1308" y1="831" x2="1352" y2="831"/><line x1="1330" y1="855" x2="1312" y2="885"/><line x1="1330" y1="855" x2="1348" y2="885"/>
+        </g>
+        <text x="1330" y="907" class="t" text-anchor="middle">Nhân viên cơ sở</text>
+        <text x="1330" y="923" class="s" text-anchor="middle">(đối tác cung cấp DV)</text>
+      </g>
+
+      <!-- ===== Associations (actor ↔ use case) ===== -->
+      <g class="el" data-flow="1 2">
+        <line class="assoc" x1="117" y1="305" x2="252" y2="137"/>
+        <line class="assoc" x1="117" y1="312" x2="636" y2="240"/>
+        <line class="assoc" x1="113" y1="350" x2="211" y2="705"/>
+        <line class="assoc" x1="1122" y1="570" x2="1308" y2="561"/>
+      </g>
+      <g class="el" data-flow="2">
+        <line class="assoc" x1="770" y1="840" x2="1308" y2="831"/>
+      </g>
+
+      <!-- ===== Shared steps ===== -->
+      <g class="el" data-flow="1 2">
+        <ellipse class="uc" cx="320" cy="120" rx="88" ry="28"/>
+        <text x="320" y="125" class="t" text-anchor="middle">Truy cập website</text>
+
+        <ellipse class="uc" cx="545" cy="120" rx="95" ry="28"/>
+        <text x="545" y="116" class="t" text-anchor="middle">Đăng ký thông tin</text>
+        <text x="545" y="132" class="s" text-anchor="middle">thông tin khách hàng</text>
+
+        <ellipse class="uc" cx="770" cy="120" rx="88" ry="28"/>
+        <text x="770" y="125" class="t" text-anchor="middle">Chọn dịch vụ</text>
+
+        <ellipse class="uc" cx="1020" cy="120" rx="125" ry="28"/>
+        <text x="1020" y="125" class="t" text-anchor="middle">Chọn thời gian &amp; địa điểm</text>
+
+        <ellipse class="uc" cx="770" cy="235" rx="135" ry="36" stroke-width="2"/>
+        <text x="770" y="231" class="t" text-anchor="middle" style="font-size:14px">Đặt lịch dịch vụ</text>
+        <text x="770" y="249" class="s" text-anchor="middle">điểm mở rộng: loại dịch vụ</text>
+
+        <line class="dep" x1="680" y1="208" x2="592" y2="146" marker-end="url(#open)"/>
+        <text x="628" y="190" class="lbl" text-anchor="end">«include»</text>
+        <line class="dep" x1="770" y1="199" x2="770" y2="150" marker-end="url(#open)"/>
+        <text x="778" y="180" class="lbl">«include»</text>
+        <line class="dep" x1="860" y1="208" x2="960" y2="146" marker-end="url(#open)"/>
+        <text x="918" y="190" class="lbl">«include»</text>
+      </g>
+
+      <!-- Status note -->
+      <g class="el" data-flow="1 2">
+        <path d="M222,395 H408 L425,412 V650 H222 Z" fill="var(--card)" stroke="var(--muted)" stroke-width="1"/>
+        <path d="M408,395 V412 H425" fill="none" stroke="var(--muted)" stroke-width="1"/>
+        <text x="236" y="420" class="t" style="font-size:12px">Trạng thái lịch hẹn</text>
+        <circle cx="242" cy="447" r="5" fill="none" stroke="var(--muted)" stroke-dasharray="2 2"/>
+        <text x="254" y="451" class="s" style="fill:currentColor">Lưu tạm (nháp)</text>
+        <text x="254" y="466" class="s">không vào hệ thống</text>
+        <circle cx="242" cy="494" r="5" fill="var(--f2)"/>
+        <text x="254" y="498" class="s" style="fill:currentColor">Chưa thanh toán</text>
+        <text x="254" y="513" class="s">Luồng 2, ngay khi đặt</text>
+        <circle cx="242" cy="541" r="5" fill="var(--f1)"/>
+        <text x="254" y="545" class="s" style="fill:currentColor">Đã thanh toán</text>
+        <text x="254" y="560" class="s">Luồng 1, sau thanh toán thành công</text>
+        <circle cx="242" cy="588" r="5" fill="var(--pay)"/>
+        <text x="254" y="592" class="s" style="fill:currentColor">Hoàn tất</text>
+        <text x="254" y="607" class="s">Luồng 2, sau khi khách trả tiền</text>
+        <text x="236" y="634" class="s" style="font-style:italic">Chỉ thu phí xong mới “đủ”</text>
+      </g>
+
+      <!-- Shared: details -->
+      <g class="el" data-flow="1 2">
+        <ellipse class="uc" cx="322" cy="710" rx="112" ry="30"/>
+        <text x="322" y="706" class="t" text-anchor="middle">Xem chi tiết lịch hẹn</text>
+        <text x="322" y="722" class="s" text-anchor="middle">tra cứu lịch đã đặt</text>
+      </g>
+
+      <!-- Shared: payment online -->
+      <g class="el" data-flow="1 2">
+        <ellipse class="uc pay" cx="1017" cy="570" rx="105" ry="28"/>
+        <text x="1017" y="566" class="t" text-anchor="middle">Thanh toán online</text>
+        <text x="1017" y="582" class="s" text-anchor="middle">qua cổng thanh toán</text>
+      </g>
+
+      <!-- ===== Luồng 1 ===== -->
+      <g class="el" data-flow="1">
+        <line class="dep" x1="930" y1="406" x2="815" y2="269" marker-end="url(#open)" style="color:var(--f1)"/>
+        <text x="852" y="335" class="lbl" text-anchor="end">«extend»</text>
+
+        <ellipse class="uc f1" cx="1017" cy="430" rx="150" ry="30"/>
+        <text x="1017" y="426" class="t" text-anchor="middle">Thanh toán và đặt lịch</text>
+        <text x="1017" y="442" class="s" text-anchor="middle">nút “Thanh toán và đặt lịch”</text>
+
+        <line class="dep" x1="1017" y1="460" x2="1017" y2="540" marker-end="url(#open)"/>
+        <text x="1025" y="505" class="lbl">«include»</text>
+
+        <ellipse class="uc f1" cx="920" cy="720" rx="88" ry="30"/>
+        <text x="920" y="716" class="t" text-anchor="middle">Ghi nhận lịch hẹn</text>
+        <text x="920" y="732" class="s" text-anchor="middle">Đã TT · báo thành công</text>
+        <line class="dep" x1="940" y1="691" x2="972" y2="596" marker-end="url(#open)"/>
+        <text x="920" y="770" class="lbl" text-anchor="middle">«extend»</text>
+        <text x="920" y="785" class="s" text-anchor="middle" style="fill:var(--ok);font-weight:600">{thanh toán thành công}</text>
+
+        <ellipse class="uc" cx="1115" cy="720" rx="85" ry="30" stroke-dasharray="4 3"/>
+        <text x="1115" y="716" class="t" text-anchor="middle">Lưu tạm thông tin</text>
+        <text x="1115" y="732" class="s" text-anchor="middle">không tạo lịch hẹn</text>
+        <line class="dep" x1="1095" y1="691" x2="1064" y2="596" marker-end="url(#open)"/>
+        <text x="1115" y="770" class="lbl" text-anchor="middle">«extend»</text>
+        <text x="1115" y="785" class="s" text-anchor="middle" style="fill:var(--bad);font-weight:600">{thanh toán thất bại}</text>
+      </g>
+
+      <!-- ===== Luồng 2 ===== -->
+      <g class="el" data-flow="2">
+        <line class="dep" x1="680" y1="404" x2="735" y2="270" marker-end="url(#open)" style="color:var(--f2)"/>
+        <text x="722" y="335" class="lbl">«extend»</text>
+
+        <ellipse class="uc f2" cx="635" cy="430" rx="135" ry="28"/>
+        <text x="635" y="426" class="t" text-anchor="middle">Đặt lịch, thanh toán sau</text>
+        <text x="635" y="442" class="s" text-anchor="middle">nút “Đặt lịch”</text>
+
+        <line class="dep" x1="635" y1="458" x2="635" y2="540" marker-end="url(#open)"/>
+        <text x="643" y="504" class="lbl">«include»</text>
+
+        <ellipse class="uc f2" cx="635" cy="570" rx="135" ry="30"/>
+        <text x="635" y="566" class="t" text-anchor="middle">Ghi nhận lịch hẹn</text>
+        <text x="635" y="582" class="s" text-anchor="middle">ghi chú “Chưa thanh toán”</text>
+
+        <ellipse class="uc f2" cx="635" cy="710" rx="135" ry="30"/>
+        <text x="635" y="706" class="t" text-anchor="middle">Thanh toán từ chi tiết lịch hẹn</text>
+        <text x="635" y="722" class="s" text-anchor="middle">khách tự thanh toán online</text>
+        <line class="dep" x1="500" y1="710" x2="436" y2="710" marker-end="url(#open)"/>
+        <text x="468" y="701" class="lbl" text-anchor="middle">«extend»</text>
+        <line class="dep" x1="750" y1="694" x2="925" y2="584" marker-end="url(#open)"/>
+        <text x="846" y="655" class="lbl">«include»</text>
+
+        <ellipse class="uc f2" cx="635" cy="840" rx="135" ry="28"/>
+        <text x="635" y="836" class="t" text-anchor="middle">Thanh toán trực tiếp tại cơ sở</text>
+        <text x="635" y="852" class="s" text-anchor="middle">tiền mặt / chuyển khoản tại quầy</text>
+
+        <ellipse class="uc" cx="322" cy="840" rx="112" ry="28" stroke="var(--pay)" stroke-width="2"/>
+        <text x="322" y="836" class="t" text-anchor="middle">Hoàn tất lịch hẹn</text>
+        <text x="322" y="852" class="s" text-anchor="middle">chuyển “Đã thanh toán”</text>
+
+        <line class="state" x1="560" y1="735" x2="402" y2="820" marker-end="url(#solid)"/>
+        <text x="492" y="790" class="lbl" style="fill:var(--pay)">cập nhật</text>
+        <line class="state" x1="500" y1="840" x2="436" y2="840" marker-end="url(#solid)"/>
+        <text x="468" y="831" class="lbl" text-anchor="middle" style="fill:var(--pay)">xác nhận</text>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><i></i>Liên kết actor ↔ use case</span>
+      <span><i class="d"></i>«include» luôn xảy ra / «extend» chỉ xảy ra khi thoả điều kiện {…}</span>
+      <span><i class="s"></i>Chuyển trạng thái lịch hẹn</span>
+      <span><b style="background:var(--f1)"></b>Luồng 1</span>
+      <span><b style="background:var(--f2)"></b>Luồng 2</span>
+      <span><b style="background:var(--pay)"></b>Thanh toán / hoàn tất (dùng chung)</span>
+    </div>
+    <figcaption>Hai luồng dùng chung các bước đầu và cổng thanh toán, rồi tách ra ở điểm mở rộng “loại dịch vụ”. Điểm khác nhau là thời điểm thu phí so với lúc lịch hẹn được ghi vào hệ thống.</figcaption>
+  </figure>
+
+  <section>
+    <h2>So sánh 2 luồng</h2>
+    <div class="grid">
+      <div class="card f1">
+        <div class="tag">Luồng 1 · Thanh toán trước</div>
+        <h3>Thu phí xong mới tạo lịch hẹn</h3>
+        <ol>
+          <li>Khách truy cập website.</li>
+          <li>Đăng ký thông tin, chọn dịch vụ, thời gian và địa điểm.</li>
+          <li>Dịch vụ yêu cầu trả trước nên form hiển thị nút <strong>“Thanh toán và đặt lịch”</strong>.</li>
+          <li>Khách bấm nút và được chuyển tới cổng thanh toán.</li>
+          <li><span class="ok">Thành công:</span> ghi nhận lịch hẹn, thông báo đặt lịch thành công và hiển thị chi tiết lịch hẹn.</li>
+          <li><span class="bad">Thất bại:</span> chỉ lưu tạm thông tin, <u>không</u> ghi lịch hẹn vào hệ thống.</li>
+        </ol>
+        <dl>
+          <dt>Thời điểm thu phí</dt><dd>Trước khi tạo lịch hẹn, online</dd>
+          <dt>Kênh thu</dt><dd>Cổng thanh toán</dd>
+          <dt>Trạng thái đầu</dt><dd><span class="pill p-paid">Đã thanh toán</span></dd>
+          <dt>Rủi ro đối tác</dt><dd>Không có lịch “ảo”, slot chỉ bị chiếm khi đã có tiền</dd>
+        </dl>
+      </div>
+      <div class="card f2">
+        <div class="tag">Luồng 2 · Thanh toán sau</div>
+        <h3>Tạo lịch hẹn ngay, thu phí sau</h3>
+        <ol>
+          <li>Bước 1–2 giống Luồng 1.</li>
+          <li>Dịch vụ không yêu cầu trả trước nên form hiển thị nút <strong>“Đặt lịch”</strong>.</li>
+          <li>Hệ thống ghi nhận lịch hẹn ngay, ghi chú <strong>“Chưa thanh toán”</strong>, rồi báo đặt lịch thành công.</li>
+          <li>Khách thanh toán theo 1 trong 2 cách:
+            <br>a. Vào <em>chi tiết lịch hẹn</em> và thanh toán online qua cổng.
+            <br>b. Thanh toán trực tiếp tại cơ sở, nhân viên xác nhận.</li>
+          <li>Thanh toán xong thì lịch hẹn chuyển <strong>Hoàn tất</strong>.</li>
+        </ol>
+        <dl>
+          <dt>Thời điểm thu phí</dt><dd>Sau khi tạo lịch, trước hoặc tại buổi hẹn</dd>
+          <dt>Kênh thu</dt><dd>Cổng thanh toán hoặc tại quầy của đối tác</dd>
+          <dt>Trạng thái đầu</dt><dd><span class="pill p-unpaid">Chưa thanh toán</span></dd>
+          <dt>Rủi ro đối tác</dt><dd>Khách có thể đặt rồi không đến; khoản thu tại quầy cần đối soát</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Vòng đời trạng thái lịch hẹn</h2>
+    <table>
+      <thead><tr><th>Trạng thái</th><th>Có trong hệ thống lịch?</th><th>Sinh ra khi</th><th>Chuyển tiếp</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill p-draft">Lưu tạm</span></td><td>Không, chỉ là bản nháp</td><td>Luồng 1, thanh toán thất bại hoặc bị huỷ</td><td>Khách thanh toán lại thành công thì sang <em>Đã thanh toán</em></td></tr>
+        <tr><td><span class="pill p-unpaid">Chưa thanh toán</span></td><td>Có</td><td>Luồng 2, ngay khi bấm “Đặt lịch”</td><td>Thanh toán online hoặc tại cơ sở thì sang <em>Hoàn tất</em></td></tr>
+        <tr><td><span class="pill p-paid">Đã thanh toán</span></td><td>Có</td><td>Luồng 1, cổng trả kết quả thành công</td><td>Lịch hẹn đã đủ điều kiện phục vụ</td></tr>
+        <tr><td><span class="pill p-done">Hoàn tất</span></td><td>Có</td><td>Luồng 2, sau khi khoản phí được ghi nhận</td><td>Trạng thái cuối của thanh toán</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Ghi chú cho developer & đối tác</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Gợi ý triển khai</h3>
+        <ul class="notes">
+          <li>Mỗi dịch vụ có cờ cấu hình, ví dụ <code>yeu_cau_thanh_toan_truoc</code>. Cờ này quyết định nút hiển thị (“Thanh toán và đặt lịch” hay “Đặt lịch”) và luồng xử lý.</li>
+          <li>Luồng 1 chỉ tạo lịch hẹn khi nhận kết quả thanh toán <em>thành công</em> từ cổng (callback/IPN phía server), không dựa vào trang redirect phía trình duyệt.</li>
+          <li>Dùng chung một use case “Thanh toán online” cho cả Luồng 1 và nút thanh toán trong chi tiết lịch hẹn của Luồng 2.</li>
+          <li>Thanh toán tại cơ sở cần chức năng để nhân viên đối tác xác nhận đã thu, phục vụ đối soát.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Cần thống nhất thêm</h3>
+        <ul class="notes">
+          <li>Luồng 1: có giữ chỗ khung giờ trong lúc khách đang thanh toán không, và giữ bao lâu?</li>
+          <li>Bản nháp “Lưu tạm” giữ bao lâu, khách có tiếp tục thanh toán lại từ bản nháp được không?</li>
+          <li>Luồng 2: xử lý thế nào khi khách không đến và chưa thanh toán (huỷ tự động, nhắc lịch)?</li>
+          <li>Phí dịch vụ và phí cổng thanh toán được phân chia, đối soát với đối tác theo kỳ nào?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  (function(){
+    var svg = document.getElementById('uc');
+    var btns = document.querySelectorAll('[data-show]');
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var v = b.getAttribute('data-show');
+        if (v === 'all') svg.removeAttribute('data-active'); else svg.setAttribute('data-active', v);
+        btns.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      });
+    });
+  })();
+</script>
+<!-- toritech:foot -->
+<div id="tt-foot" role="contentinfo"><div class="tt-in"><h2>Cùng hạng mục: Đặt lịch &amp; Điều phối</h2><p class="tt-sub">Các dự án và hồ sơ khác của TORITECH trong hạng mục này.</p><ul><li><a href="dat-lich-da-kenh-phan-tan.html"><img src="../assets/img/du-an/thumb/dat-lich-da-kenh-phan-tan.webp" alt="" loading="lazy" width="112" height="59"><span><b>Đặt lịch &amp; đơn hàng đa kênh, dữ liệu phân tán</b><small>Đề xuất kiến trúc</small></span></a></li><li><a href="tram-giao-thong-so.html"><img src="../assets/img/du-an/thumb/tram-giao-thong-so.webp" alt="" loading="lazy" width="112" height="59"><span><b>Trạm Giao Thông Số – Trung tâm tiện ích xe cộ</b><small>Mô hình tương tác</small></span></a></li><li><a href="review-tram-dang-kiem.html"><img src="../assets/img/du-an/thumb/review-tram-dang-kiem.webp" alt="" loading="lazy" width="112" height="59"><span><b>Review đơn vị dịch vụ – ví dụ: Review trạm đăng kiểm</b><small>Mô hình tương tác</small></span></a></li></ul><a class="tt-more" href="../du-an-dat-lich.html">Xem toàn bộ hạng mục Đặt lịch &amp; Điều phối →</a><div class="tt-legal"><span>© CÔNG TY TNHH TORITECH · MST 0317545179</span><span>Hotline/Zalo <a href="tel:+84343902960">0343 902 960</a> · <a href="mailto:chau.nguyen@toritech.vn">chau.nguyen@toritech.vn</a></span><a href="../index.html">Trang chủ</a><a href="../du-an.html">Tất cả dự án</a><a href="../lien-he.html">Liên hệ</a><a href="../chinh-sach-bao-ve-du-lieu-ca-nhan.html">Bảo vệ dữ liệu cá nhân</a></div></div></div><script>(function(){function fit(){var W=document.documentElement.clientWidth;["tt-top","tt-foot"].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.style.marginLeft="0";e.style.width="";var r=e.getBoundingClientRect();if(Math.abs(r.left)>.5||Math.abs(r.width-W)>.5){e.style.marginLeft=(-r.left)+"px";e.style.width=W+"px";e.style.maxWidth="none"}});var t=document.getElementById("tt-top");if(t){t.style.marginTop="0";var y=t.getBoundingClientRect().top+(window.scrollY||0);if(y>.5)t.style.marginTop=(-y)+"px"}}fit();addEventListener("resize",fit);addEventListener("load",fit)})();</script>
+<!-- /toritech:foot -->
+</body>
+</html>
